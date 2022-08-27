@@ -11,7 +11,7 @@
         localStorage.setItem("words&stuff", txt.txt);
     };
     if (browser)
-        requestAnimationFrame(() => {
+        setTimeout(() => {
             tx.setAttribute(
                 "style",
                 "height:" + tx.scrollHeight + "px;overflow-y:hidden;"
@@ -19,14 +19,13 @@
             txf = txt.txt;
             tx.oninput = oninput;
             oninput(new Event("ASdf"));
+            setTimeout(() => {
+                tx.dispatchEvent(new Event("input"))
+            }, 1)
         });
 </script>
 
-<textarea
-    bind:this={tx}
-    bind:value={txf}
-    placeholder="Enter Text Here"
-/>
+<textarea bind:this={tx} bind:value={txf} placeholder="Enter Text Here" />
 
 <style>
     textarea::placeholder {

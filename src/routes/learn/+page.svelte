@@ -10,14 +10,14 @@
     let txt = { txt: starttext ? starttext : "" };
     let learn = false;
     let terms: { q: string; a: string }[] = [];
-    let splitregex = /\t *?/;
+    let splitregex = {reg: /\t *?/, id: 0};
     function maketerms() {
         terms = txt.txt
             .split(/\n *?/)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
                 console.log(splitregex);
-                const stuff = e.split(splitregex);
+                const stuff = e.split(splitregex.reg);
                 return {
                     q: stuff[0],
                     a: stuff.splice(1, stuff.length - 1).join(", "),

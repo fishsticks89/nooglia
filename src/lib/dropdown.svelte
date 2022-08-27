@@ -1,7 +1,7 @@
 <script lang="ts">
     import { browser } from "$app/env";
 
-    export let regex: RegExp;
+    export let regex: { reg: RegExp; id: number };
 
     let items = [
         { value: /\t *?/, label: "Tab" },
@@ -14,17 +14,31 @@
     });
     let select: HTMLElement;
     if (browser)
-        requestAnimationFrame(() =>
-            select.addEventListener("change", (e) => {
-                regex = (select as any).value;
+        setTimeout(() => {
+            console.log(regex.id);
+            setSelectedValue(select as any, regex.id);
+
+            function setSelectedValue(selectObj: any, valueToSet: any) {
+                for (var i = 0; i < selectObj.options.length; i++) {
+                    if (selectObj.options[i].text == valueToSet) {
+                        selectObj.options[i].selected = true;
+                        return;
+                    }
+                }
+            }
+            select.addEventListener("change", (f) => {
+                regex.reg = items.filter(
+                    (e) => e.id == (select as any).value
+                )[0].value;
+                regex.id = (select as any).value;
                 console.log(regex);
-            })
-        );
+            });
+        });
 </script>
 
 <select bind:this={select} name="split" id="split">
     {#each items as item}
-        <option value={item.value}>{item.label}</option>
+        <option value={item.id}>{item.label}</option>
     {/each}
 </select>
 
