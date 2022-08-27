@@ -1,25 +1,12 @@
-<script lang="ts">
-</script>
-
-<h1>Open&#8203;Learn</h1>
-<h2>Quizlet learn but freer</h2>
+<h2>Importing from quizlet</h2>
 <button on:click={() => {window.location.replace("./learn")}}>Get Started</button>
-
+<p>To import a set from quizlet, click the three little dots, and then the export button</p>
+<img src="./export.png" alt="">
+<p>Then, copy the text and paste it into Openlearn (make sure the dropdown in the top left is set to "Tab")!</p>
 <style>
-    h1 {
-        font-size: 15vw;
-        margin: 0px;
-        width: 60vw;
-        padding: 2rem;
-        padding-top: 1rem;
-        padding-bottom: 0rem;
-    }
     h2 {
-        padding: 3rem;
-        margin: 0px;
-        padding: calc(2rem + 1vw);
-        padding-top: 0px;
-        padding-bottom: 0px;
+        margin: 0rem;
+        padding: 2rem;
         font-size: calc(2vw + 1rem);
         position: relative;
     }
@@ -37,5 +24,12 @@
         font-family: 'HermesLight';
         font-weight: bold;
         letter-spacing: 0.2vw;
+    }
+    img {
+        max-width: 20rem;
+        width: 70vw;
+    }
+    img, p {
+        margin-left: 2rem
     }
 </style>

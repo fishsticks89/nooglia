@@ -30,6 +30,7 @@
 
 <style>
     #split {
+        cursor: pointer;
         appearance: none;
 
         font-family: "Montserrat", sans-serif;
@@ -38,7 +39,7 @@
         font-size: large;
         color: white;
 
-        background-color: var(--accent);
+        background-color: var(--emp);
         border-radius: var(--round);
         position: fixed;
         top: 1rem;

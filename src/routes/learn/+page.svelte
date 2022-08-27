@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Dropdown from '$lib/dropdown.svelte';
+    import Dropdown from "$lib/dropdown.svelte";
     import Textarea from "$lib/textarea.svelte";
     import Learn from "$lib/learn.svelte";
     import { SvelteToast } from "@zerodevx/svelte-toast";
@@ -16,7 +16,7 @@
             .split(/\n *?/)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
-                console.log(splitregex)
+                console.log(splitregex);
                 const stuff = e.split(splitregex);
                 return {
                     q: stuff[0],
@@ -25,15 +25,15 @@
             })
             .filter((e) => e.a != undefined && e.q != undefined);
     }
+    $: showbutton = txt.txt.split("\n").length < 5;
 </script>
 
 <div class="toast">
     <SvelteToast />
 </div>
 
-<Dropdown regex={splitregex}/>
-
 <button
+    id="startlearn"
     on:click={() => {
         maketerms();
         if (terms.length > 4) learn = !learn;
@@ -49,7 +49,14 @@
     {#if learn}
         <Learn {terms} />
     {:else}
+        <Dropdown regex={splitregex} />
         <Textarea {txt} />
+        <button
+            class="import"
+            on:click={() => {
+                window.open("./quizlet", "_blank");
+            }}>Import from Quizlet</button
+        >
     {/if}
 </div>
 
@@ -64,7 +71,34 @@
         --toastContainerRight: auto;
         --toastBarBackground: var(--light);
     }
-    button {
+    .import {
+        appearance: none;
+        color: white;
+        background-color: var(--accent);
+        border: 0px;
+        margin: 0px;
+        font-weight: 600;
+        font-family: "Montserrat", sans-serif;
+        cursor: pointer;
+
+        padding: 0.7rem;
+        text-align: right;
+        margin-inline: 10vw;
+        margin-block: 1rem;
+        right: 0rem;
+        bottom: 0px;
+        position: fixed;
+
+        border-radius: var(--round);
+    }
+    @media only screen and (min-width: 190vh) {
+        .import {
+            background-color: transparent;
+            padding-right: 1rem;
+        }
+    }
+    #startlearn {
+        cursor: pointer;
         font-family: "Montserrat", sans-serif;
         font-weight: bold;
         letter-spacing: 0.3px;
@@ -86,7 +120,9 @@
         overflow-x: hidden;
         width: 100vw;
         padding: 0px;
-        padding-top: 2rem;
+        padding-block: 2rem;
+        padding-bottom: 4rem;
         margin: 0px;
+        justify-content: start;
     }
 </style>
