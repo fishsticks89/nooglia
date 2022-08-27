@@ -18,7 +18,7 @@
         padding: 3rem;
         margin: 0px;
         padding: calc(2rem + 1vw);
-        padding-top: 0px;
+        padding-top: 3vh;
         padding-bottom: 0px;
         font-size: calc(2vw + 1rem);
         position: relative;
