@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<meta name="viewport" content="width=device-width" />
+	%sveltekit.head%
+</head>
+
+<body>
+	<div>%sveltekit.body%</div>
+</body>
+<style>
+	@font-face {
+		font-family: 'Montserrat';
+		src: url('./Montserrat.ttf') format('truetype');
+	}
+	@font-face {
+		font-family: 'Hermes';
+		src: url('./Hermes.otf') format('woff2');
+	}
+	@font-face {
+		font-family: 'HermesLight';
+		src: url('./HermesLight.otf') format('woff2');
+	}
+
+	body,
+	html {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: bold;
+		background-color: var(--background);
+		margin: 0px;
+		padding: 0px;
+		overflow-x: hidden;
+	}
+	:root {
+		color-scheme: dark;
+		--hue: 220;
+		--background: hsl(var(--hue), 67%, 8%); /* the background */
+		--emp: hsl(var(--hue), 30%, 30%); /* panes */
+		--accent: hsl(var(--hue), 100%, 63%); /* buttons */
+		--light: hsl(var(--hue), 100%, 89%); /* "offwhite" */
+		--comp: hsl(calc(var(--hue) - 175), 100%, 56%);
+		--round: 0.3rem;
+	}
+</style>
+
+</html>
