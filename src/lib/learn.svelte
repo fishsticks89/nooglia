@@ -81,7 +81,7 @@
                 Math.max(currterm.word.practiced, -1);
             }
         }
-        const correct = currterm.word.a == ans;
+        const correct = currterm.word.a.toLowerCase() == ans.toLowerCase();
         if (correct) isCorrect(!answered);
         if (!answered) {
             guesses = 0;

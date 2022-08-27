@@ -97,6 +97,9 @@
             padding-right: 1rem;
         }
     }
+    #startlearn:focus-visible {
+        outline: 0px;
+    }
     #startlearn {
         cursor: pointer;
         font-family: "Montserrat", sans-serif;
