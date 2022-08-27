@@ -192,6 +192,9 @@
 
         border: none;
     }
+    button:focus-visible {
+        outline: none;
+    }
     .grid {
         display: grid;
         grid-template-columns: 50% 50%;

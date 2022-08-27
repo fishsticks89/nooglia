@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Dropdown from '$lib/dropdown.svelte';
     import Textarea from "$lib/textarea.svelte";
     import Learn from "$lib/learn.svelte";
     import { SvelteToast } from "@zerodevx/svelte-toast";
@@ -9,12 +10,14 @@
     let txt = { txt: starttext ? starttext : "" };
     let learn = false;
     let terms: { q: string; a: string }[] = [];
+    let splitregex = /\t *?/;
     function maketerms() {
         terms = txt.txt
             .split(/\n *?/)
-            .filter((e) => !e.match(/^ *?$/))
+            .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
-                const stuff = e.split(/[\t,] ?/);
+                console.log(splitregex)
+                const stuff = e.split(splitregex);
                 return {
                     q: stuff[0],
                     a: stuff.splice(1, stuff.length - 1).join(", "),
@@ -27,6 +30,8 @@
 <div class="toast">
     <SvelteToast />
 </div>
+
+<Dropdown regex={splitregex}/>
 
 <button
     on:click={() => {
