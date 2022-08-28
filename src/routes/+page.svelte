@@ -5,6 +5,8 @@
 <h2>Quizlet learn but freer</h2>
 <button on:click={() => {window.location.replace("./learn")}}>Get Started</button>
 
+<img on:click={() => {window.location.replace("https://github.com/fishsticks89/openlearn")}} style={"cursor: pointer;border-radius: 50%;filter: invert();position: fixed;right: 1rem;top: 1rem;width: 2rem;height: 2rem;"} src="./ghlogo.png" alt="" srcset="">
+
 <style>
     h1 {
         font-size: 15vw;

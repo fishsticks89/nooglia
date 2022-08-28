@@ -4,20 +4,18 @@
     import Learn from "$lib/learn.svelte";
     import { SvelteToast } from "@zerodevx/svelte-toast";
     import { toast } from "@zerodevx/svelte-toast";
-    import { browser } from "$app/env";
+    import { state } from "$lib/state";
+    import { get } from "svelte/store";
 
-    let starttext = browser ? localStorage.getItem("words&stuff") : null;
-    let txt = { txt: starttext ? starttext : "" };
     let learn = false;
     let terms: { q: string; a: string }[] = [];
-    let splitregex = {reg: /\t *?/, id: 0};
+    let reg = { reg: /\t *?/ };
     function maketerms() {
-        terms = txt.txt
-            .split(/\n *?/)
+        terms = get(state)
+            .text.split(/\n *?/)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
-                console.log(splitregex);
-                const stuff = e.split(splitregex.reg);
+                const stuff = e.split(reg.reg);
                 return {
                     q: stuff[0],
                     a: stuff.splice(1, stuff.length - 1).join(", "),
@@ -25,7 +23,6 @@
             })
             .filter((e) => e.a != undefined && e.q != undefined);
     }
-    $: showbutton = txt.txt.split("\n").length < 5;
 </script>
 
 <div class="toast">
@@ -49,8 +46,8 @@
     {#if learn}
         <Learn {terms} />
     {:else}
-        <Dropdown regex={splitregex} />
-        <Textarea {txt} />
+        <Dropdown {reg} />
+        <Textarea />
         <button
             class="import"
             on:click={() => {

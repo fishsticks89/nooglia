@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { get } from "svelte/store";
     import { browser } from "$app/env";
+    import { state } from "./state";
 
-    export let regex: { reg: RegExp; id: number };
+    export let reg: { reg: RegExp };
 
     let items = [
         { value: /\t *?/, label: "Tab" },
@@ -15,23 +17,28 @@
     let select: HTMLElement;
     if (browser)
         setTimeout(() => {
-            console.log(regex.id);
-            setSelectedValue(select as any, regex.id);
+            select.getElementsByTagName('option')[get(state).concat].selected = true;
+            // setSelectedValue(select as any, get(state).concat);
 
-            function setSelectedValue(selectObj: any, valueToSet: any) {
-                for (var i = 0; i < selectObj.options.length; i++) {
-                    if (selectObj.options[i].text == valueToSet) {
-                        selectObj.options[i].selected = true;
-                        return;
-                    }
-                }
-            }
+            // function setSelectedValue(selectObj: any, valueToSet: any) {
+            //     for (var i = 0; i < selectObj.options.length; i++) {
+            //         if (selectObj.options[i].text == valueToSet) {
+            //             selectObj.options[i].selected = true;
+            //             return;
+            //         }
+            //     }
+            // }
+            reg.reg = items.filter(
+                (e) => e.id == (select as any).value
+            )[0].value;
             select.addEventListener("change", (f) => {
-                regex.reg = items.filter(
+                reg.reg = items.filter(
                     (e) => e.id == (select as any).value
                 )[0].value;
-                regex.id = (select as any).value;
-                console.log(regex);
+                state.update((state) => {
+                    state.concat = (select as any).value;
+                    return state;
+                });
             });
         });
 </script>

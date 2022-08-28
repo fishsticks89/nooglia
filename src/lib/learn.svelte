@@ -88,9 +88,9 @@
         }
         answered = true;
         toast.push(correct ? "Correct! ✅" : (guesses <= 2) ? "Incorrect. ❌" : "The answer is: " + currterm.word.a, {
-            dismissable: false,
+            dismissable: !(guesses <= 2),
             intro: { x: -256, y: 20 },
-            duration: (guesses <= 2) ? 1200 : 7000,
+            duration: (guesses <= 2) ? 1200 : 7000
         });
         guesses++;
         if (correct) queuenext();
