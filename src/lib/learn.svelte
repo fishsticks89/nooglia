@@ -86,11 +86,10 @@
         if (!answered) {
             guesses = 0;
         }
-        answered = true;
         toast.push(
             correct
                 ? "Correct! ✅"
-                : guesses < 1
+                : !answered || !currterm.mode // if answered or practice mode
                 ? "Incorrect. ❌"
                 : "The answer is: " + currterm.word.a,
             {
@@ -99,6 +98,7 @@
                 duration: guesses < 1 ? 1200 : 7000,
             }
         );
+        answered = true;
         guesses++;
         if (correct) queuenext();
     }
