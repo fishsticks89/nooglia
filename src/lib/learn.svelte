@@ -67,31 +67,38 @@
     let answered = false;
     queuenext();
     let guesses = 0;
-    function answer(ans: string) {
-        function isCorrect(iscorr: boolean) {
-            console.log(termpractice);
-            if (currterm.mode) {
-                // matching
-                currterm.word.choiced = iscorr;
-            } else {
-                // practicing
-                currterm.word.practiced = iscorr
-                    ? currterm.word.practiced + 1
-                    : currterm.word.practiced - 1;
-                Math.max(currterm.word.practiced, -1);
-            }
+    function isCorrect(iscorr: boolean) {
+        console.log(termpractice);
+        if (currterm.mode) {
+            // matching
+            currterm.word.choiced = iscorr;
+        } else {
+            // practicing
+            currterm.word.practiced = iscorr
+                ? currterm.word.practiced + 1
+                : currterm.word.practiced - 1;
+            Math.max(currterm.word.practiced, -1);
         }
+    }
+    function answer(ans: string) {
         const correct = currterm.word.a.toLowerCase() == ans.toLowerCase();
         if (correct) isCorrect(!answered);
         if (!answered) {
             guesses = 0;
         }
         answered = true;
-        toast.push(correct ? "Correct! ✅" : (guesses <= 2) ? "Incorrect. ❌" : "The answer is: " + currterm.word.a, {
-            dismissable: !(guesses <= 2),
-            intro: { x: -256, y: 20 },
-            duration: (guesses <= 2) ? 1200 : 7000
-        });
+        toast.push(
+            correct
+                ? "Correct! ✅"
+                : guesses < 1
+                ? "Incorrect. ❌"
+                : "The answer is: " + currterm.word.a,
+            {
+                dismissable: false,
+                intro: { x: -256, y: 20 },
+                duration: guesses < 1 ? 1200 : 7000,
+            }
+        );
         guesses++;
         if (correct) queuenext();
     }
@@ -111,51 +118,74 @@
 </script>
 
 <div class="learn">
-    {#if (!done)}
-    <p
-        style:font-size={"large"}
-        style:margin={"2rem"}
-        style:position={"absolute"}
-        style:top={"0rem"}
-        style:left={"0rem"}
-    >
-        {currterm.word.q}
-    </p>
-    {#if currterm.mode}
-        <div class="grid">
-            {#each shuffle([currterm.word.a, ...shuffle(termpractice)
-                        .filter((e) => e != currterm.word)
-                        .map((e) => e.a)].slice(0, (3 >= termpractice.length ? termpractice.length - 1 : 3) + 1)) as term, i}
-                <button
-                    style={ansStyle(i)}
+    {#if !done}
+        <p
+            style:font-size={"large"}
+            style:margin={"2rem"}
+            style:position={"absolute"}
+            style:top={"0rem"}
+            style:left={"0rem"}
+        >
+            {currterm.word.q}
+        </p>
+        {#if currterm.mode}
+            <div class="grid">
+                {#each shuffle([currterm.word.a, ...shuffle(termpractice)
+                            .filter((e) => e != currterm.word)
+                            .map((e) => e.a)].slice(0, (3 >= termpractice.length ? termpractice.length - 1 : 3) + 1)) as term, i}
+                    <button
+                        style={ansStyle(i)}
+                        on:click={() => {
+                            answer(term);
+                        }}>{term}</button
+                    >
+                {/each}
+            </div>
+        {:else}
+            <input
+                type="text"
+                autofocus
+                bind:this={typedfield}
+                bind:value={typedans}
+            />
+            {#if answered}
+                <button class="ov"
                     on:click={() => {
-                        answer(term);
-                    }}>{term}</button
+                        isCorrect(true);
+                        queuenext();
+                    }}>Override: I was correct</button
                 >
-            {/each}
-        </div>
+            {/if}
+        {/if}
     {:else}
-        <input
-            type="text"
-            autofocus
-            bind:this={typedfield}
-            bind:value={typedans}
-        />
-    {/if}
-    {:else}
-    <p id="done">🎉 Done! 🎉</p>
+        <p id="done">🎉 Done! 🎉</p>
     {/if}
 </div>
 
 <style>
+    .ov {
+        max-width: 11rem;
+        font-family: "Montserrat", sans-serif;
+        color: white;
+
+        background-color: var(--accent);
+        border-radius: var(--round);
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        padding: 0.5rem;
+        padding-inline: 0.8rem;
+
+        border-color: transparent;
+    }
     #done {
         font-size: 5vw;
-        font-family: 'Montserrat';
+        font-family: "Montserrat";
         font-weight: bold;
         margin: 0px;
         padding: none;
         top: 50%;
-        left:50%;
+        left: 50%;
         position: absolute;
         transform: translate(-50%, -50%);
         width: 100vw;
