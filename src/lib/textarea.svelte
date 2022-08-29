@@ -38,6 +38,7 @@ import { state } from "./state";
         margin-top: 3rem;
 
         padding: 1rem;
+        padding-bottom: 0rem;
 
         margin-left: 50vw;
         transform: translateX(-50%);

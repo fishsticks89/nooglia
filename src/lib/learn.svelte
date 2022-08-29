@@ -139,8 +139,10 @@
                         style={ansStyle(i)}
                         on:click={() => {
                             answer(term);
-                        }}>{term}</button
+                        }}
                     >
+                        {term}
+                    </button>
                 {/each}
             </div>
         {:else}
@@ -176,7 +178,9 @@
 </div>
 
 <style>
-    .no {
+    .in {
+        background-color: transparent;
+        color: var(--emp);
     }
     .ov {
         max-width: 11rem;

@@ -30,14 +30,16 @@
         border-radius: var(--round);
         border: 0px;
         color: white;
-        font-size: 3vw;
-        padding: 1.4rem;
+        padding: 1.3rem;
+        padding-inline: 2.7rem;
         position: fixed;
         bottom: 3rem;
         right: 3rem;
+
+        font-size: 1rem;
         font-weight: 500;
-        font-family: 'HermesLight';
-        font-weight: bold;
-        letter-spacing: 0.2vw;
+        font-family: 'OpenSans', sans-serif;
+        /* font-weight: bold; */
+        /* letter-spacing: 0.2vw; */
     }
 </style>
