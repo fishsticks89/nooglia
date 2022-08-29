@@ -89,7 +89,7 @@
         toast.push(
             correct
                 ? "Correct! ✅"
-                : !answered || !currterm.mode // if answered or practice mode
+                : !answered && currterm.mode // if answered or practice mode
                 ? "Incorrect. ❌"
                 : "The answer is: " + currterm.word.a,
             {
