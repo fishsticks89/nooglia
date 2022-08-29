@@ -17,7 +17,8 @@
     let select: HTMLElement;
     if (browser)
         setTimeout(() => {
-            select.getElementsByTagName('option')[get(state).concat].selected = true;
+            select.getElementsByTagName("option")[get(state).concat].selected =
+                true;
             // setSelectedValue(select as any, get(state).concat);
 
             // function setSelectedValue(selectObj: any, valueToSet: any) {
@@ -43,30 +44,49 @@
         });
 </script>
 
-<select bind:this={select} name="split" id="split">
-    {#each items as item}
-        <option value={item.id}>{item.label}</option>
-    {/each}
-</select>
+<div class="spt">
+    <p>Split terms by:</p>
+    <select bind:this={select} name="split" id="split">
+        {#each items as item}
+            <option value={item.id}>{item.label}</option>
+        {/each}
+    </select>
+</div>
 
 <style>
-    #split {
-        cursor: pointer;
-        appearance: none;
-
+    .spt {
         font-family: "Montserrat", sans-serif;
-        font-weight: bold;
-        letter-spacing: 0.3px;
-        font-size: large;
         color: white;
 
-        background-color: var(--emp);
-        border-radius: var(--round);
         position: fixed;
         top: 1rem;
         left: 1rem;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    #split {
+        height: fit-content;
+        width: fit-content;
+
+        font-family: "Montserrat", sans-serif;
+        color: white;
+
+        cursor: pointer;
+        appearance: none;
+
+        background-color: var(--emp);
+        border-radius: var(--round);
         padding: 0.5rem;
-        padding-inline: 0.8rem;
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+
+        margin-inline: 0.5rem;
+
+        font-weight: bold;
+        letter-spacing: 0.3px;
+        font-size: large;
 
         border: 0px;
     }

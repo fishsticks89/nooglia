@@ -20,7 +20,7 @@
     function getRemainingBandwidth() {
         return (
             maxbandwidth -
-            termpractice.filter((e) => e.choiced && e.practiced < 3).length
+            termpractice.filter((e) => e.choiced && e.practiced < 2).length
         );
     }
     let currterm = {
@@ -47,7 +47,7 @@
             currterm.mode = true;
         } else {
             currterm.word = randof(
-                bterms.filter((e) => e.choiced && e.practiced < 3)
+                bterms.filter((e) => e.choiced && e.practiced < 2)
             );
             currterm.mode = false;
             requestAnimationFrame(() => {
@@ -80,11 +80,13 @@
             Math.max(currterm.word.practiced, -1);
         }
     }
+    let allowOV = true;
     function answer(ans: string) {
         const correct = currterm.word.a.toLowerCase() == ans.toLowerCase();
         if (correct) isCorrect(!answered);
         if (!answered) {
             guesses = 0;
+            allowOV = true;
         }
         toast.push(
             correct
@@ -149,11 +151,22 @@
                 bind:value={typedans}
             />
             {#if answered}
-                <button class="ov"
+                {#if allowOV}
+                    <button
+                        class="ov"
+                        on:click={() => {
+                            isCorrect(true);
+                            queuenext();
+                        }}>Override: I was correct</button
+                    >
+                {/if}
+            {:else}
+                <button
+                    class="ov in"
                     on:click={() => {
-                        isCorrect(true);
-                        queuenext();
-                    }}>Override: I was correct</button
+                        answer("");
+                        allowOV = false;
+                    }}>I don't know</button
                 >
             {/if}
         {/if}
@@ -163,6 +176,8 @@
 </div>
 
 <style>
+    .no {
+    }
     .ov {
         max-width: 11rem;
         font-family: "Montserrat", sans-serif;
