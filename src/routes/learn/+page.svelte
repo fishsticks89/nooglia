@@ -112,7 +112,8 @@
         position: absolute;
         top: 0rem;
         right: 0rem;
-        margin: 1rem;
+        margin: 1.5rem;
+        margin-right: 1.5rem;
         padding: 0.5rem;
         padding-inline: 0.8rem;
 
