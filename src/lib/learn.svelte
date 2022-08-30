@@ -106,6 +106,7 @@
     }
     const ansStyle = (i: number) => {
         return `
+        font-family: 'Montserrat', sans-serif;
         max-width: 200px;
         max-height: 70px;
         width: 80%;
@@ -127,6 +128,7 @@
             style:position={"absolute"}
             style:top={"0rem"}
             style:left={"0rem"}
+            style:font-family={"'Montserrat', sans-serif"}
         >
             {currterm.word.q}
         </p>

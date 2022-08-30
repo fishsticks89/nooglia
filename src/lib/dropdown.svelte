@@ -46,11 +46,16 @@
 
 <div class="spt">
     <p>Split terms by:</p>
+    {#if (!browser)}
+    <!-- placeholder with correct spacing -->
+    <div id="split" class="split">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    {:else}
     <select bind:this={select} name="split" id="split">
         {#each items as item}
             <option value={item.id}>{item.label}</option>
         {/each}
     </select>
+    {/if}
 </div>
 
 <style>

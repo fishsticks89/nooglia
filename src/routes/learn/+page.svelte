@@ -12,7 +12,7 @@
     let reg = { reg: /\t *?/ };
     function maketerms() {
         terms = get(state)
-            .text.split(/\n *?/)
+            .text.split(/\n+ */)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
                 const stuff = e.split(reg.reg);
@@ -31,6 +31,7 @@
 
 <button
     id="startlearn"
+    style:background-color={(learn) ? "var(--disabled)" : ""}
     on:click={() => {
         maketerms();
         if (terms.length > 4) learn = !learn;
@@ -39,7 +40,7 @@
                 dismissable: false,
                 intro: { x: -256 },
             });
-    }}>Learn</button
+    }}>{(!learn) ? "Learn" : "Back"}</button
 >
 
 <div>
@@ -71,8 +72,9 @@
     .import {
         appearance: none;
         color: white;
-        background-color: var(--accent);
+        background-color: var(--background);
         border: 0px;
+        box-shadow: 0px 0px 3px -1px var(--light);
         margin: 0px;
         font-weight: 600;
         font-family: "Montserrat", sans-serif;
@@ -90,7 +92,7 @@
     }
     @media only screen and (min-width: 190vh) {
         .import {
-            background-color: transparent;
+            box-shadow: none;
             padding-right: 1rem;
         }
     }
@@ -107,9 +109,10 @@
 
         background-color: var(--accent);
         border-radius: var(--round);
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
+        position: absolute;
+        top: 0rem;
+        right: 0rem;
+        margin: 1rem;
         padding: 0.5rem;
         padding-inline: 0.8rem;
 

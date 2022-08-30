@@ -1,14 +1,17 @@
 <script lang="ts">
-	import { get } from 'svelte/store';
+    import { get } from "svelte/store";
     import { browser } from "$app/env";
-import { state } from "./state";
+    import { state } from "./state";
     let tx: HTMLElement; // the elem
     let txf: string; // curr contents
     const oninput = (event: Event) => {
         console.log("e");
         tx.style.height = "auto";
         tx.style.height = tx.scrollHeight + "px";
-        state.update((e) => {e.text = txf; return e});
+        state.update((e) => {
+            e.text = txf;
+            return e;
+        });
     };
     if (browser)
         setTimeout(() => {
@@ -16,16 +19,43 @@ import { state } from "./state";
                 "style",
                 "height:" + tx.scrollHeight + "px;overflow-y:hidden;"
             );
+            function txshadow() {
+                const txwidth = tx.clientWidth;
+                tx.style.filter = `drop-shadow(0px 0px 8px var(--background)) drop-shadow(${txwidth}px 0px 8px var(--background)) drop-shadow(-${txwidth}px 0px 8px var(--background));`;
+            }
+            document.addEventListener("resize", () => {
+                txshadow();
+            });
             txf = get(state).text;
             tx.oninput = oninput;
             oninput(new Event("ASdf"));
             setTimeout(() => {
-                tx.dispatchEvent(new Event("input"))
-            }, 1)
+                tx.dispatchEvent(new Event("input"));
+                requestAnimationFrame(txshadow);
+            }, 1);
         });
 </script>
 
-<textarea bind:this={tx} bind:value={txf} placeholder="Enter Text Here" />
+<textarea
+    bind:this={tx}
+    bind:value={txf}
+    placeholder={browser
+        ? `e.g.
+
+California, Sacramento
+
+Wisconsin, Madison
+
+Georgia, Atlanta
+
+North Dakota, Bismark
+
+South Dakota, Pierre
+
+Massachusetts, Boston
+`
+        : ""}
+/>
 
 <style>
     textarea::placeholder {
@@ -47,7 +77,6 @@ import { state } from "./state";
 
         resize: none;
         background-color: var(--emp);
-        box-shadow: 0px 0px 0.5rem 10vw var(--background);
 
         border-width: 0px;
         border-radius: var(--round);
