@@ -3,9 +3,21 @@
 
 <h1>Open&#8203;Learn</h1>
 <h2>Quizlet learn but freer</h2>
-<button on:click={() => {window.location.replace("./learn")}}>Get Started</button>
+<button
+    on:click={() => {
+        window.location.replace("./learn");
+    }}>Get Started</button
+>
 
-<img on:click={() => {window.location.replace("https://github.com/fishsticks89/openlearn")}} style={"cursor: pointer;border-radius: 50%;filter: invert();position: fixed;right: 1rem;top: 1rem;width: 2rem;height: 2rem;"} src="./ghlogo.png" alt="" srcset="">
+<img
+    on:click={() => {
+        window.location.replace("https://github.com/fishsticks89/openlearn");
+    }}
+    style={"cursor: pointer;border-radius: 50%;filter: invert();position: fixed;right: 1rem;top: 1rem;width: 2rem;height: 2rem;"}
+    src="./ghlogo.png"
+    alt=""
+    srcset=""
+/>
 
 <style>
     h1 {
@@ -38,7 +50,7 @@
 
         font-size: 1rem;
         font-weight: 500;
-        font-family: 'OpenSans', sans-serif;
+        font-family: "OpenSans", sans-serif;
         /* font-weight: bold; */
         /* letter-spacing: 0.2vw; */
     }

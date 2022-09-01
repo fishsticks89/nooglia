@@ -1,5 +1,9 @@
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { collection, connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import { connectAuthEmulator, getAuth, GoogleAuthProvider } from "firebase/auth";
+import { browser, dev } from "$app/env";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -13,6 +17,15 @@ const firebaseConfig = {
   measurementId: "G-VZ6XVDWXGP"
 };
 
+
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
+export const analytics = (browser && !dev) ? getAnalytics(app) : null;
+export const db = getFirestore(app);
+if (dev) connectFirestoreEmulator(db, 'localhost', 6060);
+export const users = collection(db, "users")
+export const sets = collection(db, "sets")
+
+export const provider = new GoogleAuthProvider();
+export const auth = getAuth(app);
+connectAuthEmulator(auth, "http://localhost:9099");

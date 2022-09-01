@@ -1,7 +1,8 @@
 <script lang="ts">
     import { get } from "svelte/store";
     import { browser } from "$app/env";
-    import { state } from "./state";
+    import type { setStore } from "./setStore";
+    export let state: setStore;
 
     export let reg: { reg: RegExp };
 
@@ -15,29 +16,26 @@
         return { id: i, ...e };
     });
     let select: HTMLElement;
+    $: if (browser)
+        setTimeout(() => {
+            [...select.getElementsByTagName("option")]
+                .filter((e) => {
+                    return e.getAttribute("value") === $state.set.mode;
+                })
+                .forEach((e) => (e.selected = true));
+        });
     if (browser)
         setTimeout(() => {
-            select.getElementsByTagName("option")[get(state).concat].selected =
-                true;
-            // setSelectedValue(select as any, get(state).concat);
-
-            // function setSelectedValue(selectObj: any, valueToSet: any) {
-            //     for (var i = 0; i < selectObj.options.length; i++) {
-            //         if (selectObj.options[i].text == valueToSet) {
-            //             selectObj.options[i].selected = true;
-            //             return;
-            //         }
-            //     }
-            // }
-            reg.reg = items.filter(
-                (e) => e.id == (select as any).value
-            )[0].value;
-            select.addEventListener("change", (f) => {
+            function setReg() {
                 reg.reg = items.filter(
-                    (e) => e.id == (select as any).value
+                    (e) => e.label === ((select as any).value as string)
                 )[0].value;
+            }
+            setReg();
+            select.addEventListener("change", (f) => {
+                setReg();
                 state.update((state) => {
-                    state.concat = (select as any).value;
+                    state.set.mode = (select as any).value;
                     return state;
                 });
             });
@@ -46,15 +44,17 @@
 
 <div class="spt">
     <p>Split terms by:</p>
-    {#if (!browser)}
-    <!-- placeholder with correct spacing -->
-    <div id="split" class="split">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    {#if !browser}
+        <!-- placeholder with correct spacing -->
+        <div id="split" class="split">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
     {:else}
-    <select bind:this={select} name="split" id="split">
-        {#each items as item}
-            <option value={item.id}>{item.label}</option>
-        {/each}
-    </select>
+        <select bind:this={select} name="split" id="split">
+            {#each items as item}
+                <option value={item.label}>{item.label}</option>
+            {/each}
+        </select>
     {/if}
 </div>
 

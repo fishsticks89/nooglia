@@ -1,17 +1,20 @@
 <script lang="ts">
     import { get } from "svelte/store";
     import { browser } from "$app/env";
-    import { state } from "./state";
+    import type { setStore } from "$lib/setStore";
+    import { authState } from "./state";
+    export let state: setStore;
     let tx: HTMLElement; // the elem
     let txf: string; // curr contents
-    const oninput = (event: Event) => {
+    const oninput = (updatestate: boolean) => {
         console.log("e");
         tx.style.height = "auto";
         tx.style.height = tx.scrollHeight + "px";
-        state.update((e) => {
-            e.text = txf;
-            return e;
-        });
+        if (updatestate)
+            state.update((e) => {
+                e.set.contents = txf;
+                return e;
+            });
     };
     if (browser)
         setTimeout(() => {
@@ -26,12 +29,21 @@
             document.addEventListener("resize", () => {
                 txshadow();
             });
-            txf = get(state).text;
-            tx.oninput = oninput;
-            oninput(new Event("ASdf"));
+            txf = get(state).set.contents;
+            state.subscribe((e) => {
+                txf = e.set.contents;
+                oninput(false);
+            });
+            authState.subscribe((e) => {
+                setTimeout(() => oninput(false));
+            });
+            tx.oninput = () => {
+                oninput(true);
+            };
             setTimeout(() => {
                 tx.dispatchEvent(new Event("input"));
-                requestAnimationFrame(txshadow);
+                setTimeout(txshadow);
+                oninput(false);
             }, 1);
         });
 </script>
