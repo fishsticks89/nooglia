@@ -28,4 +28,4 @@ export const sets = collection(db, "sets")
 
 export const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);
-connectAuthEmulator(auth, "http://localhost:9099");
+if (dev) connectAuthEmulator(auth, "http://localhost:9099");
