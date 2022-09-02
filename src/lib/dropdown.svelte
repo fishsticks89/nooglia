@@ -1,20 +1,9 @@
 <script lang="ts">
-    import { get } from "svelte/store";
+    import { items } from "$lib/splitters";
     import { browser } from "$app/env";
     import type { setStore } from "./setStore";
     export let state: setStore;
 
-    export let reg: { reg: RegExp };
-
-    let items = [
-        { value: /\t */, label: "Tab" },
-        { value: /, */, label: "Comma" },
-        { value: /- */, label: "Dash" },
-        { value: /; */, label: "SemiColon" },
-        { value: /: */, label: "Colon" },
-    ].map((e, i) => {
-        return { id: i, ...e };
-    });
     let select: HTMLElement;
     $: if (browser)
         setTimeout(() => {
@@ -26,14 +15,7 @@
         });
     if (browser)
         setTimeout(() => {
-            function setReg() {
-                reg.reg = items.filter(
-                    (e) => e.label === ((select as any).value as string)
-                )[0].value;
-            }
-            setReg();
             select.addEventListener("change", (f) => {
-                setReg();
                 state.update((state) => {
                     state.set.mode = (select as any).value;
                     return state;

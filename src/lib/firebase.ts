@@ -22,7 +22,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const analytics = (browser && !dev) ? getAnalytics(app) : null;
 export const db = getFirestore(app);
-if (dev) connectFirestoreEmulator(db, 'localhost', 6060);
+if (dev) connectFirestoreEmulator(db, 'localhost', 4040);
 export const users = collection(db, "users")
 export const sets = collection(db, "sets")
 

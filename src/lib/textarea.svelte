@@ -8,8 +8,12 @@
     let txf: string; // curr contents
     const oninput = (updatestate: boolean) => {
         console.log("e");
-        tx.style.height = "auto";
-        tx.style.height = tx.scrollHeight + "px";
+        if (tx) {
+            tx.style.height = "auto";
+            tx.style.height = tx.scrollHeight + "px";
+        } else {
+            // console.error("no tx");
+        }
         if (updatestate)
             state.update((e) => {
                 e.set.contents = txf;
@@ -38,7 +42,9 @@
                 setTimeout(() => oninput(false));
             });
             tx.oninput = () => {
-                oninput(true);
+                setTimeout(() => {
+                    oninput(true);
+                });
             };
             setTimeout(() => {
                 tx.dispatchEvent(new Event("input"));

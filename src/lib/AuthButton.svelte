@@ -19,7 +19,7 @@
           }}
 >
     {#if $authState}
-          {#if (showpfp)}
+          {#if (showpfp && pfp)}
         <img on:error={() => {showpfp = false}} in:fly={{ duration: 600, y: 200 }} src={pfp} alt="" />
         <div in:fly={{ duration: 600, y: 200 }} class="vr" />
         {/if}

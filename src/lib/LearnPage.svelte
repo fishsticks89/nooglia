@@ -6,17 +6,17 @@
     import { toast } from "@zerodevx/svelte-toast";
     import { get } from "svelte/store";
     import type { setStore } from "./setStore";
+import { items } from "./splitters";
     export let store: setStore;
 
     let learn = false;
     let terms: { q: string; a: string }[] = [];
-    let reg = { reg: /\t *?/ };
     function maketerms() {
         terms = get(store)
             .set.contents.split(/\n+ */)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
-                const stuff = e.split(reg.reg);
+                const stuff = e.split(items.filter(e => e.label === get(store).set.mode)[0].value);
                 return {
                     q: stuff[0],
                     a: stuff.splice(1, stuff.length - 1).join(", "),
@@ -48,7 +48,7 @@
     {#if learn}
         <Learn {terms} />
     {:else}
-        <Dropdown state={store} {reg} />
+        <Dropdown state={store} />
         <Textarea state={store} />
         <button
             class="import"
