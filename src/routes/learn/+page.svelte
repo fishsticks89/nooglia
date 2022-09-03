@@ -17,7 +17,7 @@
         type DocumentData,
         type DocumentReference,
     } from "firebase/firestore";
-    import LearnPage from "$lib/learn/LearnPage.svelte";
+    import App from "$lib/App.svelte";
     import { authState } from "$lib/auth/authState";
     import AuthManager from "$lib/auth/AuthManager.svelte";
     import {
@@ -140,4 +140,4 @@
 </script>
 
 <AuthManager />
-<LearnPage store={currentset} />
+<App store={currentset} />

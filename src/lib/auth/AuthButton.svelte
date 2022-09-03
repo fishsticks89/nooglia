@@ -2,7 +2,7 @@
     import { fly } from "svelte/transition";
     import { authState } from "$lib/auth/authState";
     import { signin } from "$lib/auth/signin";
-    
+
     export let oncl: () => void;
     export let posStyle: string = "";
     export let text = "Library";
@@ -20,12 +20,19 @@
           }}
 >
     {#if $authState}
-          {#if (showpfp && pfp)}
-        <img on:error={() => {showpfp = false}} in:fly={{ duration: 600, y: 200 }} src={pfp} alt="" />
-        <div in:fly={{ duration: 600, y: 200 }} class="vr" />
+        {#if showpfp && pfp}
+            <img
+                on:error={() => {
+                    showpfp = false;
+                }}
+                in:fly={{ duration: 600, y: 200 }}
+                src={pfp}
+                alt=""
+            />
+            <div in:fly={{ duration: 600, y: 200 }} class="vr" />
         {/if}
         {#key text}
-        <p in:fly={{ duration: 600, y: 200 }}>{text}</p>
+            <p in:fly={{ duration: 600, y: 200 }}>{text}</p>
         {/key}
     {:else}
         Sign In
