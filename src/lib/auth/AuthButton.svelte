@@ -1,10 +1,11 @@
 <script lang="ts">
+    import { fly } from "svelte/transition";
+    import { authState } from "$lib/auth/authState";
+    import { signin } from "$lib/auth/signin";
+    
     export let oncl: () => void;
     export let posStyle: string = "";
     export let text = "Library";
-    import { authState } from "$lib/auth/authState";
-    import { fly } from "svelte/transition";
-    import { signin } from "./signin";
     $: pfp = $authState ? $authState?.photoURL : null;
     let showpfp = true;
 </script>
