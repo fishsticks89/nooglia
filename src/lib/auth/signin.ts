@@ -1,5 +1,5 @@
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-import { app } from "./firebase";
+import { app } from "$lib/firebase";
 
 export function signin() {
     const provider = new GoogleAuthProvider();

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { items } from "$lib/splitters";
+    import { items } from "$lib/createset/splitters";
     import { browser } from "$app/env";
-    import type { setStore } from "./setStore";
+    import type { setStore } from "$lib/data/setStore";
     export let state: setStore;
 
     let select: HTMLElement;

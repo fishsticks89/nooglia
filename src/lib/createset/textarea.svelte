@@ -1,8 +1,8 @@
 <script lang="ts">
     import { get } from "svelte/store";
     import { browser } from "$app/env";
-    import type { setStore } from "$lib/setStore";
-    import { authState } from "./state";
+    import type { setStore } from "$lib/data/setStore";
+    import { authState } from "$lib/auth/authState";
     export let state: setStore;
     let tx: HTMLElement; // the elem
     let txf: string; // curr contents

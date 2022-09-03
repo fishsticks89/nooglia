@@ -1,12 +1,11 @@
 <script lang="ts">
-    import Dropdown from "$lib/dropdown.svelte";
-    import Textarea from "$lib/textarea.svelte";
-    import Learn from "$lib/learn.svelte";
-    import { SvelteToast } from "@zerodevx/svelte-toast";
-    import { toast } from "@zerodevx/svelte-toast";
     import { get } from "svelte/store";
-    import type { setStore } from "./setStore";
-import { items } from "./splitters";
+    import { SvelteToast, toast } from "@zerodevx/svelte-toast";
+    import Dropdown from "$lib/createset/dropdown.svelte";
+    import Textarea from "$lib/createset/textarea.svelte";
+    import { items } from "$lib/createset/splitters";
+    import Learn from "$lib/learn/learn.svelte";
+    import type { setStore } from "$lib/data/setStore";
     export let store: setStore;
 
     let learn = false;

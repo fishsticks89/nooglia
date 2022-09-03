@@ -1,7 +1,7 @@
 import type { User } from "firebase/auth";
 import { type DocumentReference, setDoc, doc, getDoc, DocumentSnapshot } from "firebase/firestore"
 import { get } from "svelte/store";
-import { authState } from "./state";
+import { authState } from "$lib/auth/authState";
 import { users, sets } from "$lib/firebase"
 
 export type user = {

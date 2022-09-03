@@ -1,6 +1,6 @@
 <script lang="ts">
     import { toast } from "@zerodevx/svelte-toast";
-    import shuffle from "./shuffle";
+    import shuffle from "$lib/util/shuffle";
 
     let done = false;
 

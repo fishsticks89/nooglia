@@ -2,38 +2,34 @@
 </script>
 
 <script lang="ts">
-    import AuthButton from "$lib/AuthButton.svelte";
-    import LearnPage from "$lib/LearnPage.svelte";
-    import { auth, sets, users } from "$lib/firebase";
+    import { browser } from "$app/env";
+    import { writable } from "svelte/store";
     import {
         GoogleAuthProvider,
         getRedirectResult,
         onAuthStateChanged,
     } from "firebase/auth";
-    import { authState } from "$lib/state";
-    import AuthManager from "$lib/AuthManager.svelte";
-    import { get, writable, type Writable } from "svelte/store";
     import {
-        createCloudSet,
-        getUserDoc,
-        setEquals,
-        newset,
-        type set,
-    } from "$lib/db";
-    import { getLocalSet, storeLocalSet } from "$lib/storeset";
-    import {
-        doc,
         DocumentSnapshot,
         getDoc,
-        onSnapshot,
         setDoc,
         updateDoc,
         type DocumentData,
         type DocumentReference,
     } from "firebase/firestore";
-    import { browser } from "$app/env";
-    import type { setStore } from "$lib/setStore";
-    import { createDebounce } from "$lib/debounce";
+    import LearnPage from "$lib/learn/LearnPage.svelte";
+    import { authState } from "$lib/auth/authState";
+    import AuthManager from "$lib/auth/AuthManager.svelte";
+    import {
+        createCloudSet,
+        getUserDoc,
+        setEquals,
+        newset,
+    } from "$lib/data/db";
+    import { auth } from "$lib/firebase";
+    import { getLocalSet, storeLocalSet } from "$lib/data/storeset";
+    import type { setStore } from "$lib/data/setStore";
+    import { createDebounce } from "$lib/util/debounce";
 
     onAuthStateChanged(auth, (newuser) => {
         authState.set(newuser);

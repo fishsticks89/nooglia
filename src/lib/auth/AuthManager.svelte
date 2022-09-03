@@ -1,6 +1,6 @@
 <script lang="ts">
     import AuthButton from "./AuthButton.svelte";
-    import { authState } from "./state";
+    import { authState } from "$lib/auth/authState";
     import { auth } from "$lib/firebase";
     import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
 

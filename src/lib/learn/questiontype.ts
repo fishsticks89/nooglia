@@ -1,0 +1,1 @@
+export type mode = "multiple choice" | "short answer" | "flashcard"

@@ -2,9 +2,9 @@
     export let oncl: () => void;
     export let posStyle: string = "";
     export let text = "Library";
-    import { authState } from "$lib/state";
+    import { authState } from "$lib/auth/authState";
     import { fly } from "svelte/transition";
-    import { signin } from "./signin";
+    import { signin } from "$lib/auth/signin";
     $: pfp = $authState ? $authState?.photoURL : null;
     let showpfp = true;
 </script>
