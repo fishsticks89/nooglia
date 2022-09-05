@@ -1,283 +1,166 @@
 <script lang="ts">
-    import { toast } from "@zerodevx/svelte-toast";
+    import { max } from "$lib/util/minmax";
+
     import shuffle from "$lib/util/shuffle";
+    import Questionier from "./Questionier.svelte";
+    import type { mode } from "./questiontype";
 
     let done = false;
 
-    export let terms: { q: string; a: string }[];
-    let termpractice = terms.map((e) => {
-        return {
-            ...e,
-            choiced: false,
-            practiced: 0,
-            timesince: 999999999999999,
-        }; // practiced out of three min -1
-    });
-    function randof(x: any[]) {
-        return x[Math.floor(Math.random() * x.length)];
-    }
-    const maxbandwidth = 5;
-    function getRemainingBandwidth() {
-        return (
-            maxbandwidth -
-            termpractice.filter((e) => e.choiced && e.practiced < 2).length
-        );
-    }
-    let currterm = {
-        word: {
-            q: "",
-            a: "",
-            choiced: false,
-            practiced: 0,
-            timesince: 999999999999999,
-        },
-        mode: false,
-    };
-    const listener = (kke: KeyboardEvent) => {
-        if (kke.key == "Enter") answer(typedans);
-    };
-    function queuenext() {
-        answered = false;
-        const bterms = termpractice.filter((e) => e.timesince != 0);
-        if (
-            getRemainingBandwidth() > 0 &&
-            bterms.filter((e) => !e.choiced).length >= 1
-        ) {
-            currterm.word = randof(termpractice.filter((e) => !e.choiced));
-            currterm.mode = true;
-        } else {
-            currterm.word = randof(
-                bterms.filter((e) => e.choiced && e.practiced < 2)
-            );
-            currterm.mode = false;
-            requestAnimationFrame(() => {
-                typedfield.focus();
-                typedfield.removeEventListener("keyup", listener);
-                typedfield.addEventListener("keyup", listener);
-                typedans = "";
-            });
-        }
-        if (!currterm.word) {
-            done = true;
-        } else {
-            termpractice.forEach((e) => (e.timesince += 1));
-            currterm.word.timesince = 0;
-        }
-    }
-    let answered = false;
-    queuenext();
-    let guesses = 0;
-    function isCorrect(iscorr: boolean) {
-        console.log(termpractice);
-        if (currterm.mode) {
-            // matching
-            currterm.word.choiced = iscorr;
-        } else {
-            // practicing
-            currterm.word.practiced = iscorr
-                ? currterm.word.practiced + 1
-                : currterm.word.practiced - 1;
-            Math.max(currterm.word.practiced, -1);
-        }
-    }
-    let allowOV = true;
-    function answer(ans: string) {
-        const correct = currterm.word.a.toLowerCase() == ans.toLowerCase();
-        if (correct) isCorrect(!answered);
-        if (!answered) {
-            guesses = 0;
-            allowOV = true;
-        }
-        toast.push(
-            correct
-                ? "Correct! ✅"
-                : !answered && currterm.mode // if answered or practice mode
-                ? "Incorrect. ❌"
-                : "The answer is: " + currterm.word.a,
-            {
-                dismissable: false,
-                intro: { x: -256, y: 20 },
-                duration: guesses < 1 ? 1200 : 7000,
-            }
-        );
-        answered = true;
-        guesses++;
-        if (correct) queuenext();
-    }
-    const ansStyle = (i: number) => {
-        return `
-        font-family: 'Montserrat', sans-serif;
-        max-width: 200px;
-        max-height: 70px;
-        width: 80%;
-        height: 16vh;
-        font-size: 100%;
-        grid-column: ${(i % 2) + 1};
-        grid-row: ${i < 2 ? 1 : 2};
-        `;
-    };
-    let typedans = "";
-    let typedfield: HTMLElement;
-</script>
+    export let terms: { q: string; a: string }[] = [];
+    let shuffledTerms = shuffle(terms);
+    let stack: {
+        q: string;
+        a: string;
+        phase: number;
+        nextInteractionStep: number | null;
+        lastLongTermRetrieval: number | null;
+    }[] = [];
 
-<div class="learn">
-    {#if !done}
-        <p
-            style:font-size={"large"}
-            style:margin={"2rem"}
-            style:position={"absolute"}
-            style:top={"0rem"}
-            style:left={"0rem"}
-            style:font-family={"'Montserrat', sans-serif"}
-        >
-            {currterm.word.q}
-        </p>
-        {#if currterm.mode}
-            <div class="grid">
-                {#each shuffle([currterm.word.a, ...shuffle(termpractice)
-                            .filter((e) => e != currterm.word)
-                            .map((e) => e.a)].slice(0, (3 >= termpractice.length ? termpractice.length - 1 : 3) + 1)) as term, i}
-                    <button
-                        style={ansStyle(i)}
-                        on:click={() => {
-                            answer(term);
-                        }}
-                    >
-                        {term}
-                    </button>
-                {/each}
-            </div>
-        {:else}
-            <input
-                type="text"
-                autofocus
-                bind:this={typedfield}
-                bind:value={typedans}
-            />
-            {#if answered}
-                {#if allowOV}
-                    <button
-                        class="ov"
-                        on:click={() => {
-                            isCorrect(true);
-                            queuenext();
-                        }}>Override: I was correct</button
-                    >
-                {/if}
-            {:else}
-                <button
-                    class="ov in"
-                    on:click={() => {
-                        answer("");
-                        allowOV = false;
-                    }}>I don't know</button
-                >
-            {/if}
-        {/if}
-    {:else}
-        <p id="done">🎉 Done! 🎉</p>
-    {/if}
-</div>
+    let questionier: any;
+    let onAnswer = (correct: boolean) => {};
+    let setQuestion: (qa: { q: string; a: string }, newmode: mode) => void;
+    const registerSetQuestion: (
+        fun: (qa: { q: string; a: string }, newmode: mode) => void
+    ) => void = (sq) => {
+        setQuestion = sq;
+    };
+    setTimeout(() => {
+        let questionIndex = 0;
+
+        function nextQuestion() {
+            questionIndex++;
+            let newterm: {
+                q: string;
+                a: string;
+                phase: number;
+                nextInteractionStep: number | null;
+                lastLongTermRetrieval: number | null;
+            } | null = null;
+            // decides next step
+            {
+                function pushStack() {
+                    const poppedterm = shuffledTerms.pop();
+                    const tempterm = {
+                        ...poppedterm,
+                        phase: 1,
+                        nextInteractionStep: 0,
+                        lastLongTermRetrieval: null,
+                    };
+                    stack.push(tempterm);
+                    newterm = tempterm;
+                }
+                // TODO: no more than three newterms in a row
+                if (
+                    shuffledTerms.length > 0 &&
+                    stack.filter((e) => e.phase < 5).length < 9 &&
+                    stack.filter((e) => e.phase <= 3).length < 4
+                ) {
+                    // if the stack is not full, enlarge it
+                    pushStack();
+                } else if (
+                    // if the stack has items with a past interactionstep, do them
+                    stack.filter(
+                        (e) =>
+                            e.nextInteractionStep &&
+                            e.nextInteractionStep <= questionIndex
+                    ).length > 0
+                ) {
+                    newterm = stack
+                        .filter(
+                            (e) =>
+                                e.nextInteractionStep &&
+                                e.nextInteractionStep <= questionIndex
+                        )
+                        .reduce((p, c) => {
+                            return p.nextInteractionStep &&
+                                c.nextInteractionStep &&
+                                p.nextInteractionStep < c.nextInteractionStep
+                                ? p
+                                : c;
+                        });
+                } else if (
+                    stack.filter((e) => e.nextInteractionStep != null).length >
+                    0
+                ) {
+                    newterm = stack
+                        .filter((e) => e.lastLongTermRetrieval)
+                        .reduce((p, c) => {
+                            return p.lastLongTermRetrieval &&
+                                c.lastLongTermRetrieval &&
+                                p.lastLongTermRetrieval <
+                                    c.lastLongTermRetrieval
+                                ? p
+                                : c;
+                        });
+                } else {
+                    done = true;
+                }
+                // sets the correct & incorrect callback
+                onAnswer = (correct: boolean) => {
+                    alert((correct) ? "correct" : "incorrect");
+                    if (newterm) {
+                        // determines phase
+                        {
+                            if (correct) {
+                                newterm.phase = max(newterm.phase + 1, 5);
+                            } else {
+                                if (newterm.phase <= 1) {
+                                    // you can't get a flashcard wrong so imma just leave this here for god to observe
+                                } else if (newterm.phase <= 2) {
+                                    newterm.phase = 1;
+                                } else if (newterm.phase <= 5) {
+                                    newterm.phase = 3;
+                                }
+                            }
+                        }
+                        // calculates next interaction
+                        {
+                            if (newterm.phase === 1) {
+                                newterm.nextInteractionStep = questionIndex + 3;
+                                newterm.lastLongTermRetrieval = null;
+                            } else if (newterm.phase === 2) {
+                                newterm.nextInteractionStep = questionIndex + 3;
+                                newterm.lastLongTermRetrieval = null;
+                            } else if (newterm.phase === 3) {
+                                newterm.nextInteractionStep = questionIndex + 3;
+                                newterm.lastLongTermRetrieval = null;
+                            } else if (newterm.phase === 4) {
+                                newterm.nextInteractionStep = questionIndex + 4;
+                                newterm.lastLongTermRetrieval = null;
+                            } else if (newterm.phase <= 5) {
+                                newterm.nextInteractionStep = null;
+                                newterm.lastLongTermRetrieval = questionIndex;
+                            }
+                        }
+                    }
+                    nextQuestion();
+                };
+                // sets the question
+                if (newterm) {
+                    if (newterm.phase <= 1) {
+                        setQuestion(newterm, "flashcard");
+                    } else if (newterm.phase <= 2) {
+                        setQuestion(newterm, "multiple choice");
+                    } else if (newterm.phase <= 5) {
+                        setQuestion(newterm, "short answer");
+                    }
+                }
+            }
+        }
+        nextQuestion();
+    });
+</script>
+{#if !done}
+<Questionier
+    bind:this={questionier}
+    questions={terms}
+    onanswer={onAnswer}
+    {registerSetQuestion}
+/>
+{:else}
+done
+{/if}
 
 <style>
-    .in {
-        background-color: transparent;
-        color: var(--emp);
-    }
-    .ov {
-        max-width: 11rem;
-        font-family: "Montserrat", sans-serif;
-        color: white;
-
-        background-color: var(--accent);
-        border-radius: var(--round);
-        position: absolute;
-        right: 1.5rem;
-        bottom: 1.5rem;
-        padding: 0.5rem;
-        padding-inline: 0.8rem;
-
-        border-color: transparent;
-    }
-    #done {
-        font-size: 5vw;
-        font-family: "Montserrat";
-        font-weight: bold;
-        margin: 0px;
-        padding: none;
-        top: 50%;
-        left: 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        width: 100vw;
-        text-align: center;
-    }
-    input {
-        border-radius: 0px;
-        border-top: 0px;
-        border-left: 0px;
-        border-right: 0px;
-        border-bottom: 2px solid white;
-        border-color: white;
-        background-color: transparent;
-
-        padding-bottom: 5px;
-
-        position: absolute;
-        bottom: calc(10% + 2rem);
-        left: 2rem;
-        width: calc(100% - 4rem);
-        margin: 0px;
-
-        font-size: medium;
-        font-family: "Montserrat";
-    }
-    input:focus-visible {
-        outline: none;
-        border-bottom: 4px solid var(--comp);
-        margin-bottom: -2px;
-    }
-    button {
-        background-color: var(--accent);
-        border-radius: var(--round);
-
-        border: none;
-    }
-    button:focus-visible {
-        outline: none;
-    }
-    .grid {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 50% 50%;
-
-        width: 100%;
-        height: 50%;
-        margin-block: 1rem;
-
-        align-items: center;
-        align-content: center;
-        justify-content: center;
-        justify-items: center;
-    }
-    .learn {
-        width: 80vw;
-        max-width: 100vh;
-        position: fixed;
-        top: 15vh;
-        left: 50vw;
-        transform: translateX(-50%);
-        height: 70vh;
-
-        padding: 1rem;
-        width: calc(80vw - calc(2 * 1rem));
-
-        background-color: var(--emp);
-        border-color: transparent;
-        border-radius: var(--round);
-
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    }
 </style>

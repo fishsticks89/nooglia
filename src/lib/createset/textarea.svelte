@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { flyin } from '$lib/transitions/flyin';
     import { get } from "svelte/store";
     import { browser } from "$app/env";
     import type { setStore } from "$lib/data/setStore";
@@ -6,8 +7,7 @@
     export let state: setStore;
     let tx: HTMLElement; // the elem
     let txf: string; // curr contents
-    const oninput = (updatestate: boolean) => {
-        console.log("e");
+    const oninput = (updatestate: boolean, _: any = {}) => {
         if (tx) {
             tx.style.height = "auto";
             tx.style.height = tx.scrollHeight + "px";
@@ -36,25 +36,21 @@
             txf = get(state).set.contents;
             state.subscribe((e) => {
                 txf = e.set.contents;
-                oninput(false);
             });
-            authState.subscribe((e) => {
-                setTimeout(() => oninput(false));
-            });
-            tx.oninput = () => {
-                setTimeout(() => {
-                    oninput(true);
-                });
-            };
             setTimeout(() => {
                 tx.dispatchEvent(new Event("input"));
                 setTimeout(txshadow);
                 oninput(false);
             }, 1);
         });
+    $: setTimeout(() => {
+        oninput(true, txf);
+    });
 </script>
 
 <textarea
+    in:flyin={{isin: true, additionalTransforms: "translateX(-50%)"}}
+    out:flyin={{isin: false, additionalTransforms: "translateX(-50%)"}}
     bind:this={tx}
     bind:value={txf}
     placeholder={browser

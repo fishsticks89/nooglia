@@ -22,7 +22,8 @@
     {#if $authState}
         {#if showpfp && pfp}
             <img
-                on:error={() => {
+                on:error={(e) => {
+                    e.preventDefault()
                     showpfp = false;
                 }}
                 in:fly={{ duration: 600, y: 200 }}

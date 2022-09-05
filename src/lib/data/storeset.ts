@@ -6,6 +6,6 @@ export const storeLocalSet = (set: set) => {
 }
 export const getLocalSet = (): set => {
     const localset = (browser) ? localStorage.getItem("localset") : null;
-    console.log(localset ? JSON.parse(localset) : null)
+    // console.log(localset ? JSON.parse(localset) : null)
     return localset ? JSON.parse(localset) : newset();
 }

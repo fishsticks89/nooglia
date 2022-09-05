@@ -19,7 +19,6 @@
     } from "firebase/firestore";
     import App from "$lib/App.svelte";
     import { authState } from "$lib/auth/authState";
-    import AuthManager from "$lib/auth/AuthManager.svelte";
     import {
         createCloudSet,
         getUserDoc,
@@ -55,7 +54,7 @@
     authState.subscribe((user) => {
         if (user) {
             if (!setEquals(getLocalSet(), newset())) {
-                console.log(getLocalSet());
+                // console.log(getLocalSet());
                 const storedSet = getLocalSet();
                 createCloudSet(
                     user,
@@ -85,7 +84,6 @@
                             return lastediteddoc.exists();
                         })())
                     ) {
-                        console.log("asdf");
                         currentset.set({
                             doc: e.get("lastedited"),
                             set: {
@@ -133,11 +131,10 @@
                 getUserDoc().then((e) => {
                     updateDoc(e.ref, { lastedited: unset.doc });
                 });
-                console.log(unset.set);
+                // console.log(unset.set);
             });
         }
     });
 </script>
 
-<AuthManager />
 <App store={currentset} />

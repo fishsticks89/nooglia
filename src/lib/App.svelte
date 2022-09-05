@@ -4,8 +4,9 @@
     import Dropdown from "$lib/createset/dropdown.svelte";
     import Textarea from "$lib/createset/textarea.svelte";
     import { items } from "$lib/createset/splitters";
-    import Learn from "$lib/learn/learn.svelte";
+    import Learn from "$lib/learn/Learn.svelte";
     import type { setStore } from "$lib/data/setStore";
+import AuthManager from "./auth/AuthManager.svelte";
     export let store: setStore;
 
     let learn = false;
@@ -15,7 +16,10 @@
             .set.contents.split(/\n+ */)
             .filter((e) => !e.match(/^ *?$/)) // get rid of nothings
             .map((e) => {
-                const stuff = e.split(items.filter(e => e.label === get(store).set.mode)[0].value);
+                const stuff = e.split(
+                    items.filter((e) => e.label === get(store).set.mode)[0]
+                        .value
+                );
                 return {
                     q: stuff[0],
                     a: stuff.splice(1, stuff.length - 1).join(", "),
@@ -47,6 +51,7 @@
     {#if learn}
         <Learn {terms} />
     {:else}
+        <AuthManager />
         <Dropdown state={store} />
         <Textarea state={store} />
         <button

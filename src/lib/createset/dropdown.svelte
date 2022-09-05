@@ -5,15 +5,8 @@
     export let state: setStore;
 
     let select: HTMLElement;
-    $: if (browser)
-        setTimeout(() => {
-            [...select.getElementsByTagName("option")]
-                .filter((e) => {
-                    return e.getAttribute("value") === $state.set.mode;
-                })
-                .forEach((e) => (e.selected = true));
-        });
-    if (browser)
+    let main: HTMLElement;
+    if (browser) {
         setTimeout(() => {
             select.addEventListener("change", (f) => {
                 state.update((state) => {
@@ -22,9 +15,19 @@
                 });
             });
         });
+        state.subscribe((ns) =>
+            setTimeout(() => {
+                [...(select ? select : (main) ? main : document).getElementsByTagName("option")]
+                    .filter((e) => {
+                        return e.getAttribute("value") === ns.set.mode;
+                    })
+                    .forEach((e) => (e.selected = true));
+            })
+        );
+    }
 </script>
 
-<div class="spt">
+<div bind:this={main} class="spt">
     <p>Split terms by:</p>
     {#if !browser}
         <!-- placeholder with correct spacing -->
