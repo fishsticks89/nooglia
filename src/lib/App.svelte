@@ -6,7 +6,7 @@
     import { items } from "$lib/createset/splitters";
     import Learn from "$lib/learn/Learn.svelte";
     import type { setStore } from "$lib/data/setStore";
-import AuthManager from "./auth/AuthManager.svelte";
+    import AuthManager from "./auth/AuthManager.svelte";
     export let store: setStore;
 
     let learn = false;
