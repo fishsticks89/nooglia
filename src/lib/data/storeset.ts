@@ -1,4 +1,4 @@
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { newset, type set } from "./db";
 
 export const storeLocalSet = (set: set) => {

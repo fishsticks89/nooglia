@@ -1,4 +1,5 @@
 <script lang="ts">
+    import ClearButton from "$lib/ui/ClearButton.svelte";
     import { onDestroy } from "svelte";
     import { quadIn, quadOut } from "svelte/easing";
 
@@ -17,9 +18,14 @@
     }
 
     let flipped = false;
+    const flipit = () => {flipped = !flipped}
+    const slideit = (dir: boolean = true) => {
+        direction = dir;
+        onanswer();
+    }
     const listener = (event: KeyboardEvent) => {
         if (event.key === "ArrowUp" || event.key == "ArrowDown") {
-            flipped = !flipped;
+            flipit()
         } else if (event.key === "ArrowLeft") {
             direction = false;
             onanswer();
@@ -71,7 +77,9 @@
                 return `
                     outine: 8px solid;
                     outline-color: rgba(0, 255, 0, ${Math.abs(eased) * 255});
-                    left: calc(${50 + eased * 50}vw + ${(direction) ? "" : "-"}${Math.abs(eased) * learnwidth / 2}px);
+                    left: calc(${50 + eased * 50}vw + ${direction ? "" : "-"}${
+                    (Math.abs(eased) * learnwidth) / 2
+                }px);
                 `;
             },
         };
@@ -79,6 +87,16 @@
 </script>
 
 {#if !answered}
+    <ClearButton
+        on:click={flipit}
+        style="position: fixed; top: 1.5rem; left: 50vw; transform: translateX(-50%); z-index: 2"
+        >Flip
+    </ClearButton>
+    <ClearButton
+        on:click={_=>slideit(true)}
+        style="position: fixed; right: 1.5rem; top: 50vh; transform: translateY(-50%); z-index: 2"
+        >next
+    </ClearButton>
     <!-- used for translate out -->
     <div
         bind:clientWidth={learnwidth}
@@ -91,6 +109,7 @@
                 in:flip={{ rev: true, duration: 200 }}
                 out:flip={{ rev: false, duration: 200 }}
                 class="qholder"
+                on:click={flipit}
             >
                 <p class="center">
                     {currentquestion.a}
@@ -101,6 +120,7 @@
                 in:flip={{ rev: true, duration: 200 }}
                 out:flip={{ rev: false, duration: 200 }}
                 class="qholder"
+                on:click={flipit}
             >
                 <p class="center">
                     {currentquestion.q}
@@ -136,6 +156,8 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+
+        cursor: pointer;
     }
     .mover {
         width: 80vw;

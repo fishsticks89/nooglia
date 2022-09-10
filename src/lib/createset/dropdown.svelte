@@ -1,6 +1,6 @@
 <script lang="ts">
     import { items } from "$lib/createset/splitters";
-    import { browser } from "$app/env";
+    import { browser } from "$app/environment";
     import type { setStore } from "$lib/data/setStore";
     export let state: setStore;
 

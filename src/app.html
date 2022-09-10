@@ -24,29 +24,34 @@
 		font-family: 'Montserrat';
 		src: url('./Montserrat.ttf') format('truetype');
 	}
+
 	@font-face {
 		font-family: 'Hermes';
 		src: url('./Hermes.otf') format('woff2');
 	}
+
 	@font-face {
 		font-family: 'HermesLight';
 		src: url('./HermesLight.otf') format('woff2');
 	}
+
 	@font-face {
 		font-family: 'OpenSans';
 		src: url('./OpenSans.ttf') format('truetype');
 	}
+
 	@font-face {
 		font-family: 'Roboto';
 		src: url('./Roboto.ttf') format('truetype');
 	}
+
 	@font-face {
 		font-family: 'RobotoM';
 		src: url('./RobotoMedium.ttf') format('truetype');
 	}
-	
+
 	button {
-        cursor: pointer;
+		cursor: pointer;
 	}
 
 	body,
@@ -60,14 +65,35 @@
 
 		height: 100vh;
 	}
+
+	button,
+	input,
+	optgroup,
+	select,
+	textarea {
+		font-family: inherit;
+		/* 1 */
+		font-size: 100%;
+		/* 1 */
+		line-height: 1.15;
+		/* 1 */
+		margin: 0;
+		/* 2 */
+	}
+
 	:root {
 		color-scheme: dark;
 		--hue: 220;
-		--background: hsl(var(--hue), 67%, 8%); /* the background */
-		--emp: hsl(var(--hue), 30%, 30%); /* panes */
-		--accent: hsl(var(--hue), 100%, 63%); /* buttons */
-		--disabled: var(--emp); /* buttons */
-		--light: hsl(var(--hue), 100%, 89%); /* "offwhite" */
+		--background: hsl(var(--hue), 67%, 8%);
+		/* the background */
+		--emp: hsl(var(--hue), 30%, 30%);
+		/* panes */
+		--accent: hsl(var(--hue), 100%, 63%);
+		/* buttons */
+		--disabled: var(--emp);
+		/* buttons */
+		--light: hsl(var(--hue), 100%, 89%);
+		/* "offwhite" */
 		--comp: hsl(calc(var(--hue) - 175), 100%, 56%);
 		--round: 0.3rem;
 	}

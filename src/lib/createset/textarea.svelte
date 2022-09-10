@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { flyin } from '$lib/transitions/flyin';
     import { get } from "svelte/store";
-    import { browser } from "$app/env";
+    import { browser } from "$app/environment";
     import type { setStore } from "$lib/data/setStore";
     import { authState } from "$lib/auth/authState";
     export let state: setStore;

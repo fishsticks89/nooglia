@@ -1,4 +1,4 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
 import type { User } from "firebase/auth";
 
