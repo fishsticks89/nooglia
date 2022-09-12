@@ -1,4 +1,4 @@
-export default function shuffle(oldarray: any[]) {
+export default function shuffle<Type>(oldarray: Type[]): Type[] {
   let array = [...oldarray]
   let currentIndex = array.length, randomIndex;
 

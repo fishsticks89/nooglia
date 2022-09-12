@@ -25,6 +25,15 @@
             })
         );
     }
+
+    function swap() {
+        state.update(e => {
+            e.set.contents = e.set.contents.split("\n").map(f => {
+                return f.split(items.filter(g => g.label === e.set.mode)[0].value).reverse().join(items.filter(g => g.label === e.set.mode)[0].char);
+            }).join("\n")
+            return e
+        })
+    }
 </script>
 
 <div bind:this={main} class="spt">
@@ -41,9 +50,20 @@
             {/each}
         </select>
     {/if}
+    <button class="swap" on:click={swap}>
+        <span class="material-icons-round">swap_horiz</span>
+    </button>
 </div>
 
 <style>
+    .swap {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        background-color: var(--emp);
+        border: 0px;
+        border-radius: var(--round);
+    }
     .spt {
         font-family: "Montserrat", sans-serif;
         color: white;

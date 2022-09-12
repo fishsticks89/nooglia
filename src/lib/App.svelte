@@ -1,6 +1,5 @@
 <script lang="ts">
     import { get } from "svelte/store";
-    import { SvelteToast, toast } from "@zerodevx/svelte-toast";
     import Dropdown from "$lib/createset/dropdown.svelte";
     import Textarea from "$lib/createset/textarea.svelte";
     import { items } from "$lib/createset/splitters";
@@ -29,10 +28,6 @@
     }
 </script>
 
-<div class="toast">
-    <SvelteToast />
-</div>
-
 <button
     id="startlearn"
     style:background-color={learn ? "var(--disabled)" : ""}
@@ -40,10 +35,7 @@
         maketerms();
         if (terms.length > 4) learn = !learn;
         else
-            toast.push("not enough terms", {
-                dismissable: false,
-                intro: { x: -256 },
-            });
+            alert("not enough terms");
     }}>{!learn ? "Learn" : "Back"}</button
 >
 
@@ -64,16 +56,6 @@
 </div>
 
 <style>
-    .toast {
-        --toastBackground: var(--emp);
-        --toastWidth: fit-content;
-        --toastPadding: 0px 0.5rem 0px 0.5rem;
-        --toastBorderRadius: var(--round);
-        --toastContainerTop: 1rem;
-        --toastContainerLeft: 1rem;
-        --toastContainerRight: auto;
-        --toastBarBackground: var(--light);
-    }
     .import {
         appearance: none;
         color: white;

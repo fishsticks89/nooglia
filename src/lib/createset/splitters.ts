@@ -1,9 +1,9 @@
 export const items = [
-    { value: /\t */, label: "Tab" },
-    { value: /, */, label: "Comma" },
-    { value: /- */, label: "Dash" },
-    { value: /; */, label: "SemiColon" },
-    { value: /: */, label: "Colon" },
+    { value: /\t */, label: "Tab", char: "\t" },
+    { value: /, */, label: "Comma", char: ", " },
+    { value: / *- */, label: "Dash", char: " - "},
+    { value: /; */, label: "SemiColon", char: "; "},
+    { value: /: */, label: "Colon", char: ": "},
 ].map((e, i) => {
     return { id: i, ...e };
 });

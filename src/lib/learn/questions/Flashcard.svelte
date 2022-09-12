@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ClearButton from "$lib/ui/ClearButton.svelte";
+    import ClearButton from "$lib/ui/SideButton.svelte";
     import { onDestroy } from "svelte";
     import { quadIn, quadOut } from "svelte/easing";
 
@@ -89,13 +89,13 @@
 {#if !answered}
     <ClearButton
         on:click={flipit}
-        style="position: fixed; top: 1.5rem; left: 50vw; transform: translateX(-50%); z-index: 2"
-        >Flip
+        pos="top"
+        >Flip (<span class="material-icons-round">arrow_downward</span>)
     </ClearButton>
     <ClearButton
         on:click={_=>slideit(true)}
-        style="position: fixed; right: 1.5rem; top: 50vh; transform: translateY(-50%); z-index: 2"
-        >next
+        pos="right"
+        >Next (<span class="material-icons-round">arrow_forward</span>)
     </ClearButton>
     <!-- used for translate out -->
     <div
