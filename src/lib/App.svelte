@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Learn from "$lib/learn/Learn.svelte";
+    import Learn from "./learn/Learn.svelte";
     import { get } from "svelte/store";
     import Dropdown from "$lib/createset/dropdown.svelte";
     import Textarea from "$lib/createset/textarea.svelte";
