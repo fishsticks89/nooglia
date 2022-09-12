@@ -20,7 +20,12 @@ jobs:
           pnpm install
           pnpm run build
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+
+      - name: Deploy to GitHub Pages 🚀
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
         with:
-          folder: build # The folder the action should deploy.
+          target_branch: gh-pages
+          build_dir: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
