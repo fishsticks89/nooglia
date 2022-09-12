@@ -1,3 +1,6 @@
+<script context="module">
+    export const prerender = true;
+</script>
 <script lang="ts">
 </script>
 
@@ -9,7 +12,7 @@
     }}>Get Started</button
 >
 
-<img
+<!-- <img
     on:click={() => {
         window.location.replace("https://github.com/fishsticks89/openlearn");
     }}
@@ -17,7 +20,7 @@
     src="./ghlogo.png"
     alt=""
     srcset=""
-/>
+/> -->
 
 <style>
     h1 {

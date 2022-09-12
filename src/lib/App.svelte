@@ -1,9 +1,9 @@
 <script lang="ts">
+    import Learn from "$lib/learn/Learn.svelte";
     import { get } from "svelte/store";
     import Dropdown from "$lib/createset/dropdown.svelte";
     import Textarea from "$lib/createset/textarea.svelte";
     import { items } from "$lib/createset/splitters";
-    import Learn from "$lib/learn/Learn.svelte";
     import type { setStore } from "$lib/data/setStore";
     import AuthManager from "./auth/AuthManager.svelte";
     export let store: setStore;
