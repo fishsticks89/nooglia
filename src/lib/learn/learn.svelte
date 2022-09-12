@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Done from './questions/Done.svelte';
 	import { max } from '$lib/util/minmax';
 
 	import shuffle from '$lib/util/shuffle';
@@ -153,7 +154,7 @@
 		{registerSetQuestion}
 	/>
 {:else}
-	done
+	<Done/>
 {/if}
 
 <style>

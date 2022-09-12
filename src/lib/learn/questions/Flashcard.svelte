@@ -108,7 +108,7 @@
             <div
                 in:flip={{ rev: true, duration: 200 }}
                 out:flip={{ rev: false, duration: 200 }}
-                class="qholder"
+                class="fholder"
                 on:click={flipit}
             >
                 <p class="center">
@@ -119,7 +119,7 @@
             <div
                 in:flip={{ rev: true, duration: 200 }}
                 out:flip={{ rev: false, duration: 200 }}
-                class="qholder"
+                class="fholder"
                 on:click={flipit}
             >
                 <p class="center">
@@ -141,7 +141,7 @@
         font-size: 2rem;
         margin: 0px;
     }
-    .qholder {
+    .fholder {
         position: absolute;
         height: calc(100% - calc(2 * 1rem));
         width: calc(100% - calc(2 * 1rem));

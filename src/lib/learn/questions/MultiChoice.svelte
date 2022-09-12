@@ -36,6 +36,7 @@
 	);
 	function answerWithTerm(term: { a: string; index: number; color: 0 | 1 | -1 }) {
 		if (!answered) {
+			answered = true;
 			term.color = -1;
 			options.filter((e) => e.a === currentquestion.a).forEach((e) => (e.color = 1));
 			setTimeout(() => answer(term.a === currentquestion.a), 1500);
