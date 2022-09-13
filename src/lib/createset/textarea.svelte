@@ -49,8 +49,8 @@
 </script>
 
 <textarea
-    in:flyin={{isin: true, additionalTransforms: "translateX(-50%)"}}
-    out:flyin={{isin: false, additionalTransforms: "translateX(-50%)"}}
+    in:flyin={{isin: true, additionalTransforms: ""}}
+    out:flyin={{isin: false, additionalTransforms: ""}}
     bind:this={tx}
     bind:value={txf}
     placeholder={browser
