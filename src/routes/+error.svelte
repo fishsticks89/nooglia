@@ -5,11 +5,11 @@
 </script>
 
 <h1>The&#8203;Freeviewer</h1>
-<h2>The free-est way to study vocab</h2>
+<h2>Something went wrong!</h2>
 <button
     on:click={() => {
         window.location.replace("./learn");
-    }}>Get Started</button
+    }}>Go Home</button
 >
 
 <!-- <img

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Progress from './Progress.svelte';
 	import Done from './questions/Done.svelte';
 	import { max } from '$lib/util/minmax';
 
@@ -28,7 +29,7 @@
 	};
 	setTimeout(() => {
 		let questionIndex = 0;
-        let termsinarow = 0;
+		let termsinarow = 0;
 		function nextQuestion() {
 			questionIndex++;
 			let newterm: {
@@ -56,13 +57,13 @@
 					shuffledTerms.length > 0 &&
 					stack.filter((e) => e.phase < 5).length < 9 &&
 					stack.filter((e) => e.phase <= 3).length < 4 &&
-                    termsinarow < 3
+					termsinarow < 3
 				) {
 					// if the stack is not full, enlarge it
 					pushStack();
-                    termsinarow++;
+					termsinarow++;
 				} else {
-                    termsinarow = 0;
+					termsinarow = 0;
 					if (
 						// if the stack has items with a past interactionstep, do them
 						stack.filter((e) => e.nextInteractionStep && e.nextInteractionStep <= questionIndex)
@@ -91,61 +92,71 @@
 						done = true;
 					}
 				}
-				// sets the correct & incorrect callback
-				onAnswer = (correct: boolean) => {
-					if (newterm) {
-						// determines phase
-						{
-							if (correct) {
-								newterm.phase = max(newterm.phase + 1, 5);
-							} else {
-								if (newterm.phase <= 1) {
-									// you can't get a flashcard wrong so imma just leave this here for god to observe
-								} else if (newterm.phase <= 2) {
-									newterm.phase = 1;
-								} else if (newterm.phase <= 5) {
-									newterm.phase = 3;
-								}
-							}
-						}
-						// calculates next interaction
-						{
-							if (newterm.phase === 1) {
-								newterm.nextInteractionStep = questionIndex + 3;
-								newterm.lastLongTermRetrieval = null;
-							} else if (newterm.phase === 2) {
-								newterm.nextInteractionStep = questionIndex + 3;
-								newterm.lastLongTermRetrieval = null;
-							} else if (newterm.phase === 3) {
-								newterm.nextInteractionStep = questionIndex + 3;
-								newterm.lastLongTermRetrieval = null;
-							} else if (newterm.phase === 4) {
-								newterm.nextInteractionStep = questionIndex + 4;
-								newterm.lastLongTermRetrieval = null;
+			}
+			// sets the correct & incorrect callback
+			onAnswer = (correct: boolean) => {
+				if (newterm) {
+					// determines phase
+					{
+						if (correct) {
+							newterm.phase = max(newterm.phase + 1, 5);
+						} else {
+							if (newterm.phase <= 1) {
+								// you can't get a flashcard wrong so imma just leave this here for god to observe
+							} else if (newterm.phase <= 2) {
+								newterm.phase = 1;
 							} else if (newterm.phase <= 5) {
-								newterm.nextInteractionStep = null;
-								newterm.lastLongTermRetrieval = questionIndex;
+								newterm.phase = 3;
 							}
 						}
 					}
-					nextQuestion();
-				};
-				// sets the question
-				if (newterm) {
-					if (newterm.phase <= 1) {
-						setQuestion(newterm, 'flashcard');
-					} else if (newterm.phase <= 2) {
-						setQuestion(newterm, 'multiple choice');
-					} else if (newterm.phase <= 5) {
-						setQuestion(newterm, 'short answer');
+					// calculates next interaction
+					{
+						if (newterm.phase === 1) {
+							newterm.nextInteractionStep = questionIndex + 3;
+							newterm.lastLongTermRetrieval = null;
+						} else if (newterm.phase === 2) {
+							newterm.nextInteractionStep = questionIndex + 3;
+							newterm.lastLongTermRetrieval = null;
+						} else if (newterm.phase === 3) {
+							newterm.nextInteractionStep = questionIndex + 3;
+							newterm.lastLongTermRetrieval = null;
+						} else if (newterm.phase === 4) {
+							newterm.nextInteractionStep = questionIndex + 4;
+							newterm.lastLongTermRetrieval = null;
+						} else if (newterm.phase <= 5) {
+							newterm.nextInteractionStep = null;
+							newterm.lastLongTermRetrieval = questionIndex;
+						}
 					}
 				}
+				nextQuestion();
+			};
+			// sets the question
+			if (newterm) {
+				if (newterm.phase <= 1) {
+					setQuestion(newterm, 'flashcard');
+				} else if (newterm.phase <= 2) {
+					setQuestion(newterm, 'multiple choice');
+				} else if (newterm.phase <= 5) {
+					setQuestion(newterm, 'short answer');
+				}
+			}
+			// calculates progress
+			{
+				let total = 0;
+				stack.forEach(e => {
+					total += e.phase - 1
+				})
+				const possible = (stack.length + shuffledTerms.length) * 4
+				progress = total / possible;
 			}
 		}
 		nextQuestion();
 	});
+	let progress = 0;
 </script>
-
+<Progress amount={progress} />
 {#if !done}
 	<Questionier
 		bind:this={questionier}
@@ -154,7 +165,7 @@
 		{registerSetQuestion}
 	/>
 {:else}
-	<Done/>
+	<Done />
 {/if}
 
 <style>

@@ -79,13 +79,12 @@ Massachusetts, Boston
     textarea {
         font-family: "Montserrat", sans-serif;
 
-        margin-top: 3rem;
+        margin-top: 1rem;
 
         padding: 1rem;
         padding-bottom: 0rem;
 
-        margin-left: 50vw;
-        transform: translateX(-50%);
+        margin-left: 0px;
         width: 80vw;
         max-width: 100vh;
 

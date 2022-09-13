@@ -65,7 +65,7 @@
 <div
 	in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }}
 	out:flyin={{ isin: false, additionalTransforms: 'translateX(-50%)' }}
-	style={`transform: translateX(-${
+	style={(!answered) ? `transform: translateX(-${
 		50 -
 		5 *
 			(1 -
@@ -73,11 +73,11 @@
 					$incorrectTweened,
 					($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
 				))
-	}%) translateY(-${(Math.sin($correctTweened * Math.PI) * 10)}%);
+	}%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
 		)}px 0px #e300bd;
-    `}
+    ` : ""}
 	class="qholder"
 >
     <div style={`
