@@ -65,22 +65,25 @@
 <div
 	in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }}
 	out:flyin={{ isin: false, additionalTransforms: 'translateX(-50%)' }}
-	style={(!answered) ? `transform: translateX(-${
-		50 -
-		5 *
-			(1 -
-				elastic(
-					$incorrectTweened,
-					($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
-				))
-	}%);
+	style={!answered
+		? `transform: translateX(-${
+				50 -
+				5 *
+					(1 -
+						elastic(
+							$incorrectTweened,
+							($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
+						))
+		  }%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
 		)}px 0px #e300bd;
-    ` : ""}
+    `
+		: ''}
 	class="qholder"
 >
-    <div style={`
+	<div
+		style={`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -88,17 +91,46 @@
     left: 0px;
     background-color: #00e326;
     opacity: ${$correctTweened * 100};
-    `}/>
+    `}
+	/>
 	<h1 class="term">
 		{currentquestion.q}
-    {#if (firstcorrect != null)}
-     - {currentquestion.a}
-    {/if}
+		{#if firstcorrect != null}
+			- {currentquestion.a}
+		{/if}
 	</h1>
 	<input type="text" bind:this={input} bind:value={inputText} />
+	{#if firstcorrect === false}
+		<button
+			class="ov"
+			on:click={() => {
+				firstcorrect = true;
+				if (!answered) {
+					answered = true;
+					onCorrect();
+					setTimeout(() => answer(firstcorrect ? true : false), 300);
+				}
+			}}>Override: I was correct</button
+		>
+	{/if}
 </div>
 
 <style>
+	.ov {
+		width: 14rem;
+		font-family: 'Montserrat', sans-serif;
+		color: white;
+
+		background-color: var(--accent);
+		border-radius: var(--round);
+		position: absolute;
+		right: 1.5rem;
+		bottom: 1.5rem;
+		padding: 0.5rem;
+		padding-inline: 0.8rem;
+
+		border-color: transparent;
+	}
 	input {
 		border-radius: 0px;
 		border-top: 0px;
@@ -133,7 +165,7 @@
 		font-family: 'Montserrat', sans-serif;
 	}
 	.qholder {
-        overflow: hidden;
+		overflow: hidden;
 		width: 80vw;
 		max-width: 100vh;
 		position: fixed;

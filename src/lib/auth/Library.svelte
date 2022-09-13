@@ -17,14 +17,14 @@
 	export let close: () => void;
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
-	getDocs(query(sets, where('user', '==', get(authState)?.uid))).then((e) => {
+	getDocs(query(sets, where('user', '==', get(authState)?.uid), where("contents", "!=", ""))).then((e) => {
 		docs = e.docs;
 	});
 </script>
 
 {#each docs as doc}
 	<div in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }} class="setholder">
-		{doc.get('name')}
+		{(doc.get('name') != "") ? doc.get("name") : "Untitled"}
 		<button
 			on:click={() => {
 				getCloudSet(doc.ref).then((set) => {
@@ -77,5 +77,6 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
+		align-content: flex-end;
 	}
 </style>
