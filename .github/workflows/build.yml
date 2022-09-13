@@ -20,6 +20,9 @@ jobs:
           pnpm install
           pnpm run build
 
+      - name: Put actions in the 🅱uild Directory? 🍆
+        run: |
+          Move-Item -Path .github -Destination build/.github
 
       - name: Deploy to GitHub Pages 🚀
         if: success()
