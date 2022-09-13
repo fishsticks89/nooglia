@@ -40,7 +40,7 @@
 	{#if learn}
 		<Learn {terms} />
 	{:else}
-		<AuthManager />
+		<AuthManager state={store} />
 		<div class="create">
             <Name state={store} />
 			<Dropdown state={store} />

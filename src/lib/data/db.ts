@@ -1,5 +1,5 @@
 import type { User } from "firebase/auth";
-import { type DocumentReference, setDoc, doc, getDoc, DocumentSnapshot } from "firebase/firestore"
+import { type DocumentReference, setDoc, doc, getDoc, DocumentSnapshot, type DocumentData } from "firebase/firestore"
 import { get } from "svelte/store";
 import { authState } from "$lib/auth/authState";
 import { users, sets } from "$lib/firebase"
@@ -36,4 +36,13 @@ export const createCloudSet = async (user: User, name: string, contents: string,
     const nsetdoc = doc(sets);
     await setDoc(nsetdoc, { user: user.uid, name, contents, mode})
     return nsetdoc;
+}
+export const getCloudSet = async (ref: DocumentReference<DocumentData>): Promise<set> => {
+    const doc = await getDoc(ref);
+    return {
+        name: doc.get("name"),
+        mode: doc.get("mode"),
+        contents: doc.get("contents"),
+        user: doc.get("user"),
+    }
 }

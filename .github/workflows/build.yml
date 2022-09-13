@@ -33,5 +33,6 @@ jobs:
         with:
           target_branch: gh-pages
           build_dir: build
+          commit_message: Deployment 🚀
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
