@@ -86,7 +86,7 @@ Massachusetts, Boston
 
         margin-left: 0px;
         width: 80vw;
-        max-width: 100vh;
+        max-width: 40rem;
 
         resize: none;
         background-color: var(--emp);

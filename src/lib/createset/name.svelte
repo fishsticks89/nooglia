@@ -41,6 +41,7 @@
 		border-color: var(--emp);
 		background-color: transparent;
 
+		padding: 0px;
 		padding-bottom: 5px;
 
 		font-size: calc(4vw + 1rem);

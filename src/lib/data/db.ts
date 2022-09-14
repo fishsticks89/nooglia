@@ -32,9 +32,9 @@ export const getUserDoc = async (): Promise<DocumentSnapshot> => {
         setDoc(doc(users, get(authState)?.uid), newuser());
     return getUserDoc();
 }
-export const createCloudSet = async (user: User, name: string, contents: string, mode: string) => {
+export const createCloudSet = async (set:set) => {
     const nsetdoc = doc(sets);
-    await setDoc(nsetdoc, { user: user.uid, name, contents, mode})
+    await setDoc(nsetdoc, set)
     return nsetdoc;
 }
 export const getCloudSet = async (ref: DocumentReference<DocumentData>): Promise<set> => {

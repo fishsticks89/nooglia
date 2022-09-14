@@ -44,7 +44,7 @@
 			css: (t: number) => {
 				const eased = rev ? cubicOut(t) : cubicIn(t);
 
-				return pos(0, eased);
+				return pos(0, eased) + "overflow: hidden;";
 			}
 		};
 	}
@@ -119,5 +119,6 @@
 		padding: 0px;
 		z-index: 1;
 		overflow: hidden;
+		overflow-y: scroll;
 	}
 </style>
