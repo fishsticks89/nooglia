@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Feedback from './feedback/feedback.svelte';
 	import Learn from '$lib/learn/Learn.svelte';
 	import { get } from 'svelte/store';
 	import Dropdown from '$lib/createset/dropdown.svelte';
@@ -54,6 +55,7 @@
 		>
 	{/if}
 </div>
+<Feedback/>
 
 <style>
     .create {
