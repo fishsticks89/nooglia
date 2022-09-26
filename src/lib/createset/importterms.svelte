@@ -121,7 +121,7 @@
 
 		transform: translateX(-50%);
 
-		border: 1px solid var(--emp);
+		border: 0px solid transparent;
 		border-radius: var(--round);
 
 		min-height: fit-content;

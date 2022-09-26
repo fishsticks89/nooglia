@@ -9,7 +9,7 @@
 	export let store: setStore;
 </script>
 
-<div style="overflow-y: visible;">
+<div style="overflow-y: hidden; height: fit-content; min-height: 100vh;">
 	{#if browser}
 		<div class="create">
 			<Create state={store} />
