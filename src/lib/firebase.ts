@@ -8,13 +8,13 @@ import { browser, dev } from "$app/environment";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBjpIbTxAx-Ej_BPyYIqavigR6Nt4x-mT0",
-  authDomain: "openlearn-cc171.firebaseapp.com",
-  projectId: "openlearn-cc171",
-  storageBucket: "openlearn-cc171.appspot.com",
-  messagingSenderId: "436049346888",
-  appId: "1:436049346888:web:e53d352cf7c2d63024737d",
-  measurementId: "G-VZ6XVDWXGP"
+  apiKey: "AIzaSyBpGPOCBY5ArJYF3X6zxm9F9BAspS4_qXI",
+  authDomain: "nooglia-2383a.firebaseapp.com",
+  projectId: "nooglia-2383a",
+  storageBucket: "nooglia-2383a.appspot.com",
+  messagingSenderId: "448020777089",
+  appId: "1:448020777089:web:208bb363cd58124d43e580",
+  measurementId: "G-VC9747164E"
 };
 
 
