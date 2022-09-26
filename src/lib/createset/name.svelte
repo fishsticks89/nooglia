@@ -9,13 +9,10 @@
 	txf = get(state).set.name;
 	state.subscribe((e) => {
 		txf = e.set.name;
-		console.log(e.set.name);
 	});
 	function oninput(_: any) {
 		state.update((e) => {
 			e.set.name = txf ? txf : '';
-			console.log(e.set.name);
-			console.log(txf);
 			return e;
 		});
 	}
@@ -26,8 +23,9 @@
 
 <style>
 	input::placeholder {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Gilroy', sans-serif;
 		color: var(--light);
+		opacity: 100%;
 	}
 	input {
 		width: 100%;
@@ -45,7 +43,7 @@
 		padding-bottom: 5px;
 
 		font-size: calc(4vw + 1rem);
-		font-family: 'Montserrat';
+		font-family: 'Gilroy', sans-serif;
 	}
 	input:focus-visible {
 		outline: none;

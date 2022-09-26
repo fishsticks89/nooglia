@@ -11,8 +11,8 @@
 	import { get } from 'svelte/store';
 	import { authState } from './authState';
 	import type { setStore } from '$lib/data/setStore';
-	import { createCloudSet, getCloudSet, newset } from '$lib/data/db';
-	import {fade} from "svelte/transition"
+	import { createCloudSet, getCloudSet, newset, setCurrentSet } from '$lib/data/db';
+	import { fade } from 'svelte/transition';
 
 	export let state: setStore;
 	export let close: () => void;
@@ -33,66 +33,75 @@
 				const set = {
 					user: uid,
 					name: '',
-					contents: '',
+					contents: newset().contents,
 					mode: newset().mode
 				};
 				createCloudSet(set).then((setref) => {
-					state.update(() => {
-						return {
-							set,
-							doc: setref
-						};
-					});
+					setCurrentSet(setref, state);
 					close();
 				});
 			}
 		}}
-		class="open" in:fade={{duration: 300}} out:fade={{duration: 100}} >New Set</button
+		class="open"
+		in:fade={{ duration: 300 }}
+		out:fade={{ duration: 100 }}>New Set</button
 	>
 	{#each docs as doc}
-		<div in:flyin={{ isin: true, additionalTransforms: '' }} out:flyin={{ isin: false, additionalTransforms: '' }} class="setholder">
-			{doc.get('name') != '' ? doc.get('name') : 'Untitled'}
-			<button
-				on:click={() => {
-					getCloudSet(doc.ref).then((set) => {
-						state.update(() => {
-							return {
-								set,
-								doc: doc.ref
-							};
-						});
-						close();
+		<div
+			in:flyin={{ isin: true, additionalTransforms: '' }}
+			out:flyin={{ isin: false, additionalTransforms: '' }}
+			class="setholder"
+			on:click={() => {
+				getCloudSet(doc.ref).then((set) => {
+					state.update(() => {
+						return {
+							set,
+							doc: doc.ref,
+							isEditing: false
+						};
 					});
-				}}
-				class="open">Open</button
-			>
+					close();
+				});
+			}}
+		>
+			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
+			<button class="open">Open</button>
 		</div>
 	{/each}
 </div>
 
 <style>
-	#create {
-		margin-block: 1rem;
-	}
 	.open {
 		width: fit-content;
 		height: fit-content;
 		padding: 1rem;
 		padding-inline: 1.5rem;
 
-		color: var(--accent);
+		color: var(--light);
 		font-weight: bold;
 		border-width: 0px;
 		border-radius: var(--round);
 
-		background-color: var(--light);
+		background-color: var(--glass);
 	}
 	.holder {
 		margin: 0px;
-		margin-left: 50vw;
-		width: 80vw;
-		max-width: 30rem;
-		transform: translateX(-50%);
+		margin-block: 0px;
+		padding-inline: 10%;
+		padding-top: 1rem;
+		padding-bottom: 4rem;
+		width: 80%;
+		height: calc(100% - 5rem);
+
+		overflow-x: hidden;
+		overflow-y: scroll;
+		position: fixed;
+		top: 0rem;
+		left: 0rem;
+
+		display: flex;
+		align-items: center;
+		flex-direction: column;
 	}
 	.setholder {
 		color: white;
@@ -100,18 +109,18 @@
 		font-family: 'Montserrat', sans-serif;
 		margin: 0px;
 		margin-block: 1rem;
-		padding: 2rem;
-		width: 100%;
+		padding: 10%;
+		width: 80%;
 
 		border: 1px solid white;
 		border-width: 1px;
-		border-color: white;
+		border-color: var(--background);
 
-		background-color: var(--accent);
+		background-color: var(--emp);
 		border-radius: var(--round);
 
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		justify-content: space-between;
 		align-content: flex-end;
 	}

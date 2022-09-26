@@ -1,123 +1,42 @@
 <script lang="ts">
-	import Feedback from './feedback/feedback.svelte';
-	import Learn from '$lib/learn/Learn.svelte';
-	import { get } from 'svelte/store';
-	import Dropdown from '$lib/createset/dropdown.svelte';
-	import Textarea from '$lib/createset/textarea.svelte';
-	import Name from '$lib/createset/name.svelte';
-	import { items } from '$lib/createset/splitters';
+	import Feedback from './feedback/Feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
 	import AuthManager from './auth/AuthManager.svelte';
-	export let store: setStore;
+	import Create from './createset/Create.svelte';
+	import Nav from './nav/Nav.svelte';
+	import { browser } from '$app/environment';
 
-	let learn = false;
-	let terms: { q: string; a: string }[] = [];
-	function maketerms() {
-		terms = get(store)
-			.set.contents.split(/\n+ */)
-			.filter((e) => !e.match(/^ *?$/)) // get rid of nothings
-			.map((e) => {
-				const stuff = e.split(items.filter((e) => e.label === get(store).set.mode)[0].value);
-				return {
-					q: stuff[0],
-					a: stuff.splice(1, stuff.length - 1).join(', ')
-				};
-			})
-			.filter((e) => e.a != undefined && e.q != undefined);
-	}
+	export let store: setStore;
 </script>
 
-<button
-	id="startlearn"
-	style:background-color={learn ? 'var(--disabled)' : ''}
-	on:click={() => {
-		maketerms();
-		if (terms.length > 4) learn = !learn;
-		else alert('not enough terms');
-	}}>{!learn ? 'Learn' : 'Back'}</button
->
-
-<div>
-	{#if learn}
-		<Learn {terms} />
-	{:else}
-		<AuthManager state={store} />
+<div style="overflow-y: visible;">
+	{#if browser}
 		<div class="create">
-            <Name state={store} />
-			<Dropdown state={store} />
-			<Textarea state={store} />
+			<Create state={store} />
 		</div>
-		<button
-			class="import"
-			on:click={() => {
-				window.open('./quizlet', '_blank');
-			}}>Import from Quizlet</button
-		>
 	{/if}
+
+	<Nav>
+		<AuthManager state={store} />
+	</Nav>
+
+	<Feedback />
 </div>
-<Feedback/>
 
 <style>
-    .create {
-        width: fit-content;
-        height: fit-content;
-        margin: 0px;
-        margin-left: 50vw;
-        transform: translateX(-50%);
-        padding-top: 3rem;
-    }
-	.import {
-		appearance: none;
-		color: white;
-		background-color: var(--background);
-		border: 0px;
-		box-shadow: 0px 0px 3px -1px var(--light);
+	.create {
+		width: 70vw;
+		max-width: 50rem;
+		height: fit-content;
 		margin: 0px;
-		font-weight: 600;
-		font-family: 'Montserrat', sans-serif;
-		cursor: pointer;
+		margin-left: 50vw;
+		transform: translateX(-50%);
+		padding-top: 3rem;
 
-		padding: 0.7rem;
-		text-align: right;
-		margin-inline: 10vw;
-		margin-block: 1rem;
-		right: 0rem;
-		bottom: 0px;
-		position: fixed;
-
-		border-radius: var(--round);
-	}
-	@media only screen and (min-width: 190vh) {
-		.import {
-			box-shadow: none;
-			padding-right: 1rem;
-		}
-	}
-	#startlearn:focus-visible {
-		outline: 0px;
-	}
-	#startlearn {
-		cursor: pointer;
-		font-family: 'Montserrat', sans-serif;
-		font-weight: bold;
-		letter-spacing: 0.3px;
-		font-size: large;
-		color: white;
-
-		background-color: var(--accent);
-		border-radius: var(--round);
-		position: absolute;
-		top: 0rem;
-		right: 0rem;
-		margin: 1.5rem;
-		margin-right: 1.5rem;
-		padding: 0.5rem;
-		padding-inline: 0.8rem;
-
-		border-color: transparent;
+		overflow: visible;
 	}
 	div {
-		overflow-y: auto;
+		overflow-y: hidden;
 		overflow-x: hidden;
 		width: 100vw;
 		padding: 0px;

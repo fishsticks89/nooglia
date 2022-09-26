@@ -24,7 +24,6 @@
 		};
 		return option;
 	});
-	console.log(questions);
 
 	let answered = false;
 	const springit = spring(
@@ -39,7 +38,7 @@
 			answered = true;
 			term.color = -1;
 			options.filter((e) => e.a === currentquestion.a).forEach((e) => (e.color = 1));
-			setTimeout(() => answer(term.a === currentquestion.a), 1500);
+			setTimeout(() => answer(term.a === currentquestion.a), term.a === currentquestion.a ? 700 : 1200);
             springit.set(90);
 		}
 	}
@@ -49,7 +48,7 @@
         max-width: 200px;
         max-height: 70px;
         width: 80%;
-        height: 16vh;
+        height: 70%;
         font-size: 100%;
         grid-column: ${(i % 2) + 1};
         grid-row: ${i < 2 ? 1 : 2};
@@ -81,7 +80,7 @@
 	button {
 		background-color: var(--accent);
 		border-radius: var(--round);
-
+		color: white;
 		border: none;
 	}
 	button:focus-visible {
@@ -102,6 +101,7 @@
 		justify-items: center;
 	}
 	.term {
+		color: white;
 		font-size: large;
 		margin: 2rem;
 		position: absolute;
@@ -110,16 +110,14 @@
 		font-family: 'Montserrat', sans-serif;
 	}
 	.qholder {
-		width: 80vw;
-		max-width: 100vh;
-		position: fixed;
-		top: 15vh;
-		left: 50vw;
+		position: absolute;
+		top: 0%;
+		left: 50%;
 		transform: translateX(-50%);
-		height: 70vh;
 
 		padding: 1rem;
-		width: calc(80vw - calc(2 * 1rem));
+		width: calc(100% - calc(2 * 1rem));
+		height: calc(100% - calc(2 * 1rem));
 
 		background-color: var(--emp);
 		border-color: transparent;

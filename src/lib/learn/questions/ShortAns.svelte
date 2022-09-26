@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { flyin } from '$lib/transitions/flyin';
 	import { onDestroy } from 'svelte';
 	import elastic from '$lib/transitions/easing/elastic';
@@ -13,7 +14,7 @@
 	let answered = false;
 	function onanswer() {
 		const correct =
-			inputText.toLowerCase().split(/ +/).join('') ===
+			inputText.toLowerCase().split(/ +/).join('') ==
 			currentquestion.a.toLowerCase().split(/ +/).join('');
 		if (firstcorrect === null) {
 			firstcorrect = correct;
@@ -33,7 +34,7 @@
 		}
 	};
 	setTimeout(() => {
-		input.focus();
+		input.focus({ preventScroll: true });
 		input.addEventListener('keyup', listener);
 		inputText = '';
 	});
@@ -77,7 +78,7 @@
 		  }%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
-		)}px 0px #e300bd;
+		)}px 0px var(--comp);
     `
 		: ''}
 	class="qholder"
@@ -86,7 +87,7 @@
 		style={`
     width: 100%;
     height: 100%;
-    position: fixed;
+    position: absolute;
     top: 0px;
     left: 0px;
     background-color: #00e326;
@@ -95,14 +96,21 @@
 	/>
 	<h1 class="term">
 		{currentquestion.q}
-		{#if firstcorrect != null}
-			- {currentquestion.a}
-		{/if}
 	</h1>
-	<input type="text" bind:this={input} bind:value={inputText} />
-	{#if firstcorrect === false}
+	{#if firstcorrect == false && !answered}
+		<div class="enter" transition:fade={{ duration: 200 }}>Enter: "{currentquestion.a}" or <strong class="skp" on:click={() => answer(false)}>skip</strong></div>
+	{/if}
+	<input
+		style:border-color={!answered ? '' : 'transparent'}
+		type="text"
+		bind:this={input}
+		bind:value={inputText}
+	/>
+	<!-- firstcorrect can be null to "=== false" -->
+	{#if firstcorrect === false && !answered}
 		<button
 			class="ov"
+			transition:fade={{ duration: 200 }}
 			on:click={() => {
 				firstcorrect = true;
 				if (!answered) {
@@ -112,24 +120,44 @@
 				}
 			}}>Override: I was correct</button
 		>
+	{:else if !answered}
+		<button
+			class="ov"
+			transition:fade={{ duration: 200 }}
+			on:click={() => {
+				onanswer();
+			}}>I don't know</button
+		>
 	{/if}
 </div>
 
 <style>
-	.ov {
-		width: 14rem;
-		font-family: 'Montserrat', sans-serif;
+	.skp {
 		color: white;
+		cursor: pointer;
+	}
+	.enter {
+		color: var(--complight);
 
-		background-color: var(--accent);
+		position: absolute;
+		bottom: calc(10% + 4rem);
+		left: 2rem;
+		width: calc(100% - 4rem);
+		margin: 0px;
+	}
+	.ov {
+		font-family: 'GilroyBold', sans-serif;
+		color: var(--light);
+
+		background-color: transparent;
 		border-radius: var(--round);
+		border: 0px solid transparent;
+
 		position: absolute;
 		right: 1.5rem;
-		bottom: 1.5rem;
-		padding: 0.5rem;
-		padding-inline: 0.8rem;
-
-		border-color: transparent;
+		top: 1.5rem;
+		padding: 0.8rem;
+		padding-inline: 1.2rem;
 	}
 	input {
 		border-radius: 0px;
@@ -166,16 +194,15 @@
 	}
 	.qholder {
 		overflow: hidden;
-		width: 80vw;
-		max-width: 100vh;
-		position: fixed;
-		top: 15vh;
-		left: 50vw;
+
+		position: absolute;
+		top: 0%;
+		left: 50%;
 		transform: translateX(-50%);
-		height: 70vh;
 
 		padding: 1rem;
-		width: calc(80vw - calc(2 * 1rem));
+		width: calc(100% - calc(2 * 1rem));
+		height: calc(100% - calc(2 * 1rem));
 
 		background-color: var(--emp);
 		border-color: transparent;

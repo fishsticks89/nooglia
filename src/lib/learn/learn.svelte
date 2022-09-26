@@ -1,13 +1,15 @@
 <script lang="ts">
-	import Progress from './Progress.svelte';
-	import Done from './questions/Done.svelte';
 	import { max } from '$lib/util/minmax';
 
 	import shuffle from '$lib/util/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
+	import type { setStore } from '$lib/data/setStore';
+	import { get } from 'svelte/store';
 
 	let done = false;
+
+	export let state: setStore;
 
 	export let terms: { q: string; a: string }[] = [];
 	let shuffledTerms = shuffle(terms);
@@ -27,6 +29,18 @@
 	) => void = (sq) => {
 		setQuestion = sq;
 	};
+	let restart: () => void = () => {};
+
+	let doc = get(state).doc?.id;
+	state.subscribe((s) => {
+		if (!(s.doc?.id === doc)) {
+			doc = s.doc?.id;
+			setTimeout(() => {
+				restart();
+			});
+		}
+	});
+
 	setTimeout(() => {
 		let questionIndex = 0;
 		let termsinarow = 0;
@@ -104,7 +118,7 @@
 							if (newterm.phase <= 1) {
 								// you can't get a flashcard wrong so imma just leave this here for god to observe
 							} else if (newterm.phase <= 2) {
-								newterm.phase = 1;
+								newterm.phase = 2; // leave the multichoice be
 							} else if (newterm.phase <= 5) {
 								newterm.phase = 3;
 							}
@@ -145,28 +159,35 @@
 			// calculates progress
 			{
 				let total = 0;
-				stack.forEach(e => {
-					total += e.phase - 1
-				})
-				const possible = (stack.length + shuffledTerms.length) * 4
+				stack.forEach((e) => {
+					total += e.phase - 1;
+				});
+				const possible = (stack.length + shuffledTerms.length) * 4;
 				progress = total / possible;
 			}
 		}
 		nextQuestion();
+		restart = () => {
+			shuffledTerms = shuffle(terms);
+			stack = [];
+			questionIndex = 0;
+			termsinarow = 0;
+			done = false;
+			nextQuestion();
+		};
 	});
 	let progress = 0;
 </script>
-<Progress amount={progress} />
-{#if !done}
-	<Questionier
-		bind:this={questionier}
-		questions={terms}
-		onanswer={onAnswer}
-		{registerSetQuestion}
-	/>
-{:else}
-	<Done />
-{/if}
+
+<Questionier
+	bind:this={questionier}
+	questions={terms}
+	onanswer={onAnswer}
+	{progress}
+	{registerSetQuestion}
+	{done}
+	{restart}
+/>
 
 <style>
 </style>

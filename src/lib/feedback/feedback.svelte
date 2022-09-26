@@ -26,7 +26,7 @@
 			const request = new XMLHttpRequest();
 			request.open(
 				'POST',
-				'https://discord.com/api/webhooks/1023302834931892245/9dEKWuD4b5jqadGPGrVqc-fWAe85WbspqVBFPbkvjBagO34k3R4UXsfVVCVZoVgt_gcB'
+				'https://discord.com/api/webhooks/1020528830995255376/V9UtjobBchnvB_yyTwi12ykPOTx1dHwpAOE6UTkaXQ21jFqmaNFdbaw1ZbN3DARllspZ'
 			);
 			request.setRequestHeader('Content-type', 'application/json');
 			const params = {
@@ -115,10 +115,10 @@
 
 		padding: 0.7rem;
 		text-align: right;
-		margin-inline: 1rem;
-		margin-block: 1rem;
-		left: 0rem;
-		top: 0px;
+		margin-inline: 2rem;
+		margin-block: 2rem;
+		right: 0rem;
+		bottom: 0px;
 		position: fixed;
 
 		border-radius: var(--round);

@@ -15,7 +15,14 @@
 	} from 'firebase/firestore';
 	import App from '$lib/App.svelte';
 	import { authState } from '$lib/auth/authState';
-	import { createCloudSet, getUserDoc, setEquals, newset } from '$lib/data/db';
+	import {
+		createCloudSet,
+		getUserDoc,
+		setEquals,
+		newset,
+		getCloudSet,
+		setCurrentSet
+	} from '$lib/data/db';
 	import { auth } from '$lib/firebase';
 	import { getLocalSet, storeLocalSet } from '$lib/data/storeset';
 	import type { setStore } from '$lib/data/setStore';
@@ -41,27 +48,19 @@
 			// ...
 		});
 
-	let currentset: setStore = writable({ doc: null, set: getLocalSet() });
+	const ls = getLocalSet();
+	let currentset: setStore = writable({ doc: null, set: ls.set, isEditing: ls.isNew });
 	authState.subscribe((user) => {
 		if (user) {
-			if (!setEquals(getLocalSet(), newset())) {
-				// console.log(getLocalSet());
-				const storedSet = getLocalSet();
+			if (!setEquals(getLocalSet().set, newset())) {
+				const storedSet = getLocalSet().set;
 				createCloudSet({
 					user: user.uid,
 					name: storedSet.name,
 					contents: storedSet.contents,
 					mode: storedSet.mode
 				}).then((e) => {
-					currentset.set({
-						doc: e,
-						set: {
-							user: user.uid,
-							name: storedSet.name,
-							contents: storedSet.contents,
-							mode: storedSet.mode
-						}
-					});
+					setCurrentSet(e, currentset);
 					storeLocalSet(newset());
 				});
 			} else {
@@ -81,44 +80,47 @@
 								name: (lastediteddoc as any as DocumentSnapshot<DocumentData>).get('name'),
 								contents: (lastediteddoc as any as DocumentSnapshot<DocumentData>).get('contents'),
 								mode: (lastediteddoc as any as DocumentSnapshot<DocumentData>).get('mode')
-							}
+							},
+							isEditing: false
 						});
 					} else {
-                        const set = newset();
-                        set.user = user.uid
+						const set = newset(user.uid);
 						createCloudSet(set).then((e) => {
-							currentset.set({
-								doc: e,
-								set: {
-									user: user.uid,
-									name: '',
-									contents: '',
-									mode: 'Comma'
-								}
-							});
+							setCurrentSet(e, currentset);
 						});
 					}
 				});
 			}
 		} else {
-			currentset.set({ doc: null, set: getLocalSet() });
+			const ls = getLocalSet();
+			currentset.set({ doc: null, set: ls.set, isEditing: ls.isNew });
 		}
 	});
-	let unsubscribe: (() => void) | null = null;
-	const debo = createDebounce(2000);
+	const debo = createDebounce(900);
 	currentset.subscribe((unset) => {
-		if (unsubscribe) unsubscribe();
-		unsubscribe == null;
+		if (
+			!unset.isEditing &&
+			(unset.set.name === '' ||
+				unset.set.contents.length < 4 ||
+				unset.set.contents
+					.join('')
+					.split(/[\n ]+/)
+					.join('').length <= 1)
+		) {
+			currentset.update((e) => {
+				e.isEditing = true;
+				return e;
+			});
+		}
 		if (!unset.doc) {
 			if (browser) storeLocalSet(unset.set);
 		} else {
-			debo(() => {
-				setDoc(unset.doc as DocumentReference<DocumentData>, unset.set);
-				getUserDoc().then((e) => {
-					updateDoc(e.ref, { lastedited: unset.doc });
+			if (unset.set) {
+				debo(() => {
+					setDoc(unset.doc as DocumentReference<DocumentData>, unset.set);
 				});
-				// console.log(unset.set);
-			});
+			} else {
+			}
 		}
 	});
 </script>

@@ -1,100 +1,70 @@
 <script lang="ts">
-	import { flyin } from '$lib/transitions/flyin';
-    import { get } from "svelte/store";
-    import { browser } from "$app/environment";
-    import type { setStore } from "$lib/data/setStore";
-    import { authState } from "$lib/auth/authState";
-    export let state: setStore;
-    let tx: HTMLElement; // the elem
-    let txf: string; // curr contents
-    const oninput = (updatestate: boolean, _: any = {}) => {
-        if (tx) {
-            tx.style.height = "auto";
-            tx.style.height = tx.scrollHeight + "px";
-        } else {
-            // console.error("no tx");
-        }
-        if (updatestate)
-            state.update((e) => {
-                e.set.contents = txf;
-                return e;
-            });
-    };
-    if (browser)
-        setTimeout(() => {
-            tx.setAttribute(
-                "style",
-                "height:" + tx.scrollHeight + "px;overflow-y:hidden;"
-            );
-            function txshadow() {
-                const txwidth = tx.clientWidth;
-                tx.style.filter = `drop-shadow(0px 0px 8px var(--background)) drop-shadow(${txwidth}px 0px 8px var(--background)) drop-shadow(-${txwidth}px 0px 8px var(--background));`;
-            }
-            document.addEventListener("resize", () => {
-                txshadow();
-            });
-            txf = get(state).set.contents;
-            state.subscribe((e) => {
-                txf = e.set.contents;
-            });
-            setTimeout(() => {
-                tx.dispatchEvent(new Event("input"));
-                setTimeout(txshadow);
-                oninput(false);
-            }, 1);
-        });
-    $: setTimeout(() => {
-        oninput(true, txf);
-    });
+	export let defaultText: string;
+
+	let tx: HTMLTextAreaElement; // the elem
+	export let funcs: { get: () => string; reset: () => void };
+	export let onPaste = (contents: string) => {};
+	let text: string; // curr contents
+	funcs.get = () => {
+		return text;
+	};
+	funcs.reset = () => {
+		text = '';
+	};
+
+	function init(text: HTMLTextAreaElement) {
+		function resize() {
+			text.style.height = 'auto';
+			text.style.height = text.scrollHeight + 1 + 'px';
+		}
+		/* 0-timeout to get the already changed text */
+		function delayedResize() {
+			window.setTimeout(resize, 0);
+		}
+		text.addEventListener('change', resize);
+		text.addEventListener('cut', delayedResize);
+		text.addEventListener('paste', delayedResize);
+		text.addEventListener('drop', delayedResize);
+		text.addEventListener('keydown', delayedResize);
+		window.addEventListener('resize', delayedResize);
+
+		text.addEventListener('paste', () => {
+			setTimeout(() => onPaste(tx.value));
+		});
+
+		resize();
+	}
+
+	setTimeout(() => {
+		init(tx);
+	});
 </script>
 
-<textarea
-    in:flyin={{isin: true, additionalTransforms: ""}}
-    out:flyin={{isin: false, additionalTransforms: ""}}
-    bind:this={tx}
-    bind:value={txf}
-    placeholder={browser
-        ? `e.g.
-
-California, Sacramento
-
-Wisconsin, Madison
-
-Georgia, Atlanta
-
-North Dakota, Bismark
-
-South Dakota, Pierre
-
-Massachusetts, Boston
-`
-        : ""}
-/>
+<textarea bind:this={tx} bind:value={text} placeholder={defaultText} />
 
 <style>
-    textarea::placeholder {
-        font-family: "Montserrat", sans-serif;
-        color: var(--light);
-    }
-    textarea {
-        font-family: "Montserrat", sans-serif;
+	textarea::placeholder {
+		font-family: 'Montserrat', sans-serif;
+		color: var(--light);
+	}
+	textarea {
+		font-family: 'Montserrat', sans-serif;
 
-        margin-top: 1rem;
+		margin-top: 0rem;
 
-        padding: 1rem;
-        padding-bottom: 0rem;
+		padding: 1rem;
+		padding-bottom: 0.1rem;
 
-        margin-left: 0px;
-        width: 80vw;
-        max-width: 40rem;
+		margin-left: 1rem;
+		width: calc(100% - 4rem);
 
-        resize: none;
-        background-color: var(--emp);
+		resize: none;
+		background-color: var(--emp);
 
-        border-width: 0px;
-        border-radius: var(--round);
-    }
-    textarea:focus-visible {
-        outline: none;
-    }
+		border-width: 0px;
+		border-radius: var(--round);
+	}
+	textarea:focus-visible {
+		outline: none;
+	}
 </style>

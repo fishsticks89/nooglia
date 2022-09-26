@@ -16,16 +16,21 @@
 		if (isUser) popped = !popped;
 		else popped = false;
 	};
-	let pos = (x: number, y: number) => {
+	let pos = (x: number, width: number, isin: boolean = true) => {
+		const isSmall = width > 600;
 		// number is out of 1
 		return `
-        position: fixed;
-        bottom: ${1 - x + y * 5}rem;
-        left: ${1 - x}rem;
-        width: calc(${8.5 * (1 - x)}rem + ${100 * x}vw);
-        height: calc(${3 * (1 - x)}rem + ${100 * x}vh);
-        border-radius: ${x > 0.99 ? '0px' : 'var(--round)'};
-        backdrop-filter: brightness(${100 + 30 * x}%);
+		position: ${isSmall ? 'absolute' : 'fixed'};
+		top: 4rem;
+		left: 50%;
+		opacity: ${100 * (isin ? cubicOut(x) : cubicIn(x))}%;
+		transform: translateX(-50%) perspective(600px) translateZ(-${(1 - x) * 80}px) rotateX(-${
+			(1 - x) * 20
+		}deg);
+        width: ${isSmall ? '15rem' : '80vw'};
+        height: ${isSmall ? '20rem' : '80vh'};
+        border-radius: var(--round);
+		z-index: 5;
         `;
 	};
 	function enlarge(node: any, { duration, rev = false }: { duration: number; rev: boolean }) {
@@ -34,91 +39,76 @@
 			css: (t: number) => {
 				const eased = rev ? cubicOut(t) : cubicIn(t);
 
-				return pos(eased, 0);
+				return pos(eased, width, rev);
 			}
 		};
 	}
-	function heighten(node: any, { duration, rev }: { duration: number; rev: boolean }) {
-		return {
-			duration,
-			css: (t: number) => {
-				const eased = rev ? cubicOut(t) : cubicIn(t);
-
-				return pos(0, eased) + "overflow: hidden;";
-			}
-		};
-	}
-	function rotate(node: any, { duration, rev }: { duration: number; rev: boolean }) {
-		return {
-			duration,
-			css: (t: number) => {
-				const eased = rev ? cubicOut(t) : cubicIn(t);
-
-				return `
-                    opacity: ${cubicIn(eased) * 100}%;
-                    transform: translatex(-50%) rotate(${(1 - eased) * 120}deg);
-                `;
-			}
-		};
-	}
+	let width = 0;
 </script>
 
-{#if popped && $authState}
-	<button
-		class="signout"
-		style={pos(0, 1) + ' z-index: 2'}
-		on:click={() => {
-			auth.signOut();
-		}}
-		transition:heighten={{ duration: 300, rev: popped }}
-		><div class="x" transition:rotate={{ duration: 300, rev: popped }}>✖</div>
-		Signout</button
-	>
-	<div
-		class="bkg"
-		style={pos(1, 0)}
-		in:enlarge={{ duration: 350, rev: true }}
-		out:enlarge={{ duration: 350, rev: false }}
-	>
-		<Library
-			{state}
-			close={() => {
-				popped = false;
-			}}
-		/>
-	</div>
-{/if}
-<AuthButton
-	text={popped ? 'Back' : 'Library'}
-	posStyle={pos(0, 0) + 'z-index: 2;'}
-	oncl={onclick}
-/>
+<svelte:window bind:innerWidth={width} />
+
+<AuthButton text={popped ? 'Back' : 'Library'} posStyle={'z-index: 2;'} oncl={onclick}>
+	{#if popped && $authState}
+		<div
+			class="bkg"
+			style={pos(1, width)}
+			in:enlarge={{ duration: 350, rev: true }}
+			out:enlarge={{ duration: 350, rev: false }}
+		>
+			<Library
+				{state}
+				close={() => {
+					popped = false;
+				}}
+			/>
+			<button
+				class="signout"
+				style={''}
+				on:click={() => {
+					auth.signOut();
+					while (document.body.lastChild) {
+						document.body.lastChild.remove();
+					}
+					window.location.reload();
+				}}
+			>
+				Signout
+			</button>
+		</div>
+	{/if}
+</AuthButton>
 
 <style>
-	.x {
-		width: 50px;
-		left: 50px;
-		bottom: 80px;
-		position: absolute;
-		margin: 0px;
-		font-weight: lighter;
-		font-size: 40px;
-		transform: translateX(-50%);
-		left: 50%;
-	}
 	.signout {
 		font-size: 16px;
 		background-color: transparent;
 		border: none;
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Gilroy', sans-serif;
 		font-weight: bold;
+
+		background-color: var(--light);
+		color: var(--background);
+		border: 0px solid transparent;
+		border-radius: var(--round);
+
+		position: absolute;
+		width: calc(100% - 3rem);
+		height: 3rem;
+		margin: 1.5rem;
+		bottom: 0rem;
+		left: 0rem;
+
+		box-shadow: -3rem 3rem 0px 3rem var(--emp);
 	}
 	.bkg {
-		background-color: var(--accent);
+		background-color: var(--emp);
 		margin: 0px;
 		padding: 0px;
 		z-index: 1;
 		overflow: hidden;
-		overflow-y: scroll;
+		cursor: default;
+
+		box-shadow: 0px 0px 0.5px 1px var(--background);
 	}
 </style>

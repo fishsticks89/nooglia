@@ -3,10 +3,10 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>The Freeviewer</title>
-	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<title>nooglia</title>
+	<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 	<meta name="viewport" content="width=device-width" />
-	<meta name="description" content="The Free-est way to learn vocab">
+	<meta name="description" content="study effectively in minutes 🚀">
 
 	<meta property="og:image" content="./screenshot.png">
 	<meta property="og:image:type" content="image/png">
@@ -16,21 +16,36 @@
 	%sveltekit.head%
 </head>
 
-<body>
-	<div>%sveltekit.body%</div>
+<body style="overflow-y: visible; width: 100vw; height: 100vh; background-color: hsl(220, 67%, 8%); margin: 0%;">
+	<div style="overflow-y: visible;">%sveltekit.body%</div>
 </body>
+
+<script>
+	setInterval(() => {
+		[...document.getElementsByClassName("firebase-emulator-warning")].forEach(element => {
+			// element.style.backgroundColor = "transparent"
+			element.remove();
+		});
+	}, 200)
+</script>
+
 <style>
 	@font-face {
 		font-family: 'Montserrat';
-		src: url('./Montserrat.ttf') format('truetype');
+		src: url('./fonts/Montserrat.ttf') format('truetype');
+	}
+
+	@font-face {
+		font-family: 'MontserratBold';
+		src: url('./fonts/Montserrat-Bold.ttf') format('truetype');
 	}
 
 	@font-face {
 		font-family: 'Hermes';
-		src: url('./Hermes.otf') format('woff2');
+		src: url('./fonts/Hermes.otf') format('woff2');
 	}
 
-	@font-face {
+	/* @font-face {
 		font-family: 'HermesLight';
 		src: url('./HermesLight.otf') format('woff2');
 	}
@@ -48,6 +63,36 @@
 	@font-face {
 		font-family: 'RobotoM';
 		src: url('./RobotoMedium.ttf') format('truetype');
+	} */
+
+	@font-face {
+		font-family: 'Eina';
+		src: url('./fonts/Eina.ttf') format('truetype');
+	}
+
+	@font-face {
+		font-family: 'Gilroy';
+		src: url('./fonts/Gilroy-Regular.ttf');
+	}
+
+	@font-face {
+		font-family: 'GilroyBold';
+		src: url('./fonts/Gilroy-Bold.ttf');
+	}
+
+	@font-face {
+		font-family: 'Poppins';
+		src: url('./fonts/Poppins-Regular.ttf');
+	}
+
+	@font-face {
+		font-family: 'PoppinsSemi';
+		src: url('./fonts/Poppins-SemiBold.ttf');
+	}
+
+	@font-face {
+		font-family: 'PoppinsBold';
+		src: url('./fonts/Poppins-Bold.ttf');
 	}
 
 	button {
@@ -61,7 +106,7 @@
 		background-color: var(--background);
 		margin: 0px;
 		padding: 0px;
-		overflow-x: hidden;
+		overflow: hidden;
 
 		height: 100vh;
 	}
@@ -80,6 +125,9 @@
 		margin: 0;
 		/* 2 */
 	}
+	button {
+		color: white;
+	}
 
 	:root {
 		color-scheme: dark;
@@ -96,10 +144,17 @@
 		/* correct */
 		--correct: hsl(calc(var(--hue) - 90), 100%, 89%);
 		/* incorrect */
-		--incorrect: hsl(calc(var(--hue) + 90), 100%, 89%);
-		/* "offwhite" */
+		--incorrect: hsl(calc(var(--hue) + 90), 100%, 59%);
+		/* emp for inputs */
 		--comp: hsl(calc(var(--hue) - 175), 100%, 56%);
+		/* emp for text */
+		--complight: hsl(calc(var(--hue) - 175), 100%, 66%);
+		/* "lighten" */
+		--glass: rgba(255, 255, 255, 0.2);
+		/* "lightenhover" */
+		--glasser: rgba(255, 255, 255, 0.4);
 		--round: 0.3rem;
+		background-color: var(--background);
 	}
 
 	/* icon font: */
