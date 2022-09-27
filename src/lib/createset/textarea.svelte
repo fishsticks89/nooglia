@@ -63,6 +63,8 @@
 
 		border-width: 0px;
 		border-radius: var(--round);
+
+		max-width: 50rem;
 	}
 	textarea:focus-visible {
 		outline: none;

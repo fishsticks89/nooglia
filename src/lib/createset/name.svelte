@@ -27,6 +27,11 @@
 		color: var(--light);
 		opacity: 100%;
 	}
+	@media only screen and (max-width: 600px) {
+	input::placeholder {
+		font-family: 'GilroyBold', sans-serif;
+	}
+}
 	input {
 		width: 100%;
 		margin: 0px;
@@ -40,10 +45,10 @@
 		background-color: transparent;
 
 		padding: 0px;
-		padding-bottom: 5px;
+		padding-bottom: 0.2vw;
 
 		font-size: calc(4vw + 1rem);
-		font-family: 'Gilroy', sans-serif;
+		font-family: 'GilroyBold', sans-serif;
 	}
 	input:focus-visible {
 		outline: none;

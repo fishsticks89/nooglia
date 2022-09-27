@@ -5,7 +5,7 @@
 	import Textarea from './textarea.svelte';
 	export let addTerms: (terms: term[]) => void;
 
-	let importpop = false;
+	export let importpop = false;
 	let textarea = {
 		get: () => 'bob',
 		reset: () => {}
@@ -22,10 +22,7 @@
 		selector.reset();
 		textarea.reset();
 	};
-	let width: number = 0;
 </script>
-
-<svelte:window bind:innerWidth={width} />
 
 {#if importpop}
 	<div class="bkg">
@@ -82,16 +79,6 @@
 	</div>
 {/if}
 
-<div
-	class="import"
-	style:margin-top={width > 900 ? '-2rem' : '0rem'}
-	on:click={() => {
-		importpop = !importpop;
-	}}
->
-	+ Import from Quizlet, Word, Excel, etc
-</div>
-
 <style>
 	.cancel {
 		font-family: 'GilroyBold', sans-serif;
@@ -110,10 +97,10 @@
 	}
 	.bkg {
 		position: fixed;
-		top: 3rem;
+		top: 0rem;
 		left: 50%;
-		width: 70vw;
-		height: 100%;
+		width: 100vw;
+		height: 100vh;
 
 		background-color: var(--background);
 
@@ -125,23 +112,6 @@
 		border-radius: var(--round);
 
 		min-height: fit-content;
-	}
-	.import {
-		appearance: none;
-		/* filter: brightness(150%) saturate(150%); */
-		color: var(--light);
-		background-color: var(--background);
-		border: 0px;
-		margin: 0px;
-		font-weight: 600;
-		font-family: 'GilroyBold', sans-serif;
-		cursor: pointer;
-
-		padding-inline: 0.7rem;
-		text-align: left;
-		margin-top: -2rem;
-		margin-bottom: 1rem;
-
-		border-radius: var(--round);
+		overflow-y: auto;
 	}
 </style>

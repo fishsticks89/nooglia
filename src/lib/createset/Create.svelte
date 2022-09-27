@@ -8,7 +8,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import Name from './name.svelte';
 	import Importterms from './importterms.svelte';
-	
+
 	export let state: setStore;
 
 	let terms: Writable<(term & { id: string })[]> = writable([]);
@@ -71,89 +71,107 @@
 				return [...tms, { q: '', a: '', id: Math.random().toString() }];
 			});
 	};
+	let width: number = 0;
+	let importpop = false;
 </script>
 
-<!-- name -->
-{#if $state.isEditing}
-	<Name {state} />
-{:else}
-	<h1>{$state.set.name}</h1>
-{/if}
+<svelte:window bind:innerWidth={width} />
 
-<button
-	class="edit"
-	on:click={() => {
-		if ($state.set.name === '') alert('Name Your Set!');
-		else if (
-			$state.set.contents.length < 4 ||
-			$state.set.contents
-				.join('')
-				.split(/[\n ]+/)
-				.join('').length <= 1
-		)
-			alert('You must have at least 4 unique terms');
-		else
-			state.update((s) => {
-				s.isEditing = !s.isEditing;
-				return s;
-			});
-	}}>{$state.isEditing ? 'Done' : 'Edit'}</button
->
-{#if $state.isEditing}
+<div class="create">
+	<!-- name -->
+	{#if $state.isEditing}
+		<Name {state} />
+	{:else}
+		<h1>{$state.set.name}</h1>
+	{/if}
+
 	<button
-		class="swap"
+		class="edit"
 		on:click={() => {
-			onUpdate(
-				$terms.map((term) => {
-					term = { q: term.a, a: term.q, id: Math.random().toString() };
-					return term;
-				})
-			);
-		}}
+			if ($state.set.name === '') alert('Name Your Set!');
+			else if (
+				$state.set.contents.length < 4 ||
+				$state.set.contents
+					.join('')
+					.split(/[\n ]+/)
+					.join('').length <= 1
+			)
+				alert('You must have at least 4 unique terms');
+			else
+				state.update((s) => {
+					s.isEditing = !s.isEditing;
+					return s;
+				});
+		}}>{$state.isEditing ? 'Done' : 'Edit'}</button
 	>
-		<span class="si material-icons-round">swap_horiz</span>
-	</button>
+	{#if $state.isEditing}
+		<button
+			class="swap"
+			on:click={() => {
+				onUpdate(
+					$terms.map((term) => {
+						term = { q: term.a, a: term.q, id: Math.random().toString() };
+						return term;
+					})
+				);
+			}}
+		>
+			<span class="si material-icons-round">swap_horiz</span>
+		</button>
+		<div
+			class="import"
+			style:margin-top={width > 900 ? '-2rem' : '0rem'}
+			on:click={() => {
+				importpop = !importpop;
+			}}
+		>
+			+ Import from Quizlet, Word, Excel, etc
+		</div>
+	{:else}
+		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
+	{/if}
+
+	{#each $state.isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
+		<div class="termholder" animate:flip={{ duration: 200 }}>
+			<Term
+				{state}
+				{terms}
+				{onUpdate}
+				{term}
+				{onPress}
+				selected={focused.y == i ? focused.x : null}
+				setSelected={(p) => {
+					focused.y = i;
+					focused.x = p;
+				}}
+			/>
+		</div>
+	{/each}
+	{#if $state.isEditing}
+		<button
+			class="add"
+			on:click={() => {
+				terms.update((tms) => {
+					return [...tms, { q: '', a: '', id: Math.random().toString() }];
+				});
+			}}
+		>
+			<span class="material-icons-round">add</span>
+		</button>
+	{/if}
+</div>
+{#if $state.isEditing}
 	<Importterms
+		{importpop}
 		addTerms={(tt) => {
 			onUpdate([...tt, ...$terms]);
 		}}
 	/>
-{:else}
-	<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
-{/if}
-
-{#each $state.isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
-	<div class="termholder" animate:flip={{ duration: 200 }}>
-		<Term
-			{state}
-			{terms}
-			{onUpdate}
-			{term}
-			{onPress}
-			selected={focused.y == i ? focused.x : null}
-			setSelected={(p) => {
-				focused.y = i;
-				focused.x = p;
-			}}
-		/>
-	</div>
-{/each}
-{#if $state.isEditing}
-	<button
-		class="add"
-		on:click={() => {
-			terms.update((tms) => {
-				return [...tms, { q: '', a: '', id: Math.random().toString() }];
-			});
-		}}
-	>
-		<span class="material-icons-round">add</span>
-	</button>
 {/if}
 
 <style>
 	h1 {
-		font-family: 'Gilroy', sans-serif;
+		font-family: 'GilroyBold', sans-serif;
 
 		width: 100%;
 		margin: 0px;
@@ -196,6 +214,24 @@
 		border: 0px solid white;
 		border-radius: 10000vw;
 	}
+	.import {
+		appearance: none;
+		/* filter: brightness(150%) saturate(150%); */
+		color: var(--light);
+		background-color: var(--background);
+		border: 0px;
+		margin: 0px;
+		font-weight: 600;
+		font-family: 'GilroyBold', sans-serif;
+		cursor: pointer;
+
+		padding-inline: 0.7rem;
+		text-align: left;
+		margin-top: -2rem;
+		margin-bottom: 1rem;
+
+		border-radius: var(--round);
+	}
 	.termholder {
 		position: relative;
 
@@ -227,5 +263,16 @@
 	}
 	.add:hover {
 		background-color: rgba(255, 255, 255, 0.3);
+	}
+	.create {
+		width: calc(70vw + 8vh);
+		max-width: 50rem;
+		height: fit-content;
+		margin: 0px;
+		margin-left: 50vw;
+		transform: translateX(-50%);
+		padding-top: 3rem;
+
+		overflow: visible;
 	}
 </style>

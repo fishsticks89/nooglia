@@ -24,7 +24,7 @@
 		margin: 0px;
 		padding-inline: 0.7rem;
 		height: 3.3rem;
-		width: calc(70vw - 1.4rem);
+		width: calc(70vw - 1.4rem + 8vh);
 
 		position: fixed;
 		top: 0.8rem;
