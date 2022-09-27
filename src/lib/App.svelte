@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Feedback from './feedback/Feedback.svelte';
+	import Feedback from '$lib/feedback/feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
 	import AuthManager from './auth/AuthManager.svelte';
 	import Create from './createset/Create.svelte';

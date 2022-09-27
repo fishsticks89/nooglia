@@ -4,7 +4,7 @@
 	import { toTerm, termToString, type term } from '$lib/data/db';
 
 	import type { setStore } from '$lib/data/setStore';
-	import Learn from '$lib/learn/Learn.svelte';
+	import Learn from '$lib/learn/learn.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import Name from './name.svelte';
 	import Importterms from './importterms.svelte';
