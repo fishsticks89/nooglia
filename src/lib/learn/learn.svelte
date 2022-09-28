@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Switch from './../ui/Switch.svelte';
 	import { max } from '$lib/util/minmax';
 
 	import shuffle from '$lib/util/shuffle';
@@ -8,6 +9,7 @@
 	import { get } from 'svelte/store';
 
 	let done = false;
+	let showFlashCards = false;
 
 	export let state: setStore;
 
@@ -59,7 +61,7 @@
 					const poppedterm = shuffledTerms.pop();
 					const tempterm = {
 						...poppedterm,
-						phase: 1,
+						phase: 1 + +!showFlashCards,
 						nextInteractionStep: 0,
 						lastLongTermRetrieval: null
 					};
@@ -160,7 +162,7 @@
 			{
 				let total = 0;
 				stack.forEach((e) => {
-					total += e.phase - 1;
+					total += e.phase - (1 - +showFlashCards);
 				});
 				const possible = (stack.length + shuffledTerms.length) * 4;
 				progress = total / possible;
@@ -179,6 +181,20 @@
 	let progress = 0;
 </script>
 
+<div class="center">
+	Enable Flashcards: <Switch
+		on={showFlashCards}
+		onChange={(x) => {
+			showFlashCards = x;
+			if (x) {
+				stack = stack.map((e) => {
+					if (e.phase === 0) e.phase++;
+					return e;
+				});
+			}
+		}}
+	/>
+</div>
 <Questionier
 	bind:this={questionier}
 	questions={terms}
@@ -190,4 +206,12 @@
 />
 
 <style>
+	.center {
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
 </style>
