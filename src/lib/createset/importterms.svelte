@@ -25,7 +25,7 @@
 </script>
 
 {#if importpop}
-	<div class="bkg">
+	<div id="bkg">
 		<button
 			class="cancel"
 			on:click={() => {
@@ -95,12 +95,13 @@
 		font-family: 'Montserrat', sans-serif;
 		margin: 1rem;
 	}
-	.bkg {
+	#bkg {
 		position: fixed;
 		top: 0rem;
 		left: 50%;
 		width: 100vw;
-		height: 100vh;
+        height: 100vh;
+		height: 100dvh;
 
 		background-color: var(--background);
 
@@ -110,8 +111,7 @@
 
 		border: 0px solid transparent;
 		border-radius: var(--round);
-
-		min-height: fit-content;
-		overflow-y: auto;
+        
+		overflow-y: scroll;
 	}
 </style>

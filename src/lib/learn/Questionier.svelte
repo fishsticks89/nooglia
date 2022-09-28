@@ -56,6 +56,7 @@
 		max-width: 55rem; */
 		width: 100%;
 
+		height: 70dvh;
 		height: 70vh;
 
 		margin-block: 2rem;

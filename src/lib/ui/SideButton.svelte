@@ -12,7 +12,7 @@
 		border: 0px;
 
 		position: absolute;
-		bottom: 1rem;
+		top: 1rem;
 		right: 1rem;
 
 		border-radius: 100vmax;
