@@ -63,6 +63,7 @@
 		bind:value={term.q}
 		class="term"
 		placeholder="term"
+		data-hj-allow
 	/>
 	<div class="vr" />
 	<textarea
@@ -75,6 +76,7 @@
 		bind:value={term.a}
 		class="term"
 		placeholder="definition"
+		data-hj-allow
 	/>
 	<Runner
 		enter={() => {

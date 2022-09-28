@@ -1,0 +1,1 @@
+[...document.getElementsByClassName("SetPageTerm-contentWrapper")].map(e => [[...e.getElementsByClassName("SetPageTerm-wordText")][0], [...e.getElementsByClassName("SetPageTerm-definitionText")][0]])
