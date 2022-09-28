@@ -60,7 +60,8 @@
 		<button
 			style:background-color={'var(--accent)'}
 			style:position="relative"
-			style:bottom={"1rem"}
+			style:bottom={"2rem"}
+			style:margin-top={"2rem"}
 			class="cancel"
 			on:click={() => {
 				console.log(selector.getSplitters())
