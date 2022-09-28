@@ -59,13 +59,17 @@
 		/>
 		<button
 			style:background-color={'var(--accent)'}
+			style:position="relative"
+			style:bottom={"1rem"}
 			class="cancel"
 			on:click={() => {
+				console.log(selector.getSplitters())
 				addTerms(
 					textarea
 						.get()
-						.split(selector.getSplitters().entries)
+						.split(selector.getSplitters().entries).filter(e => e.match(selector.getSplitters().termdef))
 						.map((e) => {
+							console.log(e)
 							return {
 								q: e.split(selector.getSplitters().termdef)[0],
 								a: e.split(selector.getSplitters().termdef)[1]

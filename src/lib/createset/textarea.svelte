@@ -56,7 +56,7 @@
 		padding-bottom: 0.1rem;
 
 		margin-left: 1rem;
-		width: calc(100% - 4rem);
+		width: calc(70% - 4rem);
 
 		resize: none;
 		background-color: var(--emp);
