@@ -40,7 +40,7 @@
 	});
 </script>
 
-<textarea bind:this={tx} bind:value={text} placeholder={defaultText} />
+<textarea bind:this={tx} bind:value={text} data-hj-allow placeholder={defaultText} />
 
 <style>
 	textarea::placeholder {
