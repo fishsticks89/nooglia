@@ -108,15 +108,13 @@
 		color: var(--light);
 		background-color: var(--background);
 		border: 0px;
-		margin: 0px;
+		margin: 2vw;
 		font-weight: 600;
 		font-family: 'PoppinsSemi', sans-serif;
 		cursor: pointer;
 
 		padding: 0.7rem;
 		text-align: right;
-		margin-inline: 2rem;
-		margin-block: 2rem;
 		right: 0rem;
 		bottom: 0px;
 		position: fixed;

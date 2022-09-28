@@ -65,6 +65,7 @@
 		border-radius: var(--round);
 
 		max-width: 50rem;
+        max-height: 70vh;
 	}
 	textarea:focus-visible {
 		outline: none;
