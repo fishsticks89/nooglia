@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Feedback from './feedback/Feedback.svelte';
+	import Feedback from '$lib/feedback/feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
 	import AuthManager from './auth/AuthManager.svelte';
 	import Create from './createset/Create.svelte';
@@ -11,9 +11,7 @@
 
 <div style="overflow-y: hidden; height: fit-content; min-height: 100vh;">
 	{#if browser}
-		<div class="create">
 			<Create state={store} />
-		</div>
 	{/if}
 
 	<Nav>
@@ -24,17 +22,6 @@
 </div>
 
 <style>
-	.create {
-		width: 70vw;
-		max-width: 50rem;
-		height: fit-content;
-		margin: 0px;
-		margin-left: 50vw;
-		transform: translateX(-50%);
-		padding-top: 3rem;
-
-		overflow: visible;
-	}
 	div {
 		overflow-y: hidden;
 		overflow-x: hidden;

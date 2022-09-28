@@ -1,0 +1,36 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "firebase emulators",
+        "command": "cd fbase && firebase emulators:start",
+        "windows": {
+          "command": "cd fbase; firebase emulators:start"
+        },
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "runOptions": {
+            "runOn": "folderOpen",
+        }
+      },
+      {
+        "type": "shell",
+        "label": "client devserver",
+        "command": "pnpm run dev --host",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "runOptions": {
+            "runOn": "folderOpen",
+        }
+      }
+    ]
+  }

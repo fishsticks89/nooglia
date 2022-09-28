@@ -53,10 +53,11 @@
 		font-family: 'GilroyBold', sans-serif;
 		font-size: calc(3vw + 2.5rem);
 		top: 50vh;
-		transform: translateY(-50%);
 		left: 15vw;
 		padding: 0px;
-		width: 70vw;
+		transform: translateY(-50%);
+		width: fit-content;
+		max-width: calc(70vw + 8vh);
 		text-align: left;
 		margin: 0px;
 	}
