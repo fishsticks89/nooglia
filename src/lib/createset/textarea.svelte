@@ -51,12 +51,13 @@
 		font-family: 'Montserrat', sans-serif;
 
 		margin-top: 0rem;
+		margin-bottom: 1rem;
 
 		padding: 1rem;
 		padding-bottom: 0.1rem;
 
 		margin-left: 1rem;
-		width: calc(70% - 4rem);
+		width: 70%;
 
 		resize: none;
 		background-color: var(--emp);
