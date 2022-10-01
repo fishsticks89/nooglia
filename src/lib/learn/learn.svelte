@@ -162,9 +162,9 @@
 			{
 				let total = 0;
 				stack.forEach((e) => {
-					total += e.phase - (1 - +showFlashCards);
+					total += e.phase - (2 - +showFlashCards);
 				});
-				const possible = (stack.length + shuffledTerms.length) * 4;
+				const possible = (stack.length + shuffledTerms.length) * (5 - (2 - +showFlashCards));
 				progress = total / possible;
 			}
 		}
@@ -181,8 +181,8 @@
 	let progress = 0;
 </script>
 
-<div class="center">
-	Enable Flashcards: <Switch
+<!-- <div class="center">
+	Show terms before quizing: <Switch
 		on={showFlashCards}
 		onChange={(x) => {
 			showFlashCards = x;
@@ -194,7 +194,7 @@
 			}
 		}}
 	/>
-</div>
+</div> -->
 <Questionier
 	bind:this={questionier}
 	questions={terms}

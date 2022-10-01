@@ -6,7 +6,7 @@
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
 	export let questions: { q: string; a: string }[];
-	const options = shuffle([
+	$: options = shuffle([
 		currentquestion.a,
 		...shuffle(questions)
 			.filter((e) => e.a != currentquestion.a)
@@ -104,10 +104,12 @@
 		color: white;
 		font-size: large;
 		margin: 2rem;
+		max-width: calc(100% - 4rem);
 		position: absolute;
 		top: 0rem;
 		left: 0rem;
 		font-family: 'Montserrat', sans-serif;
+		word-wrap: break-word;
 	}
 	.qholder {
 		position: absolute;

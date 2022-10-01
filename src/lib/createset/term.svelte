@@ -134,6 +134,7 @@
 	.term {
 		width: 30%;
 		margin: 1rem;
+		word-wrap: break-word;
 	}
 	.vr {
 		height: 1.5rem;

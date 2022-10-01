@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { squish } from '$lib/transitions/squish';
+	import Runner from './../util/Runner.svelte';
 	import { flip } from 'svelte/animate';
 	import Term from './term.svelte';
 	import { toTerm, termToString, type term } from '$lib/data/db';
@@ -8,6 +10,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import Name from './name.svelte';
 	import Importterms from './importterms.svelte';
+	import printStore from '$lib/util/print/printStore';
 
 	export let state: setStore;
 
@@ -118,6 +121,21 @@
 		>
 			<span class="si material-icons-round">swap_horiz</span>
 		</button>
+		<button
+			class="clearall"
+			on:click={() => {
+				onUpdate(
+					[]
+				);
+			}}
+		>
+			Clear all&nbsp;<span class="si material-icons-round">delete</span>
+		</button>
+		<Runner
+			enter={() => {
+				importpop = false;
+			}}
+		/>
 		<div
 			class="import"
 			style:margin-top={width > 900 ? '-2rem' : '0rem'}
@@ -129,6 +147,13 @@
 		</div>
 	{:else}
 		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
+		<button
+			class="printstudy"
+			out:squish={{}}
+			on:click={() => {
+				printStore.set(true);
+			}}><span class="material-icons-round pri">print</span>print study</button
+		>
 	{/if}
 
 	{#each $state.isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
@@ -170,6 +195,22 @@
 {/if}
 
 <style>
+	.pri {
+		position: absolute;
+		left: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.printstudy {
+		position: relative;
+		width: 100%;
+		border-radius: var(--round);
+		border: 2px solid black;
+		padding-block: 0.5rem;
+		background-color: var(--light);
+		color: black;
+		font-family: 'GilroyBold', sans-serif;
+	}
 	h1 {
 		font-family: 'GilroyBold', sans-serif;
 
@@ -194,6 +235,28 @@
 	}
 	.si {
 		font-size: 1.7rem;
+	}
+	.clearall {
+		color: white;
+		background-color: var(--glass);
+
+		margin: 0rem;
+		position: absolute;
+		right: 0%;
+		transform: translateY(-140%);
+
+		height: 2.5rem;
+		width: fit-content;
+		padding-inline: 1rem;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		border: 0px solid white;
+		border-radius: var(--round);
+
+		font-family: 'GilroyBold', sans-serif;
 	}
 	.swap {
 		color: white;
