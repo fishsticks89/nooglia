@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { analytics } from '$lib/firebase';
+	import { logEvent } from 'firebase/analytics';
 	import printStore from './printStore';
 
 	let printContents: HTMLElement;
@@ -12,8 +14,9 @@
 					window.print();
 					printStore.set(false);
 					document.body.style.overflowY = 'scroll';
-					(document.getElementById('printarea') as HTMLElement).innerHTML = "";
+					(document.getElementById('printarea') as HTMLElement).innerHTML = '';
 				}, 2);
+				if (analytics) logEvent(analytics, 'printStudy');
 			});
 		}
 	});

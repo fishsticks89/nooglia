@@ -21,20 +21,24 @@
 </script>
 
 <Nav>
-	<button
+	<a
+		href="./learn"
 		class="topbutton"
 		on:click={() => {
 			window.location.replace('./learn');
-		}}><p class="gs">Get Started</p></button
+		}}><p class="gs">Get Started</p></a
 	></Nav
 >
 <h2>
 	<p class="punchline">study effectively</p>
-	<p class="punchline1">in minutes <img src="./icons/rocket.png" alt="rocket" style:height={50 + 'px'} /></p>
-	<button
+	<p class="punchline1">
+		in minutes <img src="./icons/rocket.png" alt="rocket" style:height={50 + 'px'} />
+	</p>
+	<a
+		href="./learn"
 		on:click={() => {
 			window.location.replace('./learn');
-		}}>Start Studying</button
+		}}>Start Studying</a
 	>
 </h2>
 
@@ -78,7 +82,7 @@
 		color: var(--emp);
 		font-size: 0.9rem;
 	}
-	button {
+	a {
 		background-color: var(--accent);
 		border-radius: var(--round);
 		border: 0px;
@@ -92,5 +96,6 @@
 		font-family: 'GilroyBold', sans-serif;
 		/* font-weight: bold; */
 		/* letter-spacing: 0.2vw; */
+		text-decoration: none;
 	}
 </style>

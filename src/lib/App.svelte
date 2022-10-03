@@ -1,5 +1,6 @@
 <script lang="ts">
-	import showSettings from '$lib/showSettings';
+	import Settings from './learn/settings/Settings.svelte';
+	import showSettings from '$lib/learn/settings/showSettings';
 	import Printer from './util/print/Printer.svelte';
 	import Feedback from '$lib/feedback/feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
@@ -21,7 +22,7 @@
 </script>
 
 <Printer>
-	<Modal/>
+	<Settings/>
 	<div style="overflow-y: hidden; height: fit-content; min-height: 100vh;" bind:this={main}>
 		{#if browser}
 			<Create state={store} />

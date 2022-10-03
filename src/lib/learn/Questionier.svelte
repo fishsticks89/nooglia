@@ -7,7 +7,7 @@
 	import Done from './questions/Done.svelte';
 	import { squish } from '$lib/transitions/squish';
 	import Modal from '$lib/ui/Modal.svelte';
-	import showSettings from '$lib/showSettings';
+	import showSettings from '$lib/learn/settings/showSettings';
 	export let progress: number;
 	export let done: boolean;
 	export let restart: () => void;

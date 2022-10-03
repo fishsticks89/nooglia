@@ -1,8 +1,10 @@
 <script lang="ts">
-	import showSettings from '$lib/showSettings';
 	import { fade } from 'svelte/transition';
 	import { quadOut } from 'svelte/easing';
 	import { spring, tweened } from 'svelte/motion';
+
+	export let show: boolean = false;
+	export let close: () => void;
 
 	const shlapfunc = (t: number, spring: number) => {
 		const teased = quadOut(t);
@@ -21,29 +23,31 @@
 	};
 
 	const springer = spring(0, {
-		stiffness: 0.022,
-		damping: 0.235,
-		precision: 0.003
+		stiffness: 0.025,
+		damping: 0.17,
+		precision: 0.0005
 	});
 	const linear = tweened(0, {
-		duration: 450
+		duration: 550
 	});
 	$: {
 		[springer, linear].forEach((e) => {
-			e.set(+$showSettings);
+			e.set(+show);
 		});
 	}
 </script>
 
-{#if $showSettings}
+{#if show}
 	<div
 		class="main"
 		transition:fade={{ duration: 200 }}
 		on:click={() => {
-			$showSettings = false;
+			close();
 		}}
 	/>
-	<div class="modal" out:fade={{duration: 100}} style={shlapfunc($linear, $springer)} />
+	<div class="modal" out:fade={{ duration: 100 }} style={shlapfunc($linear, $springer)}>
+		<slot />
+	</div>
 {/if}
 
 <style>

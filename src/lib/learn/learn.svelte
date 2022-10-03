@@ -7,9 +7,9 @@
 	import type { mode } from './questiontype';
 	import type { setStore } from '$lib/data/setStore';
 	import { get } from 'svelte/store';
+	import settingsState from './settings/settingsState';
 
 	let done = false;
-	let showFlashCards = false;
 
 	export let state: setStore;
 
@@ -61,7 +61,7 @@
 					const poppedterm = shuffledTerms.pop();
 					const tempterm = {
 						...poppedterm,
-						phase: 1 + +!showFlashCards,
+						phase: 1 + +!$settingsState.showFlashcards,
 						nextInteractionStep: 0,
 						lastLongTermRetrieval: null
 					};
@@ -162,9 +162,10 @@
 			{
 				let total = 0;
 				stack.forEach((e) => {
-					total += e.phase - (2 - +showFlashCards);
+					total += e.phase - (2 - +$settingsState.showFlashcards);
 				});
-				const possible = (stack.length + shuffledTerms.length) * (5 - (2 - +showFlashCards));
+				const possible =
+					(stack.length + shuffledTerms.length) * (5 - (2 - +$settingsState.showFlashcards));
 				progress = total / possible;
 			}
 		}
@@ -179,22 +180,16 @@
 		};
 	});
 	let progress = 0;
+	settingsState.subscribe((x) => {
+		if (!x.showFlashcards) {
+			stack = stack.map((e) => {
+				if (e.phase === 0) e.phase++;
+				return e;
+			});
+		}
+	});
 </script>
 
-<!-- <div class="center">
-	Show terms before quizing: <Switch
-		on={showFlashCards}
-		onChange={(x) => {
-			showFlashCards = x;
-			if (x) {
-				stack = stack.map((e) => {
-					if (e.phase === 0) e.phase++;
-					return e;
-				});
-			}
-		}}
-	/>
-</div> -->
 <Questionier
 	bind:this={questionier}
 	questions={terms}
@@ -206,12 +201,4 @@
 />
 
 <style>
-	.center {
-		margin-top: 1rem;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-	}
 </style>
