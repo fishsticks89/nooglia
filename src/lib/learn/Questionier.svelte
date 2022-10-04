@@ -31,7 +31,7 @@
 	let mode: mode | null = null;
 </script>
 
-<div class="container" out:squish={{ isin: false, initialheight: '70vh', usetransform: false }}>
+<div class="container" out:squish={{ isin: false, initialheight: '70vh' }}>
 	{#if !done}
 		<Progress amount={progress} />
 		{#if currentquestion != null && mode != null}
@@ -48,7 +48,7 @@
 	{:else}
 		<Done {restart} />
 	{/if}
-	<button class="restart" on:click={restart} out:squish={{}}
+	<button class="restart" on:click={restart} out:squish={{ initialheight: '2rem' }}
 		><span
 			class="material-icons-round"
 			style:transform={'scaleX(-1) translateY(5%)'}
@@ -61,7 +61,7 @@
 		on:click={() => {
 			$showSettings = true;
 		}}
-		out:squish={{}}
+		out:squish={{ initialheight: '2rem' }}
 		><span
 			class="material-icons-round"
 			style:transform={'scaleX(-1) translateY(5%)'}
@@ -78,7 +78,7 @@
 		position: absolute;
 		bottom: -2.5rem;
 		width: calc(50% - 0.5rem);
-		padding: 0.4rem 0px;
+		height: 2rem;
 
 		background-color: var(--emp);
 		font-family: 'GilroyBold', sans-serif;

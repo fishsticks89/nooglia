@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Switch from './../ui/Switch.svelte';
 	import { max } from '$lib/util/minmax';
 
 	import shuffle from '$lib/util/shuffle';
@@ -12,6 +11,12 @@
 	let done = false;
 
 	export let state: setStore;
+
+	interface phase {
+		mode: 'write' | 'multichoice' | 'flashcard';
+		blitzing: boolean; // whether the user has never gotten it incorrect
+		correctTimes: number;
+	}
 
 	export let terms: { q: string; a: string }[] = [];
 	let shuffledTerms = shuffle(terms);

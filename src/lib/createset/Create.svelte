@@ -149,7 +149,7 @@
 		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
 		<button
 			class="printstudy"
-			out:squish={{}}
+			out:squish={{ initialheight: "2.5rem" }}
 			on:click={() => {
 				printStore.set(true);
 			}}><span class="material-icons-round pri">print</span>print study</button
@@ -210,6 +210,7 @@
 		background-color: var(--light);
 		color: black;
 		font-family: 'GilroyBold', sans-serif;
+		height: 2.5rem;
 	}
 	h1 {
 		font-family: 'GilroyBold', sans-serif;
