@@ -9,7 +9,7 @@
 <Modal show={$showSettings} close={() => showSettings.set(false)}>
 	<div class="settingsMain">
 	<div class="center">
-		Show terms before quizing: <Switch
+		Show flashcard before first question: <Switch
 			lightBackground={true}
 			on={$settingsState.showFlashcards}
 			onChange={(x) => {
@@ -18,7 +18,7 @@
 		/>
 	</div>
 	<div class="center">
-		Show Multichoice Questions: <Switch
+		Show multichoice questions: <Switch
 			lightBackground={true}
 			on={$settingsState.showMultiChoice}
 			onChange={(x) => {
@@ -27,7 +27,7 @@
 		/>
 	</div>
 	<div class="center">
-		Show Write Questions: <Switch
+		Show write questions: <Switch
 			lightBackground={true}
 			on={$settingsState.showWrite}
 			onChange={(x) => {
@@ -47,9 +47,9 @@
 	<div class="center">
 		Occasionally ask older questions: <Switch
 			lightBackground={true}
-			on={!$settingsState.retrieve}
+			on={$settingsState.retrieve}
 			onChange={(x) => {
-				$settingsState.retrieve = !x;
+				$settingsState.retrieve = x;
 			}}
 		/>
 	</div>
