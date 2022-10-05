@@ -91,7 +91,7 @@
 					stack.filter((e) => e.phase.mode === 'multichoice').length <
 						2 + 3 * +!$settingsState.showWrite,
 					stack.filter((e) => e.phase.mode !== 'done').length,
-					stack.filter((e) => e.phase.mode !== 'done').length < 9,
+					stack.filter((e) => e.phase.mode !== 'done').length < 6,
 					$settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
 						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
 						: true
@@ -103,7 +103,7 @@
 					shuffledTerms.length > 0 &&
 					stack.filter((e) => e.phase.mode === 'multichoice').length <
 						2 + 3 * +!$settingsState.showWrite &&
-					stack.filter((e) => e.phase.mode !== 'done').length < 9 &&
+					stack.filter((e) => e.phase.mode !== 'done').length < 6 &&
 					($settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
 						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
 						: true) // optionally retrieve older terms
