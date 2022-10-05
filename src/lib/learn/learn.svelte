@@ -64,7 +64,6 @@
 			} | null = null;
 			// decides next step
 			{
-				console.log('decidingstep');
 				function pushStack() {
 					const poppedterm = shuffledTerms.pop();
 					const tempterm = {
@@ -86,15 +85,28 @@
 					stack.push(tempterm as any);
 					newterm = tempterm as any;
 				}
+				console.log(
+					shuffledTerms.length > 0,
+					stack.filter((e) => e.phase.mode === 'multichoice').length,
+					stack.filter((e) => e.phase.mode === 'multichoice').length <
+						2 + 3 * +!$settingsState.showWrite,
+					stack.filter((e) => e.phase.mode !== 'done').length,
+					stack.filter((e) => e.phase.mode !== 'done').length < 9,
+					$settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
+						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
+						: true
+				); // optionally retrieve older terms);
 				if (shuffledTerms.length === 0 && stack.filter((e) => e.phase.mode !== 'done').length === 0)
 					done = true;
 				else if (
 					// no more than three newterms in a row
 					shuffledTerms.length > 0 &&
-					stack.filter((e) => !(e.phase.mode === 'write' || e.phase.mode === 'done')).length <
-						4 + 3 * +!$settingsState.showWrite &&
+					stack.filter((e) => e.phase.mode === 'multichoice').length <
+						2 + 3 * +!$settingsState.showWrite &&
 					stack.filter((e) => e.phase.mode !== 'done').length < 9 &&
-					(($settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)) ? termsinarow < 3 || stack.filter(e => e.phase.mode === "done").length > 0 : true) // optionally retrieve older terms
+					($settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
+						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
+						: true) // optionally retrieve older terms
 				) {
 					// if the stack is not full, enlarge it
 					pushStack();
@@ -128,6 +140,10 @@
 									: c;
 							});
 					} else {
+						if (shuffledTerms.length >= 0 && termsinarow >= 3) {
+							pushStack();
+							termsinarow++;
+						}
 						console.error('DONE?');
 						done = true;
 					}
