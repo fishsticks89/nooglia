@@ -66,6 +66,7 @@
 <div
 	in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }}
 	out:flyin={{ isin: false, additionalTransforms: 'translateX(-50%)' }}
+	data-hj-allow
 	style={!answered
 		? `transform: translateX(-${
 				50 -
@@ -98,18 +99,22 @@
 		{currentquestion.q}
 	</h1>
 	{#if firstcorrect == false && !answered}
-		<div class="enter" transition:fade={{ duration: 200 }}>Enter: "{currentquestion.a}" or <strong class="skp" on:click={() => answer(false)}>skip</strong></div>
+		<div class="enter" transition:fade={{ duration: 200 }}>
+			Enter: "{currentquestion.a}" or
+			<strong class="skp" on:click={() => answer(false)}>skip</strong>
+		</div>
 	{/if}
 	<input
 		style:border-color={!answered ? '' : 'transparent'}
 		type="text"
 		bind:this={input}
 		bind:value={inputText}
+		data-hj-allow
 	/>
 	<!-- firstcorrect can be null to "=== false" -->
 	{#if firstcorrect === false && !answered}
 		<button
-			class="ov"
+			class="ov blinkin"
 			transition:fade={{ duration: 200 }}
 			on:click={() => {
 				firstcorrect = true;
@@ -132,6 +137,26 @@
 </div>
 
 <style>
+	@keyframes spinin {
+		0% {
+			color: var(--light);
+		}
+		50% {
+			color: var(--accent);
+		}
+		74% {
+			color: var(--comp);
+		}
+		100% {
+			color: var(--light);
+		}
+	}
+	.blinkin {
+		animation-name: spinin;
+		animation-duration: 0.4s;
+		animation-iteration-count: 3;
+		animation-timing-function: ease-in-out;
+	}
 	.skp {
 		color: white;
 		cursor: pointer;
@@ -155,7 +180,7 @@
 
 		position: absolute;
 		right: 1.5rem;
-		top: 1.5rem;
+		top: 1rem;
 		padding: 0.8rem;
 		padding-inline: 1.2rem;
 	}
@@ -187,10 +212,13 @@
 	.term {
 		font-size: large;
 		margin: 2rem;
+		margin-top: 3rem;
 		position: absolute;
 		top: 0rem;
 		left: 0rem;
+		max-width: calc(100% - 4rem);
 		font-family: 'Montserrat', sans-serif;
+		word-wrap: break-word;
 	}
 	.qholder {
 		overflow: hidden;

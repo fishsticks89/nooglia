@@ -96,7 +96,7 @@
 			currentset.set({ doc: null, set: ls.set, isEditing: ls.isNew });
 		}
 	});
-	const debo = createDebounce(900);
+	const debo = createDebounce(500);
 	currentset.subscribe((unset) => {
 		if (
 			!unset.isEditing &&

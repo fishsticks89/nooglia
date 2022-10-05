@@ -31,6 +31,22 @@
         "runOptions": {
             "runOn": "folderOpen",
         }
+      },
+      {
+        "type": "shell",
+        "label": "scraperinit",
+        "command": "cd scraper && pnpm run start",
+        "windows": {
+          "command": "cd scraper; pnpm run start"
+        },
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "runOptions": {
+            "runOn": "folderOpen",
+        }
       }
     ]
   }

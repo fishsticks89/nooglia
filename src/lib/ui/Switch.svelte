@@ -2,6 +2,7 @@
 	import { spring } from "svelte/motion";
 
     export let on: boolean = false;
+    export let lightBackground = false;
     export let onChange = (pos: boolean) => {
 
     }
@@ -13,14 +14,18 @@
     $: spr.set(+on);
 </script>
 
-<div class="outer" on:click={() => {
+<div class="outer" style:background-color={(lightBackground) ? "var(--glass)" : "var(--emp)"} on:click={() => {
     onChange(!on);
 }}>
+    <div class="propopen"/>
     <div class="outer blue" style:width={$spr * 2.7 + "rem"}></div>
     <div class="inner" style:left={($spr * 1.6 - 0.2).toString() + "rem"} />
 </div>
     
 <style>
+    .propopen {
+        width: 2.8rem;
+    }
     .outer {
         margin: 0rem 0.7rem;
         position: relative;

@@ -19,7 +19,7 @@
 	$: oninput(txf);
 </script>
 
-<input bind:value={txf} type="text" placeholder={browser ? 'Name Your Set' : ''} />
+<input bind:value={txf} type="text" data-hj-allow placeholder={browser ? 'Name Your Set' : ''} />
 
 <style>
 	input::placeholder {

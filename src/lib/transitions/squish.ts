@@ -1,9 +1,10 @@
-import { cubicIn, cubicOut } from "svelte/easing";
+import { cubicIn } from "svelte/easing";
 
 export function squish(
     node: any,
-    { isin = true, initialheight = "100%" }: { isin: boolean, initialheight: string }
+    opts: { isin?: boolean, initialheight: string, }
 ) {
+    const {isin = false, initialheight = "100%"} = opts;
     return {
         duration: 350,
         css: (t: number) => {
