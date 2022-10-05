@@ -44,6 +44,15 @@
 			}}
 		/>
 	</div>
+	<div class="center">
+		Occasionally ask older questions: <Switch
+			lightBackground={true}
+			on={!$settingsState.retrieve}
+			onChange={(x) => {
+				$settingsState.retrieve = !x;
+			}}
+		/>
+	</div>
 	<div class="center">Answer with:</div>
 	<Multiselect
 		options={['Term', 'Definition', 'Both']}

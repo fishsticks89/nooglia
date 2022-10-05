@@ -4,9 +4,24 @@
 	import printStore from './printStore';
 
 	let printContents: HTMLElement;
+	let appendeded = false;
 	printStore.subscribe((e) => {
 		if (e) {
 			setTimeout(() => {
+				if (!appendeded && (window as any).chrome)
+					document.body.innerHTML += `
+					<style>	
+					/* Chrome 29+ */
+					@media print {
+						@page {
+							margin: 2rem 0rem;
+						}
+						div {
+							top: 0;
+						}
+					}
+					</style>`;
+				appendeded = true;
 				document.body.style.overflowY = 'visible';
 				// document.body.style.backgroundColor = 'white';
 				(document.getElementById('printarea') as HTMLElement).innerHTML = printContents.innerHTML;

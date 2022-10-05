@@ -6,7 +6,7 @@ export function squish(
 ) {
     const {isin = false, initialheight = "100%"} = opts;
     return {
-        duration: 70000,
+        duration: 350,
         css: (t: number) => {
             const asdf = cubicIn(t);
             const eased = isin ? 1 - asdf : asdf;
