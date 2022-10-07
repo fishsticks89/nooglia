@@ -10,7 +10,7 @@
 
 	let done = false;
 	$: {
-		if (terms.length > 10) mixpanel.track('Finished Studying');
+		if (terms.length > 10 && done) mixpanel.track('Finished Studying');
 	}
 
 	export let state: setStore;
