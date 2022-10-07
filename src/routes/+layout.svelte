@@ -6,13 +6,17 @@
 	import { browser, dev } from '$app/environment';
 	import { analytics } from '$lib/firebase';
 	import mixpanel from 'mixpanel-browser';
-	if (browser && !dev) {
+	let falser = false;
+	if (browser) {
 		mixpanel.init('7309a913f64760d4b084f0a0922b3d75', { debug: !browser });
-		analytics;
+		if (!dev) analytics;
+		falser = true;
 	}
 </script>
 
-<slot />
+{#if falser || !browser}
+	<slot />
+{/if}
 
 <style>
 </style>
