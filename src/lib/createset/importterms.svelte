@@ -1,4 +1,5 @@
 <script lang="ts">
+	import mixpanel from 'mixpanel-browser';
 	import Selector from '$lib/createset/Selector.svelte';
 	import type { term } from '$lib/data/db';
 	import splitters from './splitters';
@@ -60,17 +61,18 @@
 		<button
 			style:background-color={'var(--accent)'}
 			style:position="relative"
-			style:bottom={"2rem"}
-			style:margin-top={"2rem"}
+			style:bottom={'2rem'}
+			style:margin-top={'2rem'}
 			class="cancel"
 			on:click={() => {
-				console.log(selector.getSplitters())
+				console.log(selector.getSplitters());
 				addTerms(
 					textarea
 						.get()
-						.split(selector.getSplitters().entries).filter(e => e.match(selector.getSplitters().termdef))
+						.split(selector.getSplitters().entries)
+						.filter((e) => e.match(selector.getSplitters().termdef))
 						.map((e) => {
-							console.log(e)
+							console.log(e);
 							return {
 								q: e.split(selector.getSplitters().termdef)[0],
 								a: e.split(selector.getSplitters().termdef)[1]
@@ -79,6 +81,7 @@
 				);
 				reset();
 				importpop = !importpop;
+				mixpanel.track('Import');
 			}}>IMPORT</button
 		>
 	</div>
@@ -105,7 +108,7 @@
 		top: 0rem;
 		left: 50%;
 		width: 100vw;
-        height: 100vh;
+		height: 100vh;
 		height: 100dvh;
 
 		background-color: var(--background);
@@ -116,7 +119,7 @@
 
 		border: 0px solid transparent;
 		border-radius: var(--round);
-        
+
 		overflow-y: scroll;
 	}
 </style>
