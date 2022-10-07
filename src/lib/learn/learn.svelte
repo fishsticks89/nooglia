@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { max } from '$lib/util/minmax';
-
+	import mixpanel from 'mixpanel-browser';
+	
 	import shuffle from '$lib/util/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
@@ -9,6 +9,9 @@
 	import settingsState from './settings/settingsState';
 
 	let done = false;
+	$: {
+		if (terms.length > 10) mixpanel.track('Finished Studying');
+	}
 
 	export let state: setStore;
 

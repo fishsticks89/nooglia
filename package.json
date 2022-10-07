@@ -26,6 +26,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"firebase": "^9.9.3"
+		"@types/mixpanel-browser": "^2.38.0",
+		"firebase": "^9.9.3",
+		"mixpanel-browser": "^2.45.0"
 	}
 }
