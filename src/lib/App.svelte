@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Settings from './learn/settings/Settings.svelte';
-	import showSettings from '$lib/learn/settings/showSettings';
 	import Printer from './util/print/Printer.svelte';
 	import Feedback from '$lib/feedback/feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
@@ -10,7 +9,6 @@
 	import { browser } from '$app/environment';
 	import printStore from './util/print/printStore';
 	import shuffle from './util/shuffle';
-	import Modal from './ui/Modal.svelte';
 
 	export let store: setStore;
 	let main: HTMLElement;

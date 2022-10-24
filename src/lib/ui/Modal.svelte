@@ -12,7 +12,7 @@
                     position: fixed;
                     width: 80vw;
                     max-width: 40rem;
-                    height: 80vw;
+                    height: fit-content;
                     max-height: 25rem;
                     left: 50%;
                     top: calc(${spring * 50}% - ${(1 - spring) * 13}rem);
@@ -56,6 +56,7 @@
 		border: 0px solid transparent;
 		border-radius: var(--round);
 		z-index: 2;
+		height: fit-content;
 	}
 	.main {
 		width: 100vw;

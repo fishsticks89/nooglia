@@ -76,37 +76,51 @@
 	};
 	let width: number = 0;
 	let importpop = false;
+
+	$: isEditing = $state.isEditing && $state.isEditable;
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 <div class="create">
 	<!-- name -->
-	{#if $state.isEditing}
+	{#if isEditing}
 		<Name {state} />
 	{:else}
 		<h1>{$state.set.name}</h1>
 	{/if}
-
-	<button
-		class="edit"
-		on:click={() => {
-			if ($state.set.name === '') alert('Name Your Set!');
-			else if (
-				$state.set.contents.length < 4 ||
-				$state.set.contents
-					.join('')
-					.split(/[\n ]+/)
-					.join('').length <= 1
-			)
-				alert('You must have at least 4 unique terms');
-			else
-				state.update((s) => {
-					s.isEditing = !s.isEditing;
-					return s;
-				});
-		}}>{$state.isEditing ? 'Done' : 'Edit'}</button
-	>
+	<div class="setButtons">
+		{#if $state.isEditable}
+			<button
+				class="edit"
+				on:click={() => {
+					if ($state.set.name === '') alert('Name Your Set!');
+					else if (
+						$state.set.contents.length < 4 ||
+						$state.set.contents
+							.join('')
+							.split(/[\n ]+/)
+							.join('').length <= 1
+					)
+						alert('You must have at least 4 unique terms');
+					else
+						state.update((s) => {
+							s.isEditing = !s.isEditing;
+							return s;
+						});
+				}}>{$state.isEditing ? 'Done' : 'Edit'}</button
+			>
+		{/if}
+		{#if !isEditing}
+			<button class="share edit"
+				on:click={() => {
+					navigator.clipboard.writeText(window.location.href);
+					alert("Copied Link!")
+				}}
+				>Share <span class="material-icons-round shareico">content_copy</span></button
+			>
+		{/if}
+	</div>
 	{#if $state.isEditing}
 		<button
 			class="swap"
@@ -124,9 +138,7 @@
 		<button
 			class="clearall"
 			on:click={() => {
-				onUpdate(
-					[]
-				);
+				onUpdate([]);
 			}}
 		>
 			Clear all&nbsp;<span class="si material-icons-round">delete</span>
@@ -149,14 +161,14 @@
 		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
 		<button
 			class="printstudy"
-			out:squish={{ initialheight: "2.5rem" }}
+			out:squish={{ initialheight: '2.5rem' }}
 			on:click={() => {
 				printStore.set(true);
 			}}><span class="material-icons-round pri">print</span>print study</button
 		>
 	{/if}
 
-	{#each $state.isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
+	{#each isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
 		<div class="termholder" animate:flip={{ duration: 200 }}>
 			<Term
 				{state}
@@ -172,7 +184,7 @@
 			/>
 		</div>
 	{/each}
-	{#if $state.isEditing}
+	{#if isEditing}
 		<button
 			class="add"
 			on:click={() => {
@@ -224,15 +236,32 @@
 
 		font-size: calc(4vw + 1rem);
 	}
+	.setButtons {
+		display: flex;
+		justify-content: space-between;
+	}
 	.edit {
 		font-family: 'GilroyBold', sans-serif;
-		background-color: vaR(--light);
+		background-color: var(--light);
 		color: var(--emp);
 		padding: 0.6rem;
 		padding-inline: 1.4rem;
 
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
 		border: 0px solid transparent;
 		border-radius: var(--round);
+	}
+	.shareico {
+		font-size: 1.3rem;
+		padding-left: 0.3rem;
+		/* transform: translateY(-10%); */
+	}
+	.share {
+		color: white;
+		background-color: var(--glass);
 	}
 	.si {
 		font-size: 1.7rem;

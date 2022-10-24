@@ -9,9 +9,10 @@
 	printStore.subscribe((e) => {
 		if (e) {
 			setTimeout(() => {
-				if (!appendeded && (window as any).chrome)
-					document.body.innerHTML += `
-					<style>	
+				if (!appendeded && (window as any).chrome) {
+					const style = document.createElement('style');
+					style.appendChild(
+						document.createTextNode(`
 					/* Chrome 29+ */
 					@media print {
 						@page {
@@ -20,8 +21,13 @@
 						div {
 							top: 0;
 						}
-					}
-					</style>`;
+					}`)
+					);
+					document.body.appendChild(style);
+					setTimeout(() => {
+						style.remove();
+					}, 2);
+				}
 				appendeded = true;
 				document.body.style.overflowY = 'visible';
 				// document.body.style.backgroundColor = 'white';

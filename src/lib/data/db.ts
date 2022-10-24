@@ -17,11 +17,10 @@ export type set = {
     user: string;
     name: string;
     contents: string[];
-    mode: string;
 }
-export const newset = (user: string = ''): set => { return { user, name: "", contents: ["\n"], mode: "Comma" } };
+export const newset = (user: string = ''): set => { return { user, name: "", contents: ["\n"] } };
 export function setEquals(object0: set, object1: set): boolean {
-    return object0.mode === object1.mode && object0.contents.filter((e, i) => { e !== object1.contents[i] }).length === 0 && object0.name === object1.name;
+    return object0.contents.filter((e, i) => { e !== object1.contents[i] }).length === 0 && object0.name === object1.name;
 }
 
 export interface term {
@@ -38,40 +37,32 @@ export const termToString = (term: term) => {
     return term.q.split("\n").join("") + "\n" + term.a.split("\n").join("");
 }
 
-export const getUserDoc = async (): Promise<DocumentSnapshot> => {
-    const userDoc = await getDoc(doc(users, get(authState)?.uid));
+export const getUserDoc = async (useruid: string): Promise<DocumentSnapshot> => {
+    const userDoc = await getDoc(doc(users, useruid));
     if (userDoc.exists()) {
         return userDoc
     }
-    else
+    else {
         setDoc(doc(users, get(authState)?.uid), newuser());
-    return getUserDoc();
+        const userDoc = await getDoc(doc(users, useruid));
+        if (userDoc.exists()) {
+            return userDoc
+        } else {
+            throw "userdoc not created"
+        }
+    }
 }
 export const createCloudSet = async (set: set) => {
     const nsetdoc = doc(sets);
     await setDoc(nsetdoc, set)
     return nsetdoc;
 }
-export const setCurrentSet = (doc: DocumentReference<DocumentData>, state: setStore) => {
-    getCloudSet(doc).then((set) => {
-        state.update(() => {
-            getUserDoc().then((udoc) => {
-                updateDoc(udoc.ref, { lastedited: doc });
-            });
-            return {
-                set,
-                doc,
-                isEditing: false
-            };
-        });
-    });
-}
-export const getCloudSet = async (ref: DocumentReference<DocumentData>): Promise<set> => {
+
+export const getCloudSet = async (ref: DocumentReference<DocumentData>): Promise<set | null> => {
     const doc = await getDoc(ref);
-    return {
+    return (doc.exists()) ? {
         name: doc.get("name"),
-        mode: doc.get("mode"),
         contents: doc.get("contents"),
         user: doc.get("user"),
-    }
+    } : null
 }

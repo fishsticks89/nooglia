@@ -28,6 +28,7 @@
 	"dependencies": {
 		"@types/mixpanel-browser": "^2.38.0",
 		"firebase": "^9.9.3",
-		"mixpanel-browser": "^2.45.0"
+		"mixpanel-browser": "^2.45.0",
+		"svelte-share-buttons-component": "^1.5.0"
 	}
 }
