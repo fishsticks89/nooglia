@@ -10,12 +10,8 @@
 	} from 'firebase/firestore';
 	import { get } from 'svelte/store';
 	import { authState } from './authState';
-	import type { setStore } from '$lib/data/setStore';
-	import { createCloudSet, getCloudSet, newset, setCurrentSet } from '$lib/data/db';
+	import { createCloudSet, newset } from '$lib/data/db';
 	import { fade } from 'svelte/transition';
-
-	export let state: setStore;
-	export let close: () => void;
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
 	getDocs(query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
@@ -34,11 +30,9 @@
 					user: uid,
 					name: '',
 					contents: newset().contents,
-					mode: newset().mode
 				};
 				createCloudSet(set).then((setref) => {
-					setCurrentSet(setref, state);
-					close();
+					window.location.replace("/set/" + setref.id)
 				});
 			}
 		}}
@@ -47,26 +41,15 @@
 		out:fade={{ duration: 100 }}>New Set</button
 	>
 	{#each docs as doc}
-		<div
+		<a
 			in:flyin={{ isin: true, additionalTransforms: '' }}
 			out:flyin={{ isin: false, additionalTransforms: '' }}
 			class="setholder"
-			on:click={() => {
-				getCloudSet(doc.ref).then((set) => {
-					state.update(() => {
-						return {
-							set,
-							doc: doc.ref,
-							isEditing: false
-						};
-					});
-					close();
-				});
-			}}
+			href={"./sets" + doc.id}
 		>
 			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
 			<button class="open">Open</button>
-		</div>
+		</a>
 	{/each}
 </div>
 
@@ -94,7 +77,7 @@
 		height: calc(100% - 5rem);
 
 		overflow-x: hidden;
-		overflow-y: scroll;
+		overflow-y: auto;
 		position: fixed;
 		top: 0rem;
 		left: 0rem;
