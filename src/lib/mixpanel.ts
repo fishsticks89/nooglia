@@ -1,7 +1,22 @@
-import { browser } from '$app/environment';
-import mixpanel from "mixpanel-browser"
-// or with require() syntax:
-// const mixpanel = require('mixpanel-browser');
+import { browser } from "$app/environment";
+import mixpanel from "mixpanel-browser";
 
-// Enabling the debug mode flag is useful during implementation,
-// but it's recommended you remove it for production
+let readyToMix = false;
+
+try {
+    mixpanel.init('7309a913f64760d4b084f0a0922b3d75', {
+        debug: !browser,
+        loaded: () => {
+            readyToMix = true;
+        }
+    });
+} catch (error) {
+    console.error(error);
+}
+
+export const event = (ev: string) => {
+    if (readyToMix)
+        mixpanel.track(ev)
+    else 
+        console.error("No mixing? lmao")
+}

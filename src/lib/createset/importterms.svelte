@@ -1,5 +1,5 @@
 <script lang="ts">
-	import mixpanel from 'mixpanel-browser';
+	import { event } from '$lib/mixpanel';
 	import Selector from '$lib/createset/Selector.svelte';
 	import type { term } from '$lib/data/db';
 	import splitters from './splitters';
@@ -81,7 +81,7 @@
 				);
 				reset();
 				importpop = !importpop;
-				mixpanel.track('Import');
+				event('Import');
 			}}>IMPORT</button
 		>
 	</div>
