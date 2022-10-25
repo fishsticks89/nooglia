@@ -123,6 +123,7 @@
 		display: block;
 		width: calc(100% - 1.4rem);
 		padding: 0.7rem;
+		margin-bottom: 1rem;
 
 		border-radius: var(--round);
 		background-color: var(--emp);
