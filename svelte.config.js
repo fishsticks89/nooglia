@@ -12,9 +12,7 @@ const config = {
 			// default options are shown. On some platforms
 			// these options are set automatically — see below
 			pages: 'public',
-			assets: 'public',
-			fallback: null,
-			precompress: false,
+			assets: 'public'
 		})
 	}
 };
