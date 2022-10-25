@@ -34,6 +34,16 @@
       },
       {
         "type": "shell",
+        "label": "client testbuild",
+        "command": "pnpm run build",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "type": "shell",
         "label": "scraperinit",
         "command": "cd scraper && pnpm run start",
         "windows": {

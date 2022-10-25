@@ -1,6 +1,6 @@
 <script lang="ts">
-	import mixpanel from 'mixpanel-browser';
 	import { analytics } from '$lib/firebase';
+	import { event } from '$lib/mixpanel';
 	import { logEvent } from 'firebase/analytics';
 	import printStore from './printStore';
 
@@ -39,7 +39,7 @@
 					(document.getElementById('printarea') as HTMLElement).innerHTML = '';
 				}, 2);
 				if (analytics) logEvent(analytics, 'printStudy');
-				mixpanel.track('Print Studied');
+				event('Print Studied');
 			});
 		}
 	});

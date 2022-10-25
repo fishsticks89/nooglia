@@ -1,6 +1,4 @@
 <script lang="ts">
-	import mixpanel from 'mixpanel-browser';
-	import Runner from './../util/Runner.svelte';
 	import Flashcard from './questions/Flashcard.svelte';
 	import MultiChoice from './questions/MultiChoice.svelte';
 	import ShortAns from './questions/ShortAns.svelte';

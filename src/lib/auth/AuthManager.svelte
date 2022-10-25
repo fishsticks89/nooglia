@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Library from './Library.svelte';
 	import AuthButton from './AuthButton.svelte';
-	import { authState } from '$lib/auth/authState';
+	import { authState, expectingSignIn } from '$lib/auth/authState';
 	import { auth } from '$lib/firebase';
 	import { cubicIn, cubicInOut, cubicOut } from 'svelte/easing';
 	import type { setStore } from '$lib/data/setStore';
-
-	export let state: setStore;
+	import { browser } from '$app/environment';
 
 	let popped = false;
 
@@ -48,36 +47,37 @@
 
 <svelte:window bind:innerWidth={width} />
 
-<AuthButton text={popped ? 'Back' : 'Library'} posStyle={'z-index: 2;'} oncl={onclick}>
-	{#if popped && $authState}
-		<div
-			class="bkg"
-			style={pos(1, width)}
-			in:enlarge={{ duration: 350, rev: true }}
-			out:enlarge={{ duration: 350, rev: false }}
-		>
-			<Library
-				{state}
-				close={() => {
-					popped = false;
-				}}
-			/>
-			<button
-				class="signout"
-				style={''}
-				on:click={() => {
-					auth.signOut();
-					while (document.body.lastChild) {
-						document.body.lastChild.remove();
-					}
-					window.location.reload();
-				}}
+{#if !(!$authState && expectingSignIn) && browser}
+	<AuthButton text={popped ? 'Back' : 'Library'} posStyle={'z-index: 2;'} oncl={onclick}>
+		{#if popped && $authState}
+			<div
+				class="bkg"
+				style={pos(1, width)}
+				in:enlarge={{ duration: 350, rev: true }}
+				out:enlarge={{ duration: 350, rev: false }}
 			>
-				Signout
-			</button>
-		</div>
-	{/if}
-</AuthButton>
+				<Library
+					close={() => {
+						popped = false;
+					}}
+				/>
+				<button
+					class="signout"
+					style={''}
+					on:click={() => {
+						auth.signOut();
+						while (document.body.lastChild) {
+							document.body.lastChild.remove();
+						}
+						window.location.reload();
+					}}
+				>
+					Signout
+				</button>
+			</div>
+		{/if}
+	</AuthButton>
+{/if}
 
 <style>
 	.signout {

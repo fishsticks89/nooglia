@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import { authState } from '$lib/auth/authState';
+	import { authState, expectingSignIn } from '$lib/auth/authState';
 	import { signin } from '$lib/auth/signin';
 
 	export let oncl: () => void;
@@ -12,7 +12,12 @@
 
 <div
 	class="pos"
-	style={posStyle}
+	style={$authState ? '' : `
+	background-color: white;
+	color: var(--emp);
+	font-family: 'GilroyBold', sans-serif;
+	color: black; width: fit-content;
+	` + posStyle}
 	on:click={$authState
 		? oncl
 		: () => {
@@ -22,7 +27,7 @@
 	<div class="clipper">
 		{#if $authState}
 			{#key text}
-				<p in:fly={{ duration: 600, y: 200 }}>{text}</p>
+				<p class="txt" in:fly={{ duration: 600, y: 200 }}>{text}</p>
 			{/key}
 			{#if showpfp && pfp}
 				<div in:fly={{ duration: 600, y: 200 }} class="vr" />
@@ -32,12 +37,14 @@
 						showpfp = false;
 					}}
 					in:fly={{ duration: 600, y: 200 }}
+					id="pfp"
 					src={pfp}
 					alt=""
 				/>
 			{/if}
 		{:else}
-			Sign In
+			<img class="ggl" src="/google_logo.svg" alt="" srcset="" />
+			<p class="signup">Continue with Google</p>
 		{/if}
 	</div>
 
@@ -45,12 +52,24 @@
 </div>
 
 <style>
-    p {
-        width: 55px;
-        margin: 0px;
-        text-align: center;
-    }
-	img {
+	.signup {
+		width: fit-content;
+		padding-inline: 1rem;
+		padding-left: 0.7rem;
+		translate: 0px -1%;
+	}
+	.txt {
+		width: 55px;
+		margin: 0px;
+		text-align: center;
+	}
+	.ggl {
+		padding-left: 1rem;
+		width: 1.5rem;
+		height: 1.5rem;
+		outline: 0px;
+	}
+	#pfp {
 		width: 1.5rem;
 		height: 1.5rem;
 		border-radius: 50%;
@@ -58,18 +77,18 @@
 		outline: 0px;
 	}
 	.clipper {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
-        height: 100%;
+		height: 100%;
 		overflow: hidden;
 	}
 	.vr {
 		height: 40%;
 		width: 1.5px;
 		background-color: rgba(255, 255, 255, 0.427);
-        margin-inline: 0.4rem;
+		margin-inline: 0.4rem;
 	}
 	.pos {
 		cursor: pointer;
@@ -89,6 +108,6 @@
 		position: relative;
 
 		font-family: 'PoppinsSemi', sans-serif;
-        font-size: 15px;
+		font-size: 15px;
 	}
 </style>

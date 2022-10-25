@@ -20,7 +20,7 @@
 </script>
 
 <Printer>
-	<Settings/>
+	<Settings />
 	<div style="overflow-y: hidden; height: fit-content; min-height: 100vh;" bind:this={main}>
 		{#if browser}
 			<Create state={store} />
@@ -52,7 +52,7 @@
 
 <style>
 	.printmain {
-		width: 100%
+		width: 100%;
 	}
 	.title {
 		padding: 0rem;

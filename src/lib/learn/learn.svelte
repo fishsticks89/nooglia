@@ -1,16 +1,15 @@
-<script lang="ts">
-	import mixpanel from 'mixpanel-browser';
-	
+<script lang="ts">	
 	import shuffle from '$lib/util/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
 	import type { setStore } from '$lib/data/setStore';
 	import { get } from 'svelte/store';
 	import settingsState from './settings/settingsState';
+	import { event } from '$lib/mixpanel';
 
 	let done = false;
 	$: {
-		if (terms.length > 10 && done) mixpanel.track('Done');
+		if (terms.length > 10 && done) event('Done');
 	}
 
 	export let state: setStore;

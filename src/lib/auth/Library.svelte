@@ -12,6 +12,7 @@
 	import { authState } from './authState';
 	import { createCloudSet, newset } from '$lib/data/db';
 	import { fade } from 'svelte/transition';
+	import { prefetch } from '$app/navigation';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
 	getDocs(query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
@@ -29,10 +30,10 @@
 				const set = {
 					user: uid,
 					name: '',
-					contents: newset().contents,
+					contents: newset().contents
 				};
 				createCloudSet(set).then((setref) => {
-					window.location.replace("/set/" + setref.id)
+					window.location.replace('/set/' + setref.id);
 				});
 			}
 		}}
@@ -41,15 +42,21 @@
 		out:fade={{ duration: 100 }}>New Set</button
 	>
 	{#each docs as doc}
-		<a
+		<button
 			in:flyin={{ isin: true, additionalTransforms: '' }}
 			out:flyin={{ isin: false, additionalTransforms: '' }}
 			class="setholder"
-			href={"./sets" + doc.id}
+			on:mouseover={() => {
+				prefetch('/set/' + doc.id);
+			}}
+			on:focus
+			on:click={() => {
+				window.location.replace('/set/' + doc.id);
+			}}
 		>
 			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
 			<button class="open">Open</button>
-		</a>
+		</button>
 	{/each}
 </div>
 
@@ -72,7 +79,7 @@
 		margin-block: 0px;
 		padding-inline: 10%;
 		padding-top: 1rem;
-		padding-bottom: 4rem;
+		padding-bottom: 5rem;
 		width: 80%;
 		height: calc(100% - 5rem);
 
@@ -93,7 +100,7 @@
 		margin: 0px;
 		margin-block: 1rem;
 		padding: 10%;
-		width: 80%;
+		width: 100%;
 
 		border: 1px solid white;
 		border-width: 1px;
@@ -106,5 +113,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-content: flex-end;
+
+		text-align: left;
 	}
 </style>

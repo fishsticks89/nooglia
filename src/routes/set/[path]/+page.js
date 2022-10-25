@@ -10,3 +10,6 @@ export function load({ params }) {
  
   throw error(404, 'Not found');
 }
+
+export const prerender = 'fallback';
+export const ssr = false;

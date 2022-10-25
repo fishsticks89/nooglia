@@ -8,12 +8,12 @@
 	if (browser) prefetch('./learn');
 
 	onAuthStateChanged(auth, (newuser) => {
-		if (newuser) window.location.replace('./learn');
+		if (newuser) window.location.replace('./home');
 	});
 
 	getRedirectResult(auth)
 		.then((result) => {
-			if (result) window.location.replace('./learn');
+			if (result) window.location.replace('./home');
 		})
 		.catch((error) => {
 			// ...
@@ -22,10 +22,10 @@
 
 <Nav>
 	<a
-		href="./learn"
+		href="./home"
 		class="topbutton"
 		on:click={() => {
-			window.location.replace('./learn');
+			window.location.replace('./home');
 		}}><p class="gs">Get Started</p></a
 	></Nav
 >
