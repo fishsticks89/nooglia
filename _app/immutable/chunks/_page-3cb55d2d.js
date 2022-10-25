@@ -1,0 +1,1 @@
+import{H as e}from"./control-83f00558.js";function o(r,t){return new e(r,t)}function n({params:r}){if(r.path)return{id:r.path};throw o(404,"Not found")}const a="fallback",s=!1,f=Object.freeze(Object.defineProperty({__proto__:null,load:n,prerender:a,ssr:s},Symbol.toStringTag,{value:"Module"}));export{f as _,n as l,a as p,s};
