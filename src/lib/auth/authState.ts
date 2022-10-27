@@ -2,7 +2,8 @@ import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
 import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from '$lib/firebase';
-import { event } from '$lib/mixpanel';
+import { event, mix } from '$lib/mixpanel';
+import mixpanel from 'mixpanel-browser';
 
 export const authState: Writable<User | null> = writable(null);
 
@@ -12,9 +13,12 @@ setTimeout(() => {
 }, 0)
 
 authState.subscribe(e => {
-    if (e !== null)
+    if (e !== null) {
         event("Signin")
-
+        mix(() => {
+            mixpanel.identify(e.uid)
+        })
+    }
     if (browser)
         if (e) {
             // User just signed in, we should not display dialog next time because of firebase auto-login

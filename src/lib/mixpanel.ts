@@ -17,6 +17,17 @@ try {
 export const event = (ev: string) => {
     if (readyToMix)
         mixpanel.track(ev)
-    else 
+    else
+        console.error("No mixing? lmao")
+}
+
+export const mix = (f: () => void) => {
+    if (readyToMix)
+        try {
+            f()
+        } catch (error) {
+            console.error(error)
+        }
+    else
         console.error("No mixing? lmao")
 }
