@@ -16,7 +16,9 @@ authState.subscribe(e => {
     if (e !== null) {
         event("Signin")
         mix(() => {
-            mixpanel.identify(e.uid)
+            mixpanel.identify(e.uid);
+            mixpanel.people.set("name", e.displayName)
+            mixpanel.people.set("email", e.email)
         })
     }
     if (browser)

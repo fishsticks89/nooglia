@@ -20,6 +20,8 @@
 	import Runner from '$lib/util/Runner.svelte';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
+
+	authState.subscribe(e => console.log(e))
 </script>
 
 {#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
@@ -29,7 +31,7 @@
 			and more <img src="./icons/rocket.png" alt="rocket" style:height={50 + 'px'} />
 		</p>
 		<button
-		class="startbutt"
+			class="startbutt"
 			on:click={() => {
 				signInWithRedirect(auth, new GoogleAuthProvider());
 			}}>Start Studying</button
@@ -63,25 +65,19 @@
 				}
 			}}
 			class="newset"
-			in:fade={{ duration: 300 }}
-			out:fade={{ duration: 100 }}>New Set</button
+			in:fade={{ duration: 300 }}>New Set</button
 		>
 		{#each docs as doc}
-			<div
+			<a
 				in:flyin={{ isin: true, additionalTransforms: '' }}
-				out:flyin={{ isin: false, additionalTransforms: '' }}
 				class="setholder"
-				on:mouseover={() => {
-					prefetch('/set/' + doc.id);
-				}}
+				data-sveltekit:prefetch
 				on:focus
-				on:click={() => {
-					window.location.replace('/set/' + doc.id);
-				}}
+				href={'/set/' + doc.id}
 			>
 				<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
 				<button class="open">Open</button>
-			</div>
+			</a>
 		{/each}
 	</div>
 {/if}
@@ -124,6 +120,9 @@
 		width: calc(100% - 1.4rem);
 		padding: 0.7rem;
 		margin-bottom: 1rem;
+
+		color: white;
+		text-decoration: none;
 
 		border-radius: var(--round);
 		background-color: var(--emp);
