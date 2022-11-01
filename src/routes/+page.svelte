@@ -1,10 +1,12 @@
 <script lang="ts">
+	import CSRprovider from '$lib/util/CSRprovider.svelte';
 	import { flyin } from '$lib/transitions/flyin';
 	import { authState, expectingSignIn } from '$lib/auth/authState';
 	import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 	import { auth, sets } from '$lib/firebase';
 	import { browser } from '$app/environment';
 	import {
+		DocumentSnapshot,
 		getDocs,
 		query,
 		QueryDocumentSnapshot,
@@ -12,17 +14,24 @@
 		type DocumentData
 	} from 'firebase/firestore';
 	import { get } from 'svelte/store';
-	import { createCloudSet, newset } from '$lib/data/db';
 	import { fade } from 'svelte/transition';
-	import { prefetch } from '$app/navigation';
 	import Nav from '$lib/nav/Nav.svelte';
 	import AuthManager from '$lib/auth/AuthManager.svelte';
 	import Runner from '$lib/util/Runner.svelte';
+	import { createSet } from '$lib/createset/createSet';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
 
-	authState.subscribe(e => console.log(e))
+	const getStringArr = (doc: DocumentSnapshot<DocumentData>, property: string) => {
+		return doc.get(property) as string[];
+	};
+
+	authState.subscribe((e) => console.log(e));
+
+	let href: null | string = null;
 </script>
+
+<CSRprovider link={href} />
 
 {#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
 	<h2>
@@ -53,31 +62,27 @@
 		<button
 			on:click={() => {
 				const uid = $authState?.uid;
-				if (uid) {
-					const set = {
-						user: uid,
-						name: '',
-						contents: newset().contents
-					};
-					createCloudSet(set).then((setref) => {
-						window.location.replace('/set/' + setref.id);
+				if (uid)
+					createSet(uid, (setref) => {
+						href = setref;
 					});
-				}
 			}}
 			class="newset"
 			in:fade={{ duration: 300 }}>New Set</button
 		>
 		{#each docs as doc}
-			<a
-				in:flyin={{ isin: true, additionalTransforms: '' }}
-				class="setholder"
-				data-sveltekit:prefetch
-				on:focus
-				href={'/set/' + doc.id}
-			>
-				<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
-				<button class="open">Open</button>
-			</a>
+			{#if getStringArr(doc, 'contents').join("").split(/[ \n]/).join('') != ''}
+				<a
+					in:flyin={{ isin: true, additionalTransforms: '' }}
+					class="setholder"
+					data-sveltekit:prefetch
+					on:focus
+					href={'/set/' + doc.id}
+				>
+					<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
+					<button class="open">Open</button>
+				</a>
+			{/if}
 		{/each}
 	</div>
 {/if}
