@@ -54,6 +54,13 @@
 			getDocs(
 				query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))
 			).then((e) => {
+				if (e.docs.length === 0) {
+					const uid = $authState?.uid;
+					if (uid)
+						createSet(uid, (setref) => {
+							href = setref;
+						});
+				}
 				docs = e.docs;
 			});
 		}}
@@ -71,7 +78,7 @@
 			in:fade={{ duration: 300 }}>New Set</button
 		>
 		{#each docs as doc}
-			{#if getStringArr(doc, 'contents').join("").split(/[ \n]/).join('') != ''}
+			{#if getStringArr(doc, 'contents').join('').split(/[ \n]/).join('') != ''}
 				<a
 					in:flyin={{ isin: true, additionalTransforms: '' }}
 					class="setholder"
