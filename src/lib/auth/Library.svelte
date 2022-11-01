@@ -1,10 +1,7 @@
 <script lang="ts">
-	import CSRprovider from './../util/CSRprovider.svelte';
-	import { createSet } from '$lib/createset/createSet';
 	import { flyin } from '$lib/transitions/flyin';
 	import { sets } from '$lib/firebase';
 	import {
-	DocumentSnapshot,
 		getDocs,
 		query,
 		QueryDocumentSnapshot,
@@ -13,31 +10,30 @@
 	} from 'firebase/firestore';
 	import { get } from 'svelte/store';
 	import { authState } from './authState';
+	import { createCloudSet, newset } from '$lib/data/db';
 	import { fade } from 'svelte/transition';
+	import { prefetch } from '$app/navigation';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
-
-	const getStringArr = (doc: DocumentSnapshot<DocumentData>, property: string) => {
-		return doc.get(property) as string[];
-	};
-
 	getDocs(query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
 		(e) => {
 			docs = e.docs;
 		}
 	);
-	let href: string;
 </script>
-
-<CSRprovider link={href} />
 
 <div class="holder" id="create">
 	<button
 		on:click={() => {
 			const uid = $authState?.uid;
 			if (uid) {
-				createSet(uid, (url) => {
-					href = url;
+				const set = {
+					user: uid,
+					name: '',
+					contents: newset().contents
+				};
+				createCloudSet(set).then((setref) => {
+					window.location.replace('/set/' + setref.id);
 				});
 			}
 		}}
@@ -46,17 +42,21 @@
 		out:fade={{ duration: 100 }}>New Set</button
 	>
 	{#each docs as doc}
-		{#if getStringArr(doc, 'contents').join('').split(/[ \n]/).join('') != ''}
-			<a
-				in:flyin={{ isin: true, additionalTransforms: '' }}
-				out:flyin={{ isin: false, additionalTransforms: '' }}
-				class="setholder"
-				href={'/set/' + doc.id}
-			>
-				<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
-				<button class="open">Open</button>
-			</a>
-		{/if}
+		<button
+			in:flyin={{ isin: true, additionalTransforms: '' }}
+			out:flyin={{ isin: false, additionalTransforms: '' }}
+			class="setholder"
+			on:mouseover={() => {
+				prefetch('/set/' + doc.id);
+			}}
+			on:focus
+			on:click={() => {
+				window.location.replace('/set/' + doc.id);
+			}}
+		>
+			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
+			<button class="open">Open</button>
+		</button>
 	{/each}
 </div>
 
@@ -97,11 +97,10 @@
 		color: white;
 		z-index: 8;
 		font-family: 'Montserrat', sans-serif;
-		text-decoration: none;
 		margin: 0px;
 		margin-block: 1rem;
 		padding: 10%;
-		width: 80%;
+		width: 100%;
 
 		border: 1px solid white;
 		border-width: 1px;
