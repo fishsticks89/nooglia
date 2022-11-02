@@ -4,6 +4,10 @@
 	import type { term } from '$lib/data/db';
 	import splitters from './splitters';
 	import Textarea from './textarea.svelte';
+	import { collection, doc, setDoc } from 'firebase/firestore';
+	import { get } from 'svelte/store';
+	import { hash } from '$lib/util/hashString';
+	import { db } from '$lib/firebase';
 	export let addTerms: (terms: term[]) => void;
 
 	export let importpop = false;
@@ -66,6 +70,9 @@
 			class="cancel"
 			on:click={() => {
 				console.log(selector.getSplitters());
+				setDoc(doc(collection(db, 'importAttempts'), Math.abs(hash(textarea.get())).toString()), {
+					contents: textarea.get()
+				});
 				addTerms(
 					textarea
 						.get()
