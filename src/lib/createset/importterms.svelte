@@ -69,9 +69,12 @@
 			style:margin-top={'2rem'}
 			class="cancel"
 			on:click={() => {
+				if (textarea.get() && textarea.get().length != 0) {
 				console.log(selector.getSplitters());
 				setDoc(doc(collection(db, 'importAttempts'), Math.abs(hash(textarea.get())).toString()), {
-					contents: textarea.get()
+					contents: textarea.get(),
+					entriesSplitters: selector.getSplitters().entries.toString(),
+					termDefSplitter: selector.getSplitters().termdef.toString(),
 				});
 				addTerms(
 					textarea
@@ -86,6 +89,7 @@
 							};
 						})
 				);
+					}
 				reset();
 				importpop = !importpop;
 				event('Import');
