@@ -5,7 +5,6 @@
 	import splitters from './splitters';
 	import Textarea from './textarea.svelte';
 	import { collection, doc, setDoc } from 'firebase/firestore';
-	import { get } from 'svelte/store';
 	import { hash } from '$lib/util/hashString';
 	import { db } from '$lib/firebase';
 	export let addTerms: (terms: term[]) => void;
