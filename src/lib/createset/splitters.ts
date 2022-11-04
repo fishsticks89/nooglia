@@ -1,9 +1,9 @@
-export default {
-    tab: /\t */,
-    comma: /, */,
+export default { // all of these should prob be symetrical
+    tab: / *\t */,
+    comma: / *, */,
     dash: / *- */,
-    semicolon: /; */,
-    colon: /: */,
-    newline: "\n",
-    doublenewline: "\n\n"
+    semicolon: / *; */,
+    colon: / *: */,
+    newline: / *\n+ */,
+    doublenewline: / *\n\n+ */
 }

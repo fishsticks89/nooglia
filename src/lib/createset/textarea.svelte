@@ -4,6 +4,7 @@
 	let tx: HTMLTextAreaElement; // the elem
 	export let funcs: { get: () => string; reset: () => void };
 	export let onPaste = (contents: string) => {};
+	export let onChange = (contents: string) => {};
 	let text: string; // curr contents
 	funcs.get = () => {
 		return text;
@@ -14,6 +15,7 @@
 
 	function init(text: HTMLTextAreaElement) {
 		function resize() {
+			onChange(text.value);
 			text.style.height = 'auto';
 			text.style.height = text.scrollHeight + 1 + 'px';
 		}
@@ -30,6 +32,21 @@
 
 		text.addEventListener('paste', () => {
 			setTimeout(() => onPaste(tx.value));
+		});
+
+		// make tab work
+		text.addEventListener('keydown', function (e) {
+			if (e.key == 'Tab') {
+				e.preventDefault();
+				var start = this.selectionStart;
+				var end = this.selectionEnd;
+
+				// set textarea value to: text before caret + tab + text after caret
+				this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+
+				// put caret at right position again
+				this.selectionStart = this.selectionEnd = start + 1;
+			}
 		});
 
 		resize();
@@ -66,7 +83,7 @@
 		border-radius: var(--round);
 
 		max-width: 50rem;
-        max-height: 70vh;
+		max-height: 70vh;
 	}
 	textarea:focus-visible {
 		outline: none;
