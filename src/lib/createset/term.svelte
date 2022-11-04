@@ -1,15 +1,14 @@
 <script lang="ts">
 	import Runner from './../util/Runner.svelte';
-	import type { setStore } from '$lib/data/setStore';
 	import type { Writable } from 'svelte/store';
 	import type { term } from '$lib/data/db';
 
-	export let state: setStore;
+	export let isEditing: boolean;
 	export let terms: Writable<term[]>;
 	export let selected: boolean | null;
-	export let onUpdate: (tms: term[]) => void;
-	export let setSelected: (side: boolean) => void;
-	export let onPress: (ev: KeyboardEvent) => void;
+	export let onUpdate = (tms: term[]) => {};
+	export let setSelected = (side: boolean) => {};
+	export let onPress = (ev: KeyboardEvent) => {};
 
 	export let term: term;
 
@@ -52,7 +51,7 @@
 	});
 </script>
 
-{#if $state.isEditing}
+{#if isEditing}
 	<textarea
 		type="text"
 		on:change={() => {

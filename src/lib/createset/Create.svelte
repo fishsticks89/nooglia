@@ -155,7 +155,7 @@
 				importpop = !importpop;
 			}}
 		>
-			+ Import from Quizlet, Word, Excel, etc
+			+ Import from Word, Google Docs, Excel, etc
 		</div>
 	{:else}
 		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
@@ -171,7 +171,7 @@
 	{#each isEditing ? $terms : $terms.filter((e) => e && (e.q != '' || e.a != '')) as term, i (term.id)}
 		<div class="termholder" animate:flip={{ duration: 200 }}>
 			<Term
-				{state}
+				isEditing={isEditing}
 				{terms}
 				{onUpdate}
 				{term}

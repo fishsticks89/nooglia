@@ -17,15 +17,16 @@ const firebaseConfig = {
   measurementId: "G-VC9747164E"
 };
 
+const connectToEmulators = dev;
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const analytics = (browser && !dev) ? getAnalytics(app) : null;
+export const analytics = (browser && !connectToEmulators) ? getAnalytics(app) : null;
 export const db = getFirestore(app);
-if (dev) connectFirestoreEmulator(db, 'localhost', 4040);
+if (connectToEmulators) connectFirestoreEmulator(db, 'localhost', 4040);
 export const users = collection(db, "users")
 export const sets = collection(db, "sets")
 
 export const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);
-if (dev) connectAuthEmulator(auth, "http://localhost:9099");
+if (connectToEmulators) connectAuthEmulator(auth, "http://localhost:9099");

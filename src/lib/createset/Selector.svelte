@@ -1,10 +1,21 @@
 <script lang="ts">
 	import Selector from './ui/selector.svelte';
 	import splitterlist from './splitters';
+	export let onChange = () => {};
+	let onChangei = () => {
+		// checks if splitters are the same
+		if (selector.getSplitters().entries === selector.getSplitters().termdef) {
+			setTimeout(() => {
+				selector.setTermDefSplitter(0);
+				onChange();
+			}, 400);
+		} else onChange();
+	};
 	export let selector: {
 		reset: () => void;
 		getSplitters: () => { termdef: RegExp | string; entries: RegExp | string };
 		setTermDefSplitter: (index: number) => void;
+		setEntriesSplitter: (index: number) => void;
 	};
 	let splitters = [true, false, false, false];
 	let splitters2 = [true, false, false, false];
@@ -14,10 +25,26 @@
 	};
 	let tx1: string;
 	let tx2: string;
+	let ignore = false;
+	$: {
+		tx1;
+		tx2;
+		if (tx1 && tx2 && ((tx1 !== '' && tx2 !== '') || ignore)) {
+			onChangei();
+			ignore = true;
+		}
+	}
 	selector.setTermDefSplitter = (ind) => {
 		splitters = splitters.map((e, i) => {
 			return i == ind;
 		});
+		onChangei();
+	};
+	selector.setEntriesSplitter = (ind) => {
+		splitters2 = splitters2.map((e, i) => {
+			return i == ind;
+		});
+		onChangei();
 	};
 	selector.getSplitters = () => {
 		const [termdefindex, entryindex] = [splitters, splitters2].map((splitter) => {
@@ -69,11 +96,13 @@
 		splitters = splitters.map((_, i2) => {
 			return i == i2;
 		});
+		onChangei();
 	};
 	const select2 = (i: number) => {
 		splitters2 = splitters2.map((_, i2) => {
 			return i == i2;
 		});
+		onChangei();
 	};
 </script>
 
@@ -107,7 +136,16 @@
 				select(3);
 			}}
 		>
-			Custom:&nbsp;<input type="text" bind:value={tx1} />
+			Custom:&nbsp;<input
+				type="text"
+				placeholder={'e.g. " = "'}
+				bind:value={tx1}
+				on:input={() => {
+					setTimeout(() => {
+						onChangei();
+					});
+				}}
+			/>
 		</Selector>
 	</div>
 	<div class="selectorlist">
@@ -139,7 +177,16 @@
 				select2(3);
 			}}
 		>
-			Custom:&nbsp;<input type="text" bind:value={tx2} />
+			Custom:&nbsp;<input
+				type="text"
+				placeholder={'e.g. "\\n\\n - "'}
+				bind:value={tx2}
+				on:input={() => {
+					setTimeout(() => {
+						onChangei();
+					});
+				}}
+			/>
 		</Selector>
 	</div>
 </div>
@@ -158,7 +205,7 @@
 		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 	input::placeholder {
-		color: rgba(255, 255, 255, 0.2);
+		color: rgba(255, 255, 255, 0.36);
 	}
 	input:focus-visible {
 		outline: none;
