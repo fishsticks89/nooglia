@@ -1,7 +1,9 @@
 <script lang="ts">
+	import Runner from '$lib/util/Runner.svelte';
 	import shuffle from '$lib/util/shuffle';
 	import { flyin } from '$lib/transitions/flyin';
 	import { spring, type Spring } from 'svelte/motion';
+	import { listenKeys } from '$lib/util/keylistener';
 
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
@@ -26,20 +28,20 @@
 	});
 
 	let answered = false;
-	const springit = spring(
-		0,
-		{
-			stiffness: 0.02,
-			damping: 0.25
-		}
-	);
+	const springit = spring(0, {
+		stiffness: 0.02,
+		damping: 0.25
+	});
 	function answerWithTerm(term: { a: string; index: number; color: 0 | 1 | -1 }) {
 		if (!answered) {
 			answered = true;
 			term.color = -1;
 			options.filter((e) => e.a === currentquestion.a).forEach((e) => (e.color = 1));
-			setTimeout(() => answer(term.a === currentquestion.a), term.a === currentquestion.a ? 700 : 1200);
-            springit.set(90);
+			setTimeout(
+				() => answer(term.a === currentquestion.a),
+				term.a === currentquestion.a ? 700 : 1200
+			);
+			springit.set(90);
 		}
 	}
 
@@ -65,11 +67,27 @@
 	<div class="grid">
 		{#each options as term}
 			<button
-				style={ansStyle(term.index) + `filter: hue-rotate(${((term.color > 0) ? "-" : "")}${Math.abs(term.color * $springit)}deg);`}
+				style={ansStyle(term.index) +
+					`filter: hue-rotate(${term.color > 0 ? '-' : ''}${Math.abs(term.color * $springit)}deg);`}
 				on:click={() => {
 					answerWithTerm(term);
 				}}
 			>
+				<Runner
+					enter={() => {
+						return listenKeys((ev) => {
+							if (Number(ev.key) == term.index + 1) answerWithTerm(term);
+						});
+					}}
+					leave={(unsu) => {
+						unsu();
+					}}
+				/>
+				<div class="number">
+					<p>
+						{term.index + 1}
+					</p>
+				</div>
 				{term.a}
 			</button>
 		{/each}
@@ -78,6 +96,7 @@
 
 <style>
 	button {
+		position: relative;
 		background-color: var(--accent);
 		border-radius: var(--round);
 		color: white;
@@ -110,6 +129,34 @@
 		left: 0rem;
 		font-family: 'Montserrat', sans-serif;
 		word-wrap: break-word;
+	}
+	.number > p {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+
+		margin: 0px;
+		padding: 0px;
+
+		text-align: center;
+		font-family: 'GilroyBold';
+		font-size: 0.8rem;
+
+		width: fit-content;
+		height: fit-content;
+	}
+	.number {
+		top: 0px;
+		left: 0px;
+		transform: translate(-50%, -50%);
+		position: absolute;
+		background-color: var(--background);
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 100vmax;
+		border: solid var(--emp) 1px;
+		color: var(--light);
 	}
 	.qholder {
 		position: absolute;

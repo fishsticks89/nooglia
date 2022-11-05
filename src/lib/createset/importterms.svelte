@@ -47,7 +47,7 @@
 								q: e,
 								a: ''
 							};
-						} else if (termDefSplitter === 'regexp') {
+						} else if (termDefSplitter.constructor === RegExp) {
 							const regex = new RegExp(termDefSplitter, 'g');
 							regex.test(e);
 							return {
@@ -241,12 +241,13 @@
 			width: 100vw;
 		}
 		.termsholder {
-			width: 90vw;
 			position: relative;
 			right: 0rem;
 			top: 0rem;
 
-			margin-left: 5vw;
+			width: calc(100% - 2rem);
+			margin-bottom: 1rem;
+			margin-left: 1rem;
 		}
 		.termholder {
 			position: relative;
@@ -260,9 +261,9 @@
 			bottom: initial;
 			top: 0.5rem;
 
-			width: 90%;
+			width: calc(100% - 3rem);
 			margin-bottom: 1rem;
-			margin-left: 5%;
+			margin-left: 1rem;
 		}
 	}
 	.bold {

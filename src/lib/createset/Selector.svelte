@@ -4,9 +4,12 @@
 	export let onChange = () => {};
 	let onChangei = () => {
 		// checks if splitters are the same
-		if (selector.getSplitters().entries === selector.getSplitters().termdef) {
+		const areSame = () => selector.getSplitters().entries === selector.getSplitters().termdef;
+		if (areSame()) {
 			setTimeout(() => {
-				selector.setTermDefSplitter(0);
+				if (areSame()) {
+					selector.setTermDefSplitter(0);
+				}
 				onChange();
 			}, 400);
 		} else onChange();
