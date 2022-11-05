@@ -2,20 +2,15 @@
 	import Term from './term.svelte';
 	import { event } from '$lib/mixpanel';
 	import Selector from '$lib/createset/Selector.svelte';
-	import type { term, termToString } from '$lib/data/db';
+	import type { term } from '$lib/data/db';
 	import splitters from './splitters';
 	import Textarea from './textarea.svelte';
 	import { collection, doc, setDoc } from 'firebase/firestore';
 	import { hash } from '$lib/util/hashString';
 	import { db } from '$lib/firebase';
-	import { get, writable, type Writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { createDebounce } from '$lib/util/debounce';
-	import { dev } from '$app/environment';
 	export let addTerms: (terms: term[]) => void;
-
-	if (!dev) {
-		window.location.replace('/');
-	}
 
 	export let importpop = false;
 	let textarea = {
