@@ -13,10 +13,6 @@
 	import { dev } from '$app/environment';
 	export let addTerms: (terms: term[]) => void;
 
-	if (!dev) {
-		window.location.replace('/');
-	}
-
 	export let importpop = false;
 	let textarea = {
 		get: () => 'bob',
