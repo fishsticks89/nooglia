@@ -2,15 +2,14 @@
 	import Term from './term.svelte';
 	import { event } from '$lib/mixpanel';
 	import Selector from '$lib/createset/Selector.svelte';
-	import type { term, termToString } from '$lib/data/db';
+	import type { term } from '$lib/data/db';
 	import splitters from './splitters';
 	import Textarea from './textarea.svelte';
 	import { collection, doc, setDoc } from 'firebase/firestore';
 	import { hash } from '$lib/util/hashString';
 	import { db } from '$lib/firebase';
-	import { get, writable, type Writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { createDebounce } from '$lib/util/debounce';
-	import { dev } from '$app/environment';
 	export let addTerms: (terms: term[]) => void;
 
 	export let importpop = false;
@@ -43,7 +42,7 @@
 								q: e,
 								a: ''
 							};
-						} else if (termDefSplitter === 'regexp') {
+						} else if (termDefSplitter.constructor === RegExp) {
 							const regex = new RegExp(termDefSplitter, 'g');
 							regex.test(e);
 							return {
@@ -237,12 +236,13 @@
 			width: 100vw;
 		}
 		.termsholder {
-			width: 90vw;
 			position: relative;
 			right: 0rem;
 			top: 0rem;
 
-			margin-left: 5vw;
+			width: calc(100% - 2rem);
+			margin-bottom: 1rem;
+			margin-left: 1rem;
 		}
 		.termholder {
 			position: relative;
@@ -256,9 +256,9 @@
 			bottom: initial;
 			top: 0.5rem;
 
-			width: 90%;
+			width: calc(100% - 3rem);
 			margin-bottom: 1rem;
-			margin-left: 5%;
+			margin-left: 1rem;
 		}
 	}
 	.bold {
