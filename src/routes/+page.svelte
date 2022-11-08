@@ -19,6 +19,7 @@
 	import AuthManager from '$lib/auth/AuthManager.svelte';
 	import Runner from '$lib/util/Runner.svelte';
 	import { createSet } from '$lib/createset/createSet';
+	import { onDestroy } from 'svelte';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
 
@@ -29,16 +30,26 @@
 	authState.subscribe((e) => console.log(e));
 
 	let href: null | string = null;
+
+	if (browser) {
+		setTimeout(() => {
+			document.body.style.backgroundImage = "url(\"/bkg.svg\")"
+			document.body.style.backgroundSize = "auto 180vh";
+			document.body.style.backgroundPosition = "center"
+		})
+		onDestroy(() => {
+			document.body.style.backgroundImage = ""
+			document.body.style.backgroundSize = ""
+			document.body.style.backgroundPosition = ""
+		})
+	}
 </script>
 
 <CSRprovider link={href} />
 
 {#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
 	<h2>
-		<p class="punchline">Flashcards, Quizzes</p>
-		<p class="punchline1">
-			and more <img src="./icons/rocket.png" alt="rocket" style:height={50 + 'px'} />
-		</p>
+		<p class="punchline">Make Study Guides Faster.</p>
 		<button
 			class="startbutt"
 			on:click={() => {
@@ -74,18 +85,11 @@
 						href = setref;
 					});
 			}}
-			class="newset"
-			in:fade={{ duration: 300 }}>New Set</button
+			class="newset">New Set</button
 		>
 		{#each docs as doc}
 			{#if getStringArr(doc, 'contents').join('').split(/[ \n]/).join('') != ''}
-				<a
-					in:flyin={{ isin: true, additionalTransforms: '' }}
-					class="setholder"
-					data-sveltekit:prefetch
-					on:focus
-					href={'/set/' + doc.id}
-				>
+				<a class="setholder" data-sveltekit:prefetch href={'/set/' + doc.id}>
 					<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
 					<button class="open">Open</button>
 				</a>
@@ -95,7 +99,7 @@
 {/if}
 
 <Nav>
-	<AuthManager />
+	<!-- <AuthManager /> -->
 </Nav>
 
 <style>
@@ -103,7 +107,9 @@
 		margin-block: 1rem;
 		padding: 0.7rem;
 		padding-inline: 1.2rem;
-		background-color: var(--glass);
+		color: white;
+		background: linear-gradient(to bottom right, #4d88ff, #6196ff);
+		filter: drop-shadow(0.1rem 0.1rem 0.3rem #6699ff);
 
 		border: 0px solid transparent;
 		border-radius: var(--round);
@@ -116,9 +122,9 @@
 		right: 0.4rem;
 		padding: 0.7rem;
 		padding-inline: 1.2rem;
-		top: 50%;
-		translate: 0px -50%;
-		background-color: var(--glass);
+		top: 0.4rem;
+		color: gray;
+		background-color: white;
 
 		border: 0px solid transparent;
 		border-radius: var(--round);
@@ -131,13 +137,29 @@
 		display: block;
 		width: calc(100% - 1.4rem);
 		padding: 0.7rem;
-		margin-bottom: 1rem;
+		height: 11rem;
+		margin-bottom: -6rem;
 
-		color: white;
+		transform: translateY(-5%) perspective(900px) rotateX(-30deg);
+
+		color: grey;
 		text-decoration: none;
 
+		border: 2px solid rgba(255, 255, 255, 0.641);
 		border-radius: var(--round);
-		background-color: var(--emp);
+		background: linear-gradient(rgba(249, 249, 249, 0.375), rgba(255, 255, 255, 0.375));
+		backdrop-filter: blur(5px) saturate(170%);
+
+		transition-property: transform, margin-bottom;
+		transition-timing-function: cubic-bezier();
+		transition-duration: 0.3s;
+
+		font-family: "GilroyBold";
+	}
+	.setholder:hover {
+		margin-bottom: -4rem;
+
+		transform: translateY(-20%) perspective(900px) scale(105%) rotateX(-10deg);
 	}
 	.holder {
 		width: calc(70vw + 8vh);
@@ -166,14 +188,12 @@
 	.punchline {
 		margin: 0rem;
 	}
-	.punchline1 {
-		margin: 0rem;
-	}
 	.startbutt {
-		background-color: var(--accent);
 		border-radius: var(--round);
 		border: 0px;
 		color: white;
+		background: linear-gradient(to bottom right, #4d88ff, #6196ff);
+		filter: drop-shadow(0.1rem 0.1rem 0.3rem #6699ff);
 		margin: 0px;
 		padding: calc(0.6rem + 0.6vw);
 		padding-inline: calc(1.4rem + 1.4vw);
@@ -184,5 +204,12 @@
 		/* font-weight: bold; */
 		/* letter-spacing: 0.2vw; */
 		text-decoration: none;
+	}
+	.bkg {
+		position: fixed;
+		left: 45vw;
+		top: 50vh;
+		transform: translate(-50%, -50%);
+		height: 180vh;
 	}
 </style>

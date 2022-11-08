@@ -1,0 +1,10 @@
+// vite.config.ts
+import { sveltekit } from "@sveltejs/kit/vite";
+var config = {
+  plugins: [sveltekit()]
+};
+var vite_config_default = config;
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImltcG9ydCB7IHN2ZWx0ZWtpdCB9IGZyb20gJ0BzdmVsdGVqcy9raXQvdml0ZSc7XHJcbmltcG9ydCB0eXBlIHsgVXNlckNvbmZpZyB9IGZyb20gJ3ZpdGUnO1xyXG5cclxuY29uc3QgY29uZmlnOiBVc2VyQ29uZmlnID0ge1xyXG5cdHBsdWdpbnM6IFtzdmVsdGVraXQoKV1cclxufTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGNvbmZpZztcclxuIl0sCiAgIm1hcHBpbmdzIjogIjtBQUFBO0FBR0EsSUFBTSxTQUFxQjtBQUFBLEVBQzFCLFNBQVMsQ0FBQztBQUFBO0FBR1gsSUFBTyxzQkFBUTsiLAogICJuYW1lcyI6IFtdCn0K

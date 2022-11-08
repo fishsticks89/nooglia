@@ -12,22 +12,7 @@
 	<meta property="og:image:type" content="image/png">
 	<meta property="og:image:width" content="1920">
 	<meta property="og:image:height" content="884">
-	<style type="text/css" media="print">
-		@page {
-			size: auto;
-			/* auto is the initial value */
-			margin: 0mm;
-			/* this affects the margin in the printer settings */
-			padding: 0in;
-			page-orientation: portrait;
-		}
 
-		html {
-			background-color: #FFFFFF;
-			margin: 0mm;
-			/* this affects the margin on the html before sending to printer */
-		}
-	</style>
 	<script>
 		// Hotjar Tracking Code for https://nooglia.com
 		if (window.location.hostname.indexOf("nooglia") != -1)
@@ -51,27 +36,10 @@
 	%sveltekit.head%
 </head>
 
-<body style="overflow-y: auto; width: 100vw; height: fit-content; background-color: hsl(220, 67%, 8%); margin: 0%;">
+<body style="overflow-y: auto; width: 100vw; height: fit-content; background-color: white; margin: 0%;">
 	<div class="maindivasdf" style="overflow-y: visible; height: 100vh;">%sveltekit.body%</div>
 </body>
-
-<div id="printarea"></div>
-
 <style>
-	@media print {
-		.maindivasdf {
-			display: none;
-		}
-	}
-
-	#printarea {
-		margin: 0in 0.5in;
-		-webkit-filter: grayscale(100%);
-		-moz-filter: grayscale(100%);
-		-ms-filter: grayscale(100%);
-		filter: grayscale(100%);
-	}
-
 	@font-face {
 		font-family: 'Montserrat';
 		src: url('/fonts/Montserrat.ttf') format('truetype');
@@ -153,9 +121,10 @@
 	}
 
 	:root {
-		color-scheme: dark;
+		color: black;
+		color-scheme: light;
 		--hue: 220;
-		--background: hsl(var(--hue), 67%, 8%);
+		--background: white;
 		/* the background */
 		--emp: hsl(var(--hue), 30%, 30%);
 		/* panes */
