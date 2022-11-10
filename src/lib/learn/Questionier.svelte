@@ -8,6 +8,7 @@
 	import { squish } from '$lib/transitions/squish';
 	import showSettings from '$lib/learn/settings/showSettings';
 	import { onDestroy } from 'svelte';
+	import { writable } from 'svelte/store';
 	export let progress: number;
 	export let done: boolean;
 	export let restart: () => void;
@@ -22,17 +23,17 @@
 		mode = newmode;
 		fixContainerHeight();
 	});
-	let wentOut = () => {
+	let wentOut = writable(() => {
 		console.log('uninitwentout');
-	};
+	});
 	const doWentOut = () => {
-		setTimeout(wentOut);
+		setTimeout($wentOut);
 	};
 	const answer = (correct: boolean) => {
-		wentOut = () => {
+		wentOut.set(() => {
 			onanswer(correct);
 			console.log('wentout');
-		};
+		});
 		console.log('wentout2');
 		mode = null;
 		currentquestion = null;

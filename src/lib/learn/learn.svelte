@@ -152,7 +152,7 @@
 									: c;
 							});
 					} else {
-						if (shuffledTerms.length >= 0 && termsinarow >= 3) {
+						if (shuffledTerms.length > 0 && termsinarow >= 3) {
 							pushStack();
 							termsinarow++;
 						}

@@ -18,6 +18,10 @@
 	};
 	export let currentquestion: { q: string; a: string };
 	export let wentOut = () => {};
+	export let wentOut2 = () => {
+		console.log ("asdfasdfasdf")
+		wentOut()
+	};
 
 	let answerText = '';
 	async function recordAttempt(gotcorrect: boolean, override: boolean) {
@@ -97,12 +101,16 @@
 	function onCorrect() {
 		correctTweened.set(1);
 	}
+	correctTweened.subscribe(e => {
+		if (e === 1)
+			setTimeout(() => wentOut2(), 200)
+			
+	})
 </script>
 
 <div
 	in:flyin={{ isin: true, additionalTransforms: '' }}
 	out:flyin={{ isin: false, additionalTransforms: '' }}
-	on:transitionend={wentOut}
 	data-hj-allow
 	style={!answered
 		? `transform: translateX(-${
