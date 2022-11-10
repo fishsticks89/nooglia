@@ -116,7 +116,7 @@
 							'and',
 							trow
 						);
-						return stackEmpty || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
+						return (stackEmpty && areMoreTerms) || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
 					})()
 				) {
 					// optionally retrieve older terms
@@ -152,7 +152,7 @@
 									: c;
 							});
 					} else {
-						if (shuffledTerms.length >= 0 && termsinarow >= 3) {
+						if (shuffledTerms.length > 0 && termsinarow >= 3) {
 							pushStack();
 							termsinarow++;
 						}

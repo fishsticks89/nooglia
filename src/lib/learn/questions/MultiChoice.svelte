@@ -64,17 +64,21 @@
 			overflow.set(false);
 			setTimeout(() => {
 				let ov = false;
-				[0, 1, 2, 3].forEach((e) => {
-					if (checkOverflow(document.getElementById('term-' + e) as HTMLElement)) ov = true;
-				});
+				Array(options.length + 1)
+					.map((_, i) => i)
+					.forEach((e) => {
+						console.log(e);
+						if (checkOverflow(document.getElementById('term-' + e) as HTMLElement)) ov = true;
+					});
 				overflow.set(ov);
 				locked = false;
 			}, 0);
 		}
 	};
 	setTimeout(calcOV);
-	window.addEventListener('resize', () => debo(calcOV));
-	onDestroy(() => window.removeEventListener('resize', calcOV));
+	const resize = () => debo(calcOV);
+	window.addEventListener('resize', resize);
+	onDestroy(() => window.removeEventListener('resize', resize));
 
 	const ansStyle = (i: number) => {
 		const same = `
