@@ -2,8 +2,7 @@ import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
 import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from '$lib/firebase';
-import { event, mix } from '$lib/mixpanel';
-import mixpanel from 'mixpanel-browser';
+import { event, mix } from '$lib/mixyp';
 
 export const authState: Writable<User | null> = writable(null);
 
@@ -16,9 +15,9 @@ authState.subscribe(e => {
     if (e !== null) {
         event("Signin")
         mix(() => {
-            mixpanel.identify(e.uid);
-            mixpanel.people.set("name", e.displayName)
-            mixpanel.people.set("email", e.email)
+            (window as any).mixpanel.identify(e.uid);
+            (window as any).mixpanel.people.set("name", e.displayName)
+            (window as any).mixpanel.people.set("email", e.email)
         })
     }
     if (browser)

@@ -19,27 +19,55 @@
 	registerSetQuestion((qa, newmode) => {
 		currentquestion = qa;
 		mode = newmode;
+		fixContainerHeight();
 	});
+	let wentOut = () => {
+		console.log('uninitwentout');
+	};
+	const doWentOut = () => {
+		setTimeout(wentOut);
+	};
 	const answer = (correct: boolean) => {
+		wentOut = () => {
+			onanswer(correct);
+			console.log('wentout');
+		};
+		console.log('wentout2');
 		mode = null;
 		currentquestion = null;
-		setTimeout(() => onanswer(correct), 220);
 	};
 	let currentquestion: { q: string; a: string } | null = null;
 	// awaits parent interaction (setquestion)
 	let mode: mode | null = null;
+	let container: HTMLElement;
+	function fixContainerHeight() {
+		const prevHeight = container.style.height;
+		container.style.height = 'fit-content';
+		setTimeout(() => {
+			const newHeight = container.clientHeight + 'px';
+			container.style.height = prevHeight;
+			setTimeout(() => {
+				container.style.height = newHeight;
+			});
+		});
+	}
+	addEventListener('resize', () => {
+		setTimeout(() => {
+			fixContainerHeight();
+		});
+	});
 </script>
 
-<div class="container" out:squish={{ isin: false, initialheight: '70vh' }}>
+<div class="container" out:squish={{ isin: false, initialheight: '70vh' }} bind:this={container}>
 	{#if !done}
 		<Progress amount={progress} />
 		{#if currentquestion != null && mode != null}
 			{#if mode === 'flashcard'}
-				<Flashcard {answer} {currentquestion} />
+				<Flashcard wentOut={doWentOut} {answer} {currentquestion} />
 			{:else if mode === 'multiple choice'}
-				<MultiChoice {answer} {questions} {currentquestion} />
+				<MultiChoice wentOut={doWentOut} {answer} {questions} {currentquestion} />
 			{:else if mode === 'short answer'}
-				<ShortAns {answer} {currentquestion} />
+				<ShortAns wentOut={doWentOut} {answer} {currentquestion} {fixContainerHeight} />
 			{:else}
 				error
 			{/if}
@@ -97,8 +125,10 @@
 		max-width: 55rem; */
 		width: 100%;
 
-		height: 70dvh;
-		height: 70vh;
+		height: fit-content;
+		transition-property: height;
+		transition-duration: 0.2s;
+		transition-timing-function: ease-out;
 
 		margin-top: 2rem;
 		margin-bottom: 3rem;

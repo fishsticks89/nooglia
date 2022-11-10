@@ -1,13 +1,21 @@
 <script lang="ts">
 	import Runner from '$lib/util/Runner.svelte';
 	import shuffle from '$lib/util/shuffle';
-	import { flyin } from '$lib/transitions/flyin';
+	import { flyin, flyin2 } from '$lib/transitions/flyin';
 	import { spring, type Spring } from 'svelte/motion';
 	import { listenKeys } from '$lib/util/keylistener';
+	import { checkOverflow } from '$lib/util/checkoverflow';
+	import { onDestroy } from 'svelte';
+	import { writable } from 'svelte/store';
+	import { createDebounce } from '$lib/util/debounce';
+	import { dev } from '$app/environment';
+	import { error } from '@sveltejs/kit';
 
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
 	export let questions: { q: string; a: string }[];
+	export let wentOut = () => {};
+
 	$: options = shuffle([
 		currentquestion.a,
 		...shuffle(questions)
@@ -38,40 +46,80 @@
 			term.color = -1;
 			options.filter((e) => e.a === currentquestion.a).forEach((e) => (e.color = 1));
 			setTimeout(
-				() => answer(term.a === currentquestion.a),
+				() => {
+					answer(term.a === currentquestion.a);
+					console.log('ansering');
+				},
 				term.a === currentquestion.a ? 700 : 1200
 			);
 			springit.set(90);
 		}
 	}
+	let overflow = writable(false);
+	let locked = false;
+	const debo = createDebounce(100, 900);
+	const calcOV = () => {
+		if (!locked) {
+			locked = true;
+			overflow.set(false);
+			setTimeout(() => {
+				let ov = false;
+				[0, 1, 2, 3].forEach((e) => {
+					if (checkOverflow(document.getElementById('term-' + e) as HTMLElement)) ov = true;
+				});
+				overflow.set(ov);
+				locked = false;
+			}, 0);
+		}
+	};
+	setTimeout(calcOV);
+	window.addEventListener('resize', () => debo(calcOV));
+	onDestroy(() => document.removeEventListener('resize', calcOV));
 
-	const ansStyle = (i: number) => `
+	const ansStyle = (i: number) => {
+		const same = `
         font-family: 'Montserrat', sans-serif;
-        max-width: 200px;
-        max-height: 70px;
-        width: 80%;
-        height: 70%;
         font-size: 100%;
-        grid-column: ${(i % 2) + 1};
-        grid-row: ${i < 2 ? 1 : 2};
-        `;
+		`;
+		return {
+			grid:
+				same +
+				`
+					width: 80%;
+					height: 70%;
+					grid-column: ${(i % 2) + 1};
+					grid-row: ${i < 2 ? 1 : 2};
+        `,
+			overflow:
+				same +
+				`
+					width: calc(100% - 2rem);
+					padding-block: 1rem;
+					margin-block: 0.5rem;
+					height: fit-content;
+		`
+		};
+	};
 </script>
 
 <div
-	in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }}
-	out:flyin={{ isin: false, additionalTransforms: 'translateX(-50%)' }}
+	in:flyin2={{ isin: true, additionalTransforms: '', duration: 200 }}
+	out:flyin2={{ isin: false, additionalTransforms: '', duration: 200 }}
+	on:outroend={() => {wentOut() ; console.log("shit went doiwn")}}
 	class="qholder"
 >
 	<p class="term">{currentquestion.q}</p>
 
-	<div class="grid">
+	<div class={$overflow ? 'block' : 'grid'}>
 		{#each options as term}
 			<button
-				style={ansStyle(term.index) +
+				style={($overflow ? ansStyle(term.index).overflow : ansStyle(term.index).grid) +
 					`filter: hue-rotate(${term.color > 0 ? '-' : ''}${Math.abs(term.color * $springit)}deg);`}
 				on:click={() => {
+					console.log('onclickity');
 					answerWithTerm(term);
 				}}
+				id={'term-' + term.index}
 			>
 				<Runner
 					enter={() => {
@@ -111,7 +159,20 @@
 		grid-template-rows: 50% 50%;
 
 		width: 100%;
-		height: 50%;
+		height: 50vh;
+		margin-block: 1rem;
+
+		align-items: center;
+		align-content: center;
+		justify-content: center;
+		justify-items: center;
+	}
+	.block {
+		display: flex;
+		flex-direction: column;
+
+		width: 100%;
+		height: fit-content;
 		margin-block: 1rem;
 
 		align-items: center;
@@ -122,11 +183,9 @@
 	.term {
 		color: white;
 		font-size: large;
-		margin: 2rem;
-		max-width: calc(100% - 4rem);
-		position: absolute;
-		top: 0rem;
-		left: 0rem;
+		margin: 1rem;
+		margin-top: 2rem;
+		max-width: calc(100% - 2rem);
 		font-family: 'Montserrat', sans-serif;
 		word-wrap: break-word;
 	}
@@ -159,14 +218,9 @@
 		color: var(--light);
 	}
 	.qholder {
-		position: absolute;
-		top: 0%;
-		left: 50%;
-		transform: translateX(-50%);
-
-		padding: 1rem;
+		padding-inline: 1rem;
 		width: calc(100% - calc(2 * 1rem));
-		height: calc(100% - calc(2 * 1rem));
+		height: fit-content;
 
 		background-color: var(--emp);
 		border-color: transparent;

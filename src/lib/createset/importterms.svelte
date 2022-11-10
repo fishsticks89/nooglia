@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Term from './term.svelte';
-	import { event } from '$lib/mixpanel';
+	import { event } from '$lib/mixyp';
 	import Selector from '$lib/createset/Selector.svelte';
 	import type { term } from '$lib/data/db';
 	import splitters from './splitters';

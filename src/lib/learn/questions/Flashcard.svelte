@@ -3,9 +3,11 @@
 	import SideBut from '$lib/ui/SideButton.svelte';
 	import { onDestroy } from 'svelte';
 	import { quadIn, quadOut } from 'svelte/easing';
+	import { dev } from '$app/environment';
 
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
+	export let wentOut = () => {};
 
 	let direction: null | boolean = null; // null if no arrow yet
 	let answered = false;
@@ -80,6 +82,7 @@
 	<div
 		bind:clientWidth={learnwidth}
 		out:slide={{ duration: 400, direction: direction ? direction : false }}
+		on:outroend={wentOut}
 		class="mover"
 	>
 		<p transition:fade={{ duration: 200 }} class="remem">remember:</p>
@@ -133,7 +136,7 @@
 		left: 50%;
 	}
 	.fholder {
-		position: absolute;
+		position: relative;
 		height: calc(100% - calc(2 * 1rem));
 		width: calc(100% - calc(2 * 1rem));
 
@@ -149,13 +152,11 @@
 		justify-content: flex-end;
 	}
 	.mover {
-		position: absolute;
-		top: 2rem;
-		left: 50%;
-		transform: translateX(-50%);
+		position: relative;
+		margin-top: 2rem;
 
 		padding: 0px;
-		height: calc(100% - 2rem);
+		height: 50vh;
 		width: 100%;
 
 		border: 0px;

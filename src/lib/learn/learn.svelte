@@ -1,11 +1,11 @@
-<script lang="ts">	
+<script lang="ts">
 	import shuffle from '$lib/util/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
 	import type { setStore } from '$lib/data/setStore';
 	import { get } from 'svelte/store';
 	import settingsState from './settings/settingsState';
-	import { event } from '$lib/mixpanel';
+	import { event } from '$lib/mixyp';
 
 	let done = false;
 	$: {
@@ -67,6 +67,7 @@
 			// decides next step
 			{
 				function pushStack() {
+					if (!(shuffledTerms.length > 0)) throw 'nope';
 					const poppedterm = shuffledTerms.pop();
 					const tempterm = {
 						...poppedterm,
@@ -87,29 +88,38 @@
 					stack.push(tempterm as any);
 					newterm = tempterm as any;
 				}
-				console.log(
-					shuffledTerms.length > 0,
-					stack.filter((e) => e.phase.mode === 'multichoice').length,
-					stack.filter((e) => e.phase.mode === 'multichoice').length <
-						2 + 3 * +!$settingsState.showWrite,
-					stack.filter((e) => e.phase.mode !== 'done').length,
-					stack.filter((e) => e.phase.mode !== 'done').length < 6,
-					$settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
-						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
-						: true
-				); // optionally retrieve older terms);
 				if (shuffledTerms.length === 0 && stack.filter((e) => e.phase.mode !== 'done').length === 0)
 					done = true;
 				else if (
-					// no more than three newterms in a row
-					shuffledTerms.length > 0 &&
-					stack.filter((e) => e.phase.mode === 'multichoice').length <
-						2 + 3 * +!$settingsState.showWrite &&
-					stack.filter((e) => e.phase.mode !== 'done').length < 6 &&
-					($settingsState.retrieve && ($settingsState.showMultiChoice || $settingsState.showWrite)
-						? termsinarow < 3 || stack.filter((e) => e.phase.mode === 'done').length > 0
-						: true) // optionally retrieve older terms
+					(() => {
+						const stackEmpty =
+							stack.filter((e) => e.nextInteractionStep && e.nextInteractionStep <= questionIndex)
+								.length === 0;
+						// no more than three newterms in a row
+						const areMoreTerms = shuffledTerms.length > 0;
+						const enoughMultiChoice = !(
+							stack.filter((e) => e.phase.mode === 'multichoice').length <
+							2 + 3 * +!$settingsState.showWrite
+						);
+						const enoughQuestions = !(stack.filter((e) => e.phase.mode !== 'done').length < 6);
+						const trow =
+							$settingsState.showMultiChoice || $settingsState.showWrite ? termsinarow === 3 : true;
+
+						console.log(
+							stackEmpty,
+							'or',
+							areMoreTerms,
+							'and',
+							!enoughMultiChoice,
+							'and',
+							!enoughQuestions,
+							'and',
+							trow
+						);
+						return stackEmpty || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
+					})()
 				) {
+					// optionally retrieve older terms
 					// if the stack is not full, enlarge it
 					pushStack();
 					termsinarow++;
