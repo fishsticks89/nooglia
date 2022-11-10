@@ -29,6 +29,7 @@
 	authState.subscribe((e) => console.log(e));
 
 	let href: null | string = null;
+	let width = 0;
 </script>
 
 <CSRprovider link={href} />
@@ -47,6 +48,8 @@
 		>
 	</h2>
 {/if}
+
+<svelte:window bind:innerWidth={width} />
 
 {#if $authState != null}
 	<Runner
@@ -95,7 +98,9 @@
 {/if}
 
 <Nav>
-	<AuthManager />
+	{#if $authState != null || width > 500}
+		<AuthManager />
+	{/if}
 </Nav>
 
 <style>
@@ -153,12 +158,12 @@
 	h2 {
 		position: fixed;
 		font-family: 'GilroyBold', sans-serif;
-		font-size: calc(3vw + 2.5rem);
+		font-size: calc(4vw + 2rem);
 		top: 50vh;
-		left: 15vw;
+		left: calc(17vw - 1rem);
 		padding: 0px;
 		transform: translateY(-50%);
-		width: fit-content;
+		width: 70vw;
 		max-width: calc(70vw + 8vh);
 		text-align: left;
 		margin: 0px;
