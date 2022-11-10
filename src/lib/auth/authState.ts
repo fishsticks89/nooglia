@@ -14,10 +14,10 @@ setTimeout(() => {
 authState.subscribe(e => {
     if (e !== null) {
         event("Signin")
-        mix(() => {
-            (window as any).mixpanel.identify(e.uid);
-            (window as any).mixpanel.people.set("name", e.displayName)
-            (window as any).mixpanel.people.set("email", e.email)
+        mix((mixpanel) => {
+            mixpanel.identify(e.uid);
+            mixpanel.people.set("name", e.displayName)
+            mixpanel.people.set("email", e.email)
         })
     }
     if (browser)

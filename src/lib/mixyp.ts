@@ -1,6 +1,4 @@
-import { browser, dev } from "$app/environment";
-
-let readyToMix = false;
+import { browser } from "$app/environment";
 
 export const event = (ev: string) => {
     if (browser)
@@ -10,7 +8,7 @@ export const event = (ev: string) => {
             console.error("No mixing? lmao")
 }
 
-export const mix = (f: () => void) => {
+export const mix = (f: (mixpanel: any) => void) => {
     if (browser)
         if ((window as any).mix)
             (window as any).mix(f)
