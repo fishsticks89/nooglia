@@ -107,7 +107,10 @@
 <div
 	in:flyin2={{ isin: true, additionalTransforms: '', duration: 200 }}
 	out:flyin2={{ isin: false, additionalTransforms: '', duration: 200 }}
-	on:outroend={() => {wentOut() ; console.log("shit went doiwn")}}
+	on:outroend={() => {
+		wentOut();
+		console.log('shit went doiwn');
+	}}
 	class="qholder"
 >
 	<p class="term">{currentquestion.q}</p>
