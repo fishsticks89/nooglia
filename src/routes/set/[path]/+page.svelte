@@ -59,6 +59,12 @@
 	});
 </script>
 
+<svelte:head>
+	{#if $currentset?.set.name}
+		<title>{$currentset?.set.name} - nooglia</title>
+	{/if}
+</svelte:head>
+
 {#if $currentset != null}
 	<App store={toSetStore(currentset)} />
 {/if}

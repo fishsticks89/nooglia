@@ -191,6 +191,8 @@
 				terms.update((tms) => {
 					return [...tms, { q: '', a: '', id: Math.random().toString() }];
 				});
+				focused.x = true;
+				focused.y = $terms.length - 1;
 			}}
 		>
 			<span class="material-icons-round">add</span>

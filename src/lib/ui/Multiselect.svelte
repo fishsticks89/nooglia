@@ -15,16 +15,25 @@
 <style>
     .option {
         padding: 0.4rem;
-        padding-inline: 0.8rem;
-        margin-inline: 0.2rem;
+        padding-inline: 0.4rem;
+        margin-top: 0.3rem;
+        margin-left: 0rem;
+        margin-right: 0.4rem;
+        margin-bottom: 0px;
         background-color: var(--glass);
         color: var(--light);
+        transition-property: background-color, scale;
+        transition-duration: 0.1s;
+        scale: 100%;
         font-family: 'GilroyBold', sans-serif;
 
         border: 0px solid transparent;
         border-radius: var(--round);
 
         cursor: pointer;
+    }
+    .option:hover {
+        scale: 105%;
     }
     .selectMain {
         display: flex;

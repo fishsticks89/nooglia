@@ -1,18 +1,54 @@
 <script lang="ts">
+	import Runner from './../../util/Runner.svelte';
 	import { fade } from 'svelte/transition';
 	import { flyin } from '$lib/transitions/flyin';
 	import { onDestroy } from 'svelte';
 	import elastic from '$lib/transitions/easing/elastic';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
+	import { arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+	import { hash } from '$lib/util/hashString';
+	import { db } from '$lib/firebase';
+	import { resizeinit } from '$lib/util/textareastuff';
 	export let answer: (correct: boolean) => void;
+	export let fixContainerHeight = () => {};
+	let answerLog = (correct: boolean) => {
+		if (!correct && inputText != '') recordAttempt(false, false);
+		answer(correct);
+	};
 	export let currentquestion: { q: string; a: string };
+	export let wentOut = () => {};
 
-	let input: HTMLElement;
+	let answerText = '';
+	async function recordAttempt(gotcorrect: boolean, override: boolean) {
+		const question = currentquestion.q;
+		const gdoc = await getDoc(doc(collection(db, 'questionAttempts'), hash(question).toString()));
+		const answerObj = {
+			autoMarkedCorrect: gotcorrect,
+			userOverride: override,
+			guess: answerText
+		};
+		if (gdoc.exists()) {
+			updateDoc(gdoc.ref, {
+				answers: arrayUnion(answerObj)
+			});
+		} else {
+			setDoc(gdoc.ref, {
+				question,
+				answers: [answerObj]
+			});
+		}
+	}
+
+	let input: HTMLTextAreaElement;
+	setTimeout(() => {
+		resizeinit(input, fixContainerHeight);
+	});
 	let inputText = '';
 	let firstcorrect: null | boolean = null;
 	let answered = false;
 	function onanswer() {
+		answerText = inputText;
 		const correct =
 			inputText.toLowerCase().split(/ +/).join('') ==
 			currentquestion.a.toLowerCase().split(/ +/).join('');
@@ -23,7 +59,7 @@
 			if (!answered) {
 				answered = true;
 				onCorrect();
-				setTimeout(() => answer(firstcorrect as boolean), 300);
+				setTimeout(() => answerLog(firstcorrect as boolean), 300);
 			}
 		} else incorrect();
 	}
@@ -64,18 +100,18 @@
 </script>
 
 <div
-	in:flyin={{ isin: true, additionalTransforms: 'translateX(-50%)' }}
-	out:flyin={{ isin: false, additionalTransforms: 'translateX(-50%)' }}
+	in:flyin={{ isin: true, additionalTransforms: '' }}
+	out:flyin={{ isin: false, additionalTransforms: '' }}
+	on:transitionend={wentOut}
 	data-hj-allow
 	style={!answered
 		? `transform: translateX(-${
-				50 -
 				5 *
-					(1 -
-						elastic(
-							$incorrectTweened,
-							($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
-						))
+				(1 -
+					elastic(
+						$incorrectTweened,
+						($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
+					))
 		  }%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
@@ -99,12 +135,19 @@
 		{currentquestion.q}
 	</h1>
 	{#if firstcorrect == false && !answered}
+		<Runner
+			enter={() => {
+				fixContainerHeight();
+			}}
+		/>
 		<div class="enter" transition:fade={{ duration: 200 }}>
 			Enter: "{currentquestion.a}" or
-			<strong class="skp" on:click={() => answer(false)}>skip</strong>
+			<strong class="skp" on:click={() => answerLog(false)}>skip</strong>
 		</div>
 	{/if}
-	<input
+	<div class="consumer" style:flex-grow={1}></div>
+	<textarea
+		rows="1"
 		style:border-color={!answered ? '' : 'transparent'}
 		type="text"
 		bind:this={input}
@@ -121,7 +164,8 @@
 				if (!answered) {
 					answered = true;
 					onCorrect();
-					setTimeout(() => answer(firstcorrect ? true : false), 300);
+					recordAttempt(false, true);
+					setTimeout(() => answerLog(firstcorrect ? true : false), 300);
 				}
 			}}>Override: I was correct</button
 		>
@@ -164,7 +208,7 @@
 	.enter {
 		color: var(--complight);
 
-		position: absolute;
+		position: relative;
 		bottom: calc(10% + 4rem);
 		left: 2rem;
 		width: calc(100% - 4rem);
@@ -184,7 +228,9 @@
 		padding: 0.8rem;
 		padding-inline: 1.2rem;
 	}
-	input {
+	textarea {
+		cursor: pointer;
+		z-index: 2000;
 		border-radius: 0px;
 		border-top: 0px;
 		border-left: 0px;
@@ -195,42 +241,55 @@
 
 		padding-bottom: 5px;
 
-		position: absolute;
-		bottom: calc(10% + 2rem);
-		left: 2rem;
-		width: calc(100% - 4rem);
 		margin: 0px;
-
+		margin-bottom: 2rem;
+		margin-left: 2rem;
+		width: calc(100% - 4rem);
 		font-size: medium;
 		font-family: 'Montserrat';
 	}
-	input:focus-visible {
+	textarea:focus-visible {
 		outline: none;
 		border-bottom: 4px solid var(--comp);
-		margin-bottom: -2px;
+	}
+
+	textarea {
+		background: transparent;
+		border: 0px solid transparent;
+		padding: 0px;
+		border-radius: 0px;
+		resize: none;
+
+		height: 1em;
+
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+	}
+	textarea::placeholder {
+		color: rgba(255, 255, 255, 0.2);
+	}
+	textarea:focus-visible {
+		outline: none;
 	}
 	.term {
+		vertical-align: top;
 		font-size: large;
 		margin: 2rem;
-		margin-top: 3rem;
-		position: absolute;
-		top: 0rem;
-		left: 0rem;
+		margin-top: 2rem;
 		max-width: calc(100% - 4rem);
 		font-family: 'Montserrat', sans-serif;
 		word-wrap: break-word;
 	}
 	.qholder {
+		display: flex;
+		flex-direction: column;
+
 		overflow: hidden;
 
-		position: absolute;
-		top: 0%;
-		left: 50%;
-		transform: translateX(-50%);
-
-		padding: 1rem;
-		width: calc(100% - calc(2 * 1rem));
-		height: calc(100% - calc(2 * 1rem));
+		padding: 0rem;
+		width: 100%;
+		height: fit-content;
+		min-height: 50vh;
+		min-height: 50dvh;
 
 		background-color: var(--emp);
 		border-color: transparent;

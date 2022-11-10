@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { analytics } from '$lib/firebase';
-	import { event } from '$lib/mixpanel';
-	import { logEvent } from 'firebase/analytics';
+	import { event } from '$lib/mixyp';
 	import printStore from './printStore';
 
 	let printContents: HTMLElement;
@@ -38,7 +36,6 @@
 					document.body.style.overflowY = 'scroll';
 					(document.getElementById('printarea') as HTMLElement).innerHTML = '';
 				}, 2);
-				if (analytics) logEvent(analytics, 'printStudy');
 				event('Print Studied');
 			});
 		}

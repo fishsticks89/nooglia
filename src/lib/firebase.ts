@@ -1,6 +1,5 @@
 
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { collection, connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { connectAuthEmulator, getAuth, GoogleAuthProvider } from "firebase/auth";
 import { browser, dev } from "$app/environment";
@@ -13,15 +12,13 @@ const firebaseConfig = {
   projectId: "nooglia-2383a",
   storageBucket: "nooglia-2383a.appspot.com",
   messagingSenderId: "448020777089",
-  appId: "1:448020777089:web:208bb363cd58124d43e580",
-  measurementId: "G-VC9747164E"
+  appId: "1:448020777089:web:208bb363cd58124d43e580"
 };
 
 const connectToEmulators = dev;
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const analytics = (browser && !connectToEmulators) ? getAnalytics(app) : null;
 export const db = getFirestore(app);
 if (connectToEmulators) connectFirestoreEmulator(db, 'localhost', 4040);
 export const users = collection(db, "users")
