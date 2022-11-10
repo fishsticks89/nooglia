@@ -19,8 +19,8 @@
 	export let currentquestion: { q: string; a: string };
 	export let wentOut = () => {};
 	export let wentOut2 = () => {
-		console.log ("asdfasdfasdf")
-		wentOut()
+		console.log('asdfasdfasdf');
+		wentOut();
 	};
 
 	let answerText = '';
@@ -101,16 +101,17 @@
 	function onCorrect() {
 		correctTweened.set(1);
 	}
-	correctTweened.subscribe(e => {
-		if (e === 1)
-			setTimeout(() => wentOut2(), 200)
-			
-	})
+	correctTweened.subscribe((e) => {
+		if (e === 1) setTimeout(() => wentOut2(), 200);
+	});
 </script>
 
 <div
 	in:flyin={{ isin: true, additionalTransforms: '' }}
 	out:flyin={{ isin: false, additionalTransforms: '' }}
+	on:click={() => {
+		input.focus();
+	}}
 	data-hj-allow
 	style={!answered
 		? `transform: translateX(-${
@@ -153,7 +154,7 @@
 			<strong class="skp" on:click={() => answerLog(false)}>skip</strong>
 		</div>
 	{/if}
-	<div class="consumer" style:flex-grow={1}></div>
+	<div class="consumer" style:flex-grow={1} />
 	<textarea
 		rows="1"
 		style:border-color={!answered ? '' : 'transparent'}
