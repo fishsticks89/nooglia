@@ -74,7 +74,7 @@
 	};
 	setTimeout(calcOV);
 	window.addEventListener('resize', () => debo(calcOV));
-	onDestroy(() => document.removeEventListener('resize', calcOV));
+	onDestroy(() => window.removeEventListener('resize', calcOV));
 
 	const ansStyle = (i: number) => {
 		const same = `
@@ -93,7 +93,9 @@
 			overflow:
 				same +
 				`
-					width: calc(100% - 2rem);
+					word-break: break-word;
+					width: calc(100% - 3rem);
+					padding-inline: 0.5rem;
 					padding-block: 1rem;
 					margin-block: 0.5rem;
 					height: fit-content;

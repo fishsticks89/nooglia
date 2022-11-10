@@ -7,6 +7,7 @@
 	import Done from './questions/Done.svelte';
 	import { squish } from '$lib/transitions/squish';
 	import showSettings from '$lib/learn/settings/showSettings';
+	import { onDestroy } from 'svelte';
 	export let progress: number;
 	export let done: boolean;
 	export let restart: () => void;
@@ -51,11 +52,15 @@
 			});
 		});
 	}
-	addEventListener('resize', () => {
+	const resizer = () => {
 		setTimeout(() => {
-			fixContainerHeight();
+			setTimeout(() => {
+				fixContainerHeight();
+			});
 		});
-	});
+	};
+	window.addEventListener('resize', resizer);
+	onDestroy(() => window.removeEventListener('resize', resizer));
 </script>
 
 <div class="container" out:squish={{ isin: false, initialheight: '70vh' }} bind:this={container}>

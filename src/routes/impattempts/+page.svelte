@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import { db } from '$lib/firebase';
 	import { collection, getDocs, query, where } from 'firebase/firestore';
 
 	let contents: string[] = [];
 
-	if (!dev) {
+	if (!dev && browser) {
 		window.location.replace('/');
 	}
 
