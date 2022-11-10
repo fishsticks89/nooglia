@@ -116,7 +116,7 @@
 							'and',
 							trow
 						);
-						return stackEmpty || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
+						return (stackEmpty && areMoreTerms) || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
 					})()
 				) {
 					// optionally retrieve older terms
