@@ -2,10 +2,10 @@ import { cubicIn, cubicOut, quadIn, quadOut } from "svelte/easing";
 
 export function flyin(
     node: any,
-    { isin = true, additionalTransforms = "" }: { isin: boolean, additionalTransforms: string }
+    { isin = true, additionalTransforms = "", duration }: { isin: boolean, additionalTransforms: string, duration?: number }
 ) {
     return {
-        duration: 200,
+        duration: duration ? duration : 200,
         css: (t: number) => {
             const asdf = cubicOut(t);
             const eased = isin ? asdf : 1 - asdf;

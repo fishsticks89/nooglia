@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Runner from '$lib/util/Runner.svelte';
 	import Flashcard from './questions/Flashcard.svelte';
 	import MultiChoice from './questions/MultiChoice.svelte';
 	import ShortAns from './questions/ShortAns.svelte';
@@ -33,6 +34,7 @@
 		wentOut.set(() => {
 			onanswer(correct);
 			console.log('wentout');
+			wentOut.set(null as any);
 		});
 		console.log('wentout2');
 		mode = null;
@@ -78,8 +80,10 @@
 				error
 			{/if}
 		{/if}
+		<Runner enter={() => setTimeout(() => fixContainerHeight())} />
 	{:else}
 		<Done {restart} />
+		<Runner enter={() => setTimeout(() => fixContainerHeight())} />
 	{/if}
 	<button class="restart" on:click={restart} out:squish={{ initialheight: '2rem' }}
 		><span

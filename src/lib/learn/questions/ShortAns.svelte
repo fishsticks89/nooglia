@@ -19,8 +19,8 @@
 	export let currentquestion: { q: string; a: string };
 	export let wentOut = () => {};
 	export let wentOut2 = () => {
-		console.log ("asdfasdfasdf")
-		wentOut()
+		console.log('asdfasdfasdf');
+		wentOut();
 	};
 
 	let answerText = '';
@@ -46,22 +46,24 @@
 
 	let input: HTMLTextAreaElement;
 	setTimeout(() => {
-		resizeinit(input, fixContainerHeight);
+		resizeinit(input, () => (correct ? () => {} : fixContainerHeight)());
 	});
 	let inputText = '';
 	let firstcorrect: null | boolean = null;
 	let answered = false;
+	let correct = false;
 	function onanswer() {
 		answerText = inputText;
-		const correct =
-			inputText.toLowerCase().split(/ +/).join('') ==
-			currentquestion.a.toLowerCase().split(/ +/).join('');
+		const iscorrect =
+			inputText.toLowerCase().trim().split('\n').join('') ==
+			currentquestion.a.toLowerCase().trim().split('\n').join('');
 		if (firstcorrect === null) {
 			firstcorrect = correct;
 		}
-		if (correct) {
+		if (iscorrect) {
 			if (!answered) {
 				answered = true;
+				correct = true;
 				onCorrect();
 				setTimeout(() => answerLog(firstcorrect as boolean), 300);
 			}
@@ -101,31 +103,31 @@
 	function onCorrect() {
 		correctTweened.set(1);
 	}
-	correctTweened.subscribe(e => {
-		if (e === 1)
-			setTimeout(() => wentOut2(), 200)
-			
-	})
 </script>
 
 <div
 	in:flyin={{ isin: true, additionalTransforms: '' }}
-	out:flyin={{ isin: false, additionalTransforms: '' }}
+	out:fade={{duration: 200}}
+	on:click={() => {
+		input.focus();
+	}}
+	on:outroend={() => {
+		wentOut();
+		console.log('shit went doiwn');
+	}}
 	data-hj-allow
-	style={!answered
-		? `transform: translateX(-${
-				5 *
-				(1 -
-					elastic(
-						$incorrectTweened,
-						($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
-					))
-		  }%);
+	style={correct ?`transform: translateX(-${
+		5 *
+		(1 -
+			elastic(
+				$incorrectTweened,
+				($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
+			))
+	}%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
 		)}px 0px var(--comp);
-    `
-		: ''}
+    ` : null}
 	class="qholder"
 >
 	<div
@@ -153,7 +155,7 @@
 			<strong class="skp" on:click={() => answerLog(false)}>skip</strong>
 		</div>
 	{/if}
-	<div class="consumer" style:flex-grow={1}></div>
+	<div class="consumer" style:flex-grow={1} />
 	<textarea
 		rows="1"
 		style:border-color={!answered ? '' : 'transparent'}
