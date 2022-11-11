@@ -7,7 +7,6 @@
 
 <div
 	in:flyin={{ isin: true, additionalTransforms: 'transform: translate(-50%, -50%);' }}
-	out:flyin={{ isin: false, additionalTransforms: 'transform: translate(-50%, -50%);' }}
 	class="qholder"
 >
 	<div class="center">
@@ -67,14 +66,14 @@
 		width: 100%;
 	}
 	.qholder {
-		position: absolute;
+		position: relative;
 		top: 0%;
 		left: 50%;
 		transform: translateX(-50%);
 
 		padding: 1rem;
 		width: calc(100% - calc(2 * 1rem));
-		height: calc(100% - calc(2 * 1rem));
+		height: 50vh;
 
 		background-color: var(--emp);
 		border-color: transparent;

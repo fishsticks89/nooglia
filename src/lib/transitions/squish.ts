@@ -12,6 +12,7 @@ export function squish(
             const eased = isin ? 1 - asdf : asdf;
             return `
                 height: calc(${eased} * ${initialheight});
+                opacity: ${eased * 100}%;
                 margin: 0px;
                 padding: 0px;
             `;
