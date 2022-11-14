@@ -85,6 +85,7 @@
 						nextInteractionStep: 0,
 						lastLongTermRetrieval: null
 					};
+					console.log(tempterm);
 					stack.push(tempterm as any);
 					newterm = tempterm as any;
 				}
@@ -116,9 +117,13 @@
 							'and',
 							trow
 						);
-						return (stackEmpty && areMoreTerms) || (areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow);
+						return (
+							(stackEmpty && areMoreTerms) ||
+							(areMoreTerms && !enoughMultiChoice && !enoughQuestions && trow)
+						);
 					})()
 				) {
+					console.log('introducing');
 					// optionally retrieve older terms
 					// if the stack is not full, enlarge it
 					pushStack();
@@ -139,6 +144,7 @@
 									? p
 									: c;
 							});
+						console.log('enforcing', newterm);
 					} else if (stack.filter((e) => e.phase.mode === 'done').length > 0) {
 						newterm = stack
 							.filter((e) => e.lastLongTermRetrieval)
@@ -151,6 +157,7 @@
 									? p
 									: c;
 							});
+						console.log('retrieving', newterm);
 					} else {
 						if (shuffledTerms.length > 0 && termsinarow >= 3) {
 							pushStack();
@@ -250,6 +257,7 @@
 								newterm.phase.correctTimes++;
 							}
 						} else {
+							console.log("WRONG")
 							newterm.phase.blitzing = false;
 							newterm.lastLongTermRetrieval = null;
 							if (newterm.phase.mode === 'flashcard') {

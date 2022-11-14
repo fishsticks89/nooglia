@@ -58,7 +58,7 @@
 			inputText.toLowerCase().trim().split('\n').join('') ==
 			currentquestion.a.toLowerCase().trim().split('\n').join('');
 		if (firstcorrect === null) {
-			firstcorrect = correct;
+			firstcorrect = iscorrect;
 		}
 		if (iscorrect) {
 			if (!answered) {
@@ -107,7 +107,7 @@
 
 <div
 	in:flyin={{ isin: true, additionalTransforms: '' }}
-	out:fade={{duration: 200}}
+	out:fade={{ duration: 200 }}
 	on:click={() => {
 		input.focus();
 	}}
@@ -116,18 +116,20 @@
 		console.log('shit went doiwn');
 	}}
 	data-hj-allow
-	style={correct ?`transform: translateX(-${
-		5 *
-		(1 -
-			elastic(
-				$incorrectTweened,
-				($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
-			))
-	}%);
+	style={correct
+		? `transform: translateX(-${
+				5 *
+				(1 -
+					elastic(
+						$incorrectTweened,
+						($incorrectTweened < 0.5 ? 1 - $incorrectTweened : $incorrectTweened) - 0.5
+					))
+		  }%);
     box-shadow: 0px 0px ${Math.abs(
 			($incorrectTweened > 0.5 ? 1 - $incorrectTweened : $incorrectTweened) * 16
 		)}px 0px var(--comp);
-    ` : null}
+    `
+		: null}
 	class="qholder"
 >
 	<div
