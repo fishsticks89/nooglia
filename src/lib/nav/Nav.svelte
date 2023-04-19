@@ -2,7 +2,9 @@
 </script>
 
 <div id="nav">
-	<p class="title">nooglia</p>
+	<p class="title" on:click={() => {
+		window.location.replace("/")
+	}}>nooglia</p>
 	<slot />
 </div>
 
@@ -17,6 +19,8 @@
 		transform: translateY(-3%);
 
 		font-family: 'Montserrat', sans-serif;
+
+		cursor: pointer;
 	}
 	#nav {
 		filter: drop-shadow(0px -1.2rem 0px var(--background));
