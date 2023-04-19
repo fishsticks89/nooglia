@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
-import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, type User } from "firebase/auth";
+import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, type User } from "firebase/auth";
 import { auth } from '$lib/firebase';
 import { event, mix } from '$lib/mixyp';
 
@@ -53,4 +53,13 @@ if (browser) {
             const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
         });
+}
+
+export function signin() {
+    const provider = new GoogleAuthProvider();
+    
+    signInWithPopup(auth, provider).then((result) => {
+        // The signed-in user info.
+        if (result != null) authState.set(result.user);
+    })
 }

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import { authState, expectingSignIn } from '$lib/auth/authState';
-	import { signin } from '$lib/auth/signin';
+	import { authState, expectingSignIn, signin } from '$lib/auth/authState';
 
 	export let oncl: () => void;
 	export let posStyle: string = '';
