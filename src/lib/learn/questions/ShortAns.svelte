@@ -106,6 +106,7 @@
 </script>
 
 <div
+	style:z-index={20}
 	in:flyin={{ isin: true, additionalTransforms: '' }}
 	out:fade={{ duration: 200 }}
 	on:click={() => {
