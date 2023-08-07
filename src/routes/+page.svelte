@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { signInWithPopup } from 'firebase/auth';
 	import CSRprovider from '$lib/util/CSRprovider.svelte';
 	import { flyin } from '$lib/transitions/flyin';
 	import { authState, expectingSignIn } from '$lib/auth/authState';
@@ -43,7 +44,7 @@
 		<button
 			class="startbutt"
 			on:click={() => {
-				signInWithRedirect(auth, new GoogleAuthProvider());
+				signInWithPopup(auth, new GoogleAuthProvider());
 			}}>Start Studying</button
 		>
 	</h2>
