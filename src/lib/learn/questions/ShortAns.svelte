@@ -18,10 +18,6 @@
 	};
 	export let currentquestion: { q: string; a: string };
 	export let wentOut = () => {};
-	export let wentOut2 = () => {
-		console.log('asdfasdfasdf');
-		wentOut();
-	};
 
 	let answerText = '';
 	async function recordAttempt(gotcorrect: boolean, override: boolean) {
@@ -105,6 +101,8 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	style:z-index={20}
 	in:flyin={{ isin: true, additionalTransforms: '' }}
@@ -162,7 +160,6 @@
 	<textarea
 		rows="1"
 		style:border-color={!answered ? '' : 'transparent'}
-		type="text"
 		bind:this={input}
 		bind:value={inputText}
 		data-hj-allow

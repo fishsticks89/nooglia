@@ -80,10 +80,10 @@
 				error
 			{/if}
 		{/if}
-		<Runner enter={() => setTimeout(() => fixContainerHeight())} />
+		<Runner enter={() => {setTimeout(() => fixContainerHeight())}} />
 	{:else}
 		<Done {restart} />
-		<Runner enter={() => setTimeout(() => fixContainerHeight())} />
+		<Runner enter={() => {setTimeout(() => fixContainerHeight())}} />
 	{/if}
 	<button class="restart" on:click={restart} out:squish={{ initialheight: '2rem' }}
 		><span

@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount } from "svelte";
 
-	export let enter: () => any = () => {};
-	export let leave: (state: any) => void = () => {};
-	let state: any;
+	export let enter: () => (() => void) | void = () => {
+		return () => {};
+	};
+	let state: (() => void) | null = null;
 	onMount(() => {
-		state = enter();
+		let s = enter();
+		if (s) state = s;
 	});
 	onDestroy(() => {
-		leave(state);
+		if (state) state();
 	});
 </script>

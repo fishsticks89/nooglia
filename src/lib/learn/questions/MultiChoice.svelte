@@ -1,15 +1,15 @@
 <script lang="ts">
-	import Runner from '$lib/util/Runner.svelte';
-	import shuffle from '$lib/util/shuffle';
-	import { flyin, flyin2 } from '$lib/transitions/flyin';
-	import { spring, type Spring } from 'svelte/motion';
-	import { listenKeys } from '$lib/util/keylistener';
-	import { checkOverflow } from '$lib/util/checkoverflow';
-	import { onDestroy } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { createDebounce } from '$lib/util/debounce';
-	import { dev } from '$app/environment';
-	import { error } from '@sveltejs/kit';
+	import Runner from "$lib/util/Runner.svelte";
+	import shuffle from "$lib/util/shuffle";
+	import { flyin, flyin2 } from "$lib/transitions/flyin";
+	import { spring, type Spring } from "svelte/motion";
+	import { listenKeys } from "$lib/util/keylistener";
+	import { checkOverflow } from "$lib/util/checkoverflow";
+	import { onDestroy } from "svelte";
+	import { writable } from "svelte/store";
+	import { createDebounce } from "$lib/util/debounce";
+	import { dev } from "$app/environment";
+	import { error } from "@sveltejs/kit";
 
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
@@ -21,7 +21,7 @@
 		...shuffle(questions)
 			.filter((e) => e.a != currentquestion.a)
 			.map((e) => e.a)
-			.slice(0, 3)
+			.slice(0, 3),
 	]).map((e, i) => {
 		const option: {
 			a: string;
@@ -30,7 +30,7 @@
 		} = {
 			a: e,
 			index: i,
-			color: 0
+			color: 0,
 		};
 		return option;
 	});
@@ -38,17 +38,23 @@
 	let answered = false;
 	const springit = spring(0, {
 		stiffness: 0.02,
-		damping: 0.25
+		damping: 0.25,
 	});
-	function answerWithTerm(term: { a: string; index: number; color: 0 | 1 | -1 }) {
+	function answerWithTerm(term: {
+		a: string;
+		index: number;
+		color: 0 | 1 | -1;
+	}) {
 		if (!answered) {
 			answered = true;
 			term.color = -1;
-			options.filter((e) => e.a === currentquestion.a).forEach((e) => (e.color = 1));
+			options
+				.filter((e) => e.a === currentquestion.a)
+				.forEach((e) => (e.color = 1));
 			setTimeout(
 				() => {
 					answer(term.a === currentquestion.a);
-					console.log('ansering');
+					console.log("ansering");
 				},
 				term.a === currentquestion.a ? 700 : 1200
 			);
@@ -68,7 +74,14 @@
 					.map((_, i) => i)
 					.forEach((e) => {
 						console.log(e);
-						if (checkOverflow(document.getElementById('term-' + e) as HTMLElement)) ov = true;
+						if (
+							checkOverflow(
+								document.getElementById(
+									"term-" + e
+								) as HTMLElement
+							)
+						)
+							ov = true;
 					});
 				overflow.set(ov);
 				locked = false;
@@ -77,8 +90,8 @@
 	};
 	setTimeout(calcOV);
 	const resize = () => debo(calcOV);
-	window.addEventListener('resize', resize);
-	onDestroy(() => window.removeEventListener('resize', resize));
+	window.addEventListener("resize", resize);
+	onDestroy(() => window.removeEventListener("resize", resize));
 
 	const ansStyle = (i: number) => {
 		const same = `
@@ -103,41 +116,44 @@
 					padding-block: 1rem;
 					margin-block: 0.5rem;
 					height: fit-content;
-		`
+		`,
 		};
 	};
 </script>
 
 <div
-	in:flyin2={{ isin: true, additionalTransforms: '', duration: 200 }}
-	out:flyin2={{ isin: false, additionalTransforms: '', duration: 200 }}
+	in:flyin2={{ isin: true, additionalTransforms: "", duration: 200 }}
+	out:flyin2={{ isin: false, additionalTransforms: "", duration: 200 }}
 	on:outroend={() => {
 		wentOut();
-		console.log('shit went doiwn');
+		console.log("shit went doiwn");
 	}}
 	class="qholder"
 >
 	<p class="term">{currentquestion.q}</p>
 
-	<div class={$overflow ? 'block' : 'grid'}>
+	<div class={$overflow ? "block" : "grid"}>
 		{#each options as term}
 			<button
-				style={($overflow ? ansStyle(term.index).overflow : ansStyle(term.index).grid) +
-					`filter: hue-rotate(${term.color > 0 ? '-' : ''}${Math.abs(term.color * $springit)}deg);`}
+				style={($overflow
+					? ansStyle(term.index).overflow
+					: ansStyle(term.index).grid) +
+					`filter: hue-rotate(${term.color > 0 ? "-" : ""}${Math.abs(
+						term.color * $springit
+					)}deg);`}
 				on:click={() => {
-					console.log('onclickity');
+					console.log("onclickity");
 					answerWithTerm(term);
 				}}
-				id={'term-' + term.index}
+				id={"term-" + term.index}
 			>
 				<Runner
 					enter={() => {
-						return listenKeys((ev) => {
-							if (Number(ev.key) == term.index + 1) answerWithTerm(term);
+						const unsub = listenKeys((ev) => {
+							if (Number(ev.key) == term.index + 1)
+								answerWithTerm(term);
 						});
-					}}
-					leave={(unsu) => {
-						unsu();
+						unsub();
 					}}
 				/>
 				<div class="number">
@@ -195,7 +211,7 @@
 		margin: 1rem;
 		margin-top: 2rem;
 		max-width: calc(100% - 2rem);
-		font-family: 'Montserrat', sans-serif;
+		font-family: "Montserrat", sans-serif;
 		word-wrap: break-word;
 	}
 	.number > p {
@@ -208,7 +224,7 @@
 		padding: 0px;
 
 		text-align: center;
-		font-family: 'GilroyBold';
+		font-family: "GilroyBold";
 		font-size: 0.8rem;
 
 		width: fit-content;
