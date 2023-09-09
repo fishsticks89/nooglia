@@ -2,9 +2,10 @@
 </script>
 
 <div id="nav">
-	<p class="title" on:click={() => {
+	<a href="/" class="title" on:click={(e) => {
+		e.preventDefault();
 		window.location.replace("/")
-	}}>nooglia</p>
+	}}>nooglia</a>
 	<slot />
 </div>
 
@@ -21,6 +22,9 @@
 		font-family: 'Montserrat', sans-serif;
 
 		cursor: pointer;
+
+		color: white;
+		text-decoration: none;
 	}
 	#nav {
 		filter: drop-shadow(0px -1.2rem 0px var(--background));

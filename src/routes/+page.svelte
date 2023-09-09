@@ -1,44 +1,21 @@
 <script lang="ts">
 	import { signInWithPopup } from "firebase/auth";
 	import CSRprovider from "$lib/util/CSRprovider.svelte";
-	import { flyin } from "$lib/transitions/flyin";
 	import { authState, expectingSignIn } from "$lib/auth/authState";
-	import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-	import { auth, sets } from "$lib/firebase";
+	import { GoogleAuthProvider } from "firebase/auth";
+	import { auth } from "$lib/firebase";
 	import { browser } from "$app/environment";
-	import {
-		DocumentSnapshot,
-		getDocs,
-		query,
-		QueryDocumentSnapshot,
-		where,
-		type DocumentData,
-		deleteDoc,
-		onSnapshot,
-	} from "firebase/firestore";
-	import { get } from "svelte/store";
-	import { fade } from "svelte/transition";
+	import type { DocumentSnapshot, DocumentData } from "firebase/firestore";
 	import Nav from "$lib/nav/Nav.svelte";
 	import AuthManager from "$lib/auth/AuthManager.svelte";
-	import Runner from "$lib/util/Runner.svelte";
-	import { createSet } from "$lib/createset/createSet";
+    import DocsList from "$lib/ui/DocsList.svelte";
 
-	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
-
-	const getStringArr = (
-		doc: DocumentSnapshot<DocumentData>,
-		property: string
-	) => {
-		return doc.get(property) as string[];
-	};
 
 	authState.subscribe((e) => console.log(e));
 
 	let href: null | string = null;
 	let width = 0;
 </script>
-
-<CSRprovider link={href} />
 
 {#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
 	<h2>
@@ -62,145 +39,16 @@
 <svelte:window bind:innerWidth={width} />
 
 {#if $authState != null}
-	<Runner
-		enter={() => {
-			onSnapshot(
-				query(
-					sets,
-					where("user", "==", get(authState)?.uid),
-					where("contents", "!=", "")
-				),
-				(e) => {
-					if (e.docs.length === 0) {
-						const uid = $authState?.uid;
-						if (uid)
-							createSet(uid, (setref) => {
-								href = setref;
-							});
-					}
-					docs = e.docs;
-				}
-			);
-		}}
-	/>
-	<div class="holder" id="create">
-		<button
-			on:click={() => {
-				const uid = $authState?.uid;
-				if (uid)
-					createSet(uid, (setref) => {
-						href = setref;
-					});
-			}}
-			class="newset"
-			in:fade={{ duration: 300 }}>New Set</button
-		>
-		{#each docs as doc}
-			{#if getStringArr(doc, "contents")
-				.join("")
-				.split(/[ \n]/)
-				.join("") != ""}
-				<a
-					in:flyin={{ isin: true, additionalTransforms: "" }}
-					class="setholder"
-					on:focus
-					href={"/set/" + doc.id}
-				>
-					<p style:margin-top="0px">
-						{doc.get("name") != "" ? doc.get("name") : "Untitled"}
-					</p>
-					<div class="butts">
-						<button class="open">Open</button>
-						<button
-							class="open"
-							on:click={(e) => {
-								e.preventDefault();
-								const shouldDelete = confirm(
-									"Are you sure you want to delete this set?"
-								);
-								if (shouldDelete) deleteDoc(doc.ref);
-							}}
-						>
-							<span class="material-icons-round">delete</span
-							></button
-						>
-					</div>
-				</a>
-			{/if}
-		{/each}
-	</div>
+	<DocsList />
 {/if}
 
 <Nav>
-	{#if $authState != null || width > 500}
+	{#if $authState != null}
 		<AuthManager />
 	{/if}
 </Nav>
 
 <style>
-	.newset {
-		margin-block: 1rem;
-		padding: 0.7rem;
-		padding-inline: 1.2rem;
-		background-color: var(--glass);
-
-		border: 0px solid transparent;
-		border-radius: var(--round);
-
-		font-family: "GilroyBold", sans-serif;
-	}
-	.open {
-		display: inline;
-		position: relative;
-
-		height: 2.9rem;
-		padding-inline: 1.2rem;
-
-		background-color: var(--glass);
-
-		border: 0px solid transparent;
-		border-radius: var(--round);
-
-		font-family: "GilroyBold", sans-serif;
-
-		margin-left: 0.6rem;
-	}
-	.butts {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-	}
-	.setholder {
-		position: relative;
-		text-align: left;
-		display: flex;
-
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-
-		width: calc(100% - 1.4rem);
-		padding: 0.7rem;
-		margin-bottom: 1rem;
-
-		color: white;
-		text-decoration: none;
-
-		border-radius: var(--round);
-		background-color: var(--emp);
-	}
-	.holder {
-		width: calc(70vw + 8vh);
-		max-width: 50rem;
-		height: fit-content;
-		margin: 0px;
-		margin-left: 50vw;
-		transform: translateX(-50%);
-		padding-top: 4rem;
-
-		overflow: visible;
-	}
 	h2 {
 		position: fixed;
 		font-family: "GilroyBold", sans-serif;

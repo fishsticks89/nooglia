@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Library from './Library.svelte';
-	import AuthButton from './AuthButton.svelte';
-	import { authState, expectingSignIn } from '$lib/auth/authState';
-	import { auth } from '$lib/firebase';
-	import { cubicIn, cubicInOut, cubicOut } from 'svelte/easing';
-	import type { setStore } from '$lib/data/setStore';
-	import { browser } from '$app/environment';
+	import Library from "./Library.svelte";
+	import AuthButton from "./AuthButton.svelte";
+	import { authState, expectingSignIn } from "$lib/auth/authState";
+	import { auth } from "$lib/firebase";
+	import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
+	import type { setStore } from "$lib/data/setStore";
+	import { browser } from "$app/environment";
 
 	let popped = false;
 
@@ -19,27 +19,30 @@
 		const isSmall = width > 600;
 		// number is out of 1
 		return `
-		position: ${isSmall ? 'absolute' : 'fixed'};
+		position: ${isSmall ? "absolute" : "fixed"};
 		top: 4rem;
 		left: 50%;
 		opacity: ${100 * (isin ? cubicOut(x) : cubicIn(x))}%;
-		transform: translateX(-50%) perspective(600px) translateZ(-${(1 - x) * 80}px) rotateX(-${
-			(1 - x) * 20
-		}deg);
-        width: ${isSmall ? '15rem' : '80vw'};
-        height: ${isSmall ? '20rem' : '80vh'};
+		transform: translateX(-50%) perspective(600px) translateZ(-${
+			(1 - x) * 80
+		}px) rotateX(-${(1 - x) * 20}deg);
+        width: ${isSmall ? "15rem" : "80vw"};
+        height: ${isSmall ? "20rem" : "80vh"};
         border-radius: var(--round);
 		z-index: 5;
         `;
 	};
-	function enlarge(node: any, { duration, rev = false }: { duration: number; rev: boolean }) {
+	function enlarge(
+		node: any,
+		{ duration, rev = false }: { duration: number; rev: boolean }
+	) {
 		return {
 			duration,
 			css: (t: number) => {
 				const eased = rev ? cubicOut(t) : cubicIn(t);
 
 				return pos(eased, width, rev);
-			}
+			},
 		};
 	}
 	let width = 0;
@@ -48,7 +51,11 @@
 <svelte:window bind:innerWidth={width} />
 
 {#if !(!$authState && expectingSignIn) && browser}
-	<AuthButton text={popped ? 'Back' : 'Library'} posStyle={'z-index: 2;'} oncl={onclick}>
+	<AuthButton
+		text={popped ? "Back" : "Library"}
+		posStyle={"z-index: 2;"}
+		oncl={onclick}
+	>
 		{#if popped && $authState}
 			<div
 				class="bkg"
@@ -56,14 +63,10 @@
 				in:enlarge={{ duration: 350, rev: true }}
 				out:enlarge={{ duration: 350, rev: false }}
 			>
-				<Library
-					close={() => {
-						popped = false;
-					}}
-				/>
+				<Library />
 				<button
 					class="signout"
-					style={''}
+					style={""}
 					on:click={() => {
 						auth.signOut();
 						while (document.body.lastChild) {
@@ -84,7 +87,7 @@
 		font-size: 16px;
 		background-color: transparent;
 		border: none;
-		font-family: 'Gilroy', sans-serif;
+		font-family: "Gilroy", sans-serif;
 		font-weight: bold;
 
 		background-color: var(--light);
