@@ -3,6 +3,10 @@
 
 <head>
 	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<meta name="viewport" content="width=device-width" />
+
+	<meta charset="utf-8" />
 	<title>nooglia</title>
 	<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 	<meta name="viewport" content="width=device-width" />
@@ -98,7 +102,8 @@
 	</script>
 </head>
 
-<body style="overflow-y: auto; width: 100vw; height: fit-content; background-color: hsl(220, 67%, 8%); margin: 0%;">
+<body data-sveltekit-preload-data="hover"
+	style="overflow-y: auto; width: 100vw; height: fit-content; background-color: hsl(220, 67%, 8%); margin: 0%;">
 	<div class="maindivasdf" style="overflow-y: visible; height: 100vh;">%sveltekit.body%</div>
 	<script async defer src="https://scripts.withcabin.com/hello.js"></script>
 </body>

@@ -86,7 +86,6 @@
 				<a
 					in:flyin={{ isin: true, additionalTransforms: '' }}
 					class="setholder"
-					data-sveltekit:prefetch
 					on:focus
 					href={'/set/' + doc.id}
 				>

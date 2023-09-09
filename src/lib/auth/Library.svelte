@@ -12,7 +12,6 @@
 	import { authState } from './authState';
 	import { createCloudSet, newset } from '$lib/data/db';
 	import { fade } from 'svelte/transition';
-	import { prefetch } from '$app/navigation';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
 	getDocs(query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
@@ -46,9 +45,6 @@
 			in:flyin={{ isin: true, additionalTransforms: '' }}
 			out:flyin={{ isin: false, additionalTransforms: '' }}
 			class="setholder"
-			on:mouseover={() => {
-				prefetch('/set/' + doc.id);
-			}}
 			on:focus
 			on:click={() => {
 				window.location.replace('/set/' + doc.id);
