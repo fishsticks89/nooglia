@@ -5,7 +5,7 @@
 	import { browser } from "$app/environment";
 	import Nav from "$lib/nav/Nav.svelte";
 	import DocsList from "$lib/ui/DocsList.svelte";
-    import DisableDarkMode from "$lib/dark/DisableDarkMode.svelte";
+	import DisableDarkMode from "$lib/dark/DisableDarkMode.svelte";
 </script>
 
 <div class="width" style:width={`calc(100vw - ${$scrollBarWidth}px`}>
@@ -54,6 +54,11 @@
 <Nav />
 
 <style>
+	h2,
+	h3,
+	h4 {
+		font-weight: normal;
+	}
 	h4 {
 		font-family: "Montserrat", sans-serif;
 	}
