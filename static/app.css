@@ -1,0 +1,149 @@
+:root {
+    color-scheme: light;
+    /* "lighten" */
+    --glass: #b6b6b6;
+    /* "lightenhover" */
+    --glasser: #D9D9D947;
+    --hue: 241;
+    --background: #F0F0F0;
+    /* the background */
+    --emp: #ffffff;
+    /* panes */
+    --accent: #D9D9D9;
+    --yellow: #FFBB00;
+    /* buttons
+--disabled: var(--emp); */
+    /* buttons */
+    --light: #292929;
+    --lighter: #555555;
+    /* correct */
+    --correct: #00FF9D;
+    /* incorrect */
+    --incorrect: #FF3D00;
+    /* emp for inputs */
+    --comp: #FF00C3;
+    /* emp for text */
+    --complight: #ff56d8;
+    --round: 0.3rem;
+    background-color: var(--background);
+}
+
+
+@media print {
+    .maindivasdf {
+        display: none;
+    }
+}
+
+#printarea {
+    margin: 0in 0.5in;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'MontserratBold';
+    src: url('/fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Hermes';
+    src: url('/fonts/Hermes.otf') format('woff2');
+}
+
+@font-face {
+    font-family: 'Eina';
+    src: url('/fonts/Eina.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'PoppinsSemi';
+    src: url('/fonts/Poppins-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: 'PoppinsBold';
+    src: url('/fonts/Poppins-Bold.ttf');
+}
+
+button {
+    cursor: pointer;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    background-color: var(--background);
+
+    margin: 0px;
+    padding: 0px;
+
+    overflow: visible;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    /* 1 */
+    font-size: 100%;
+    /* 1 */
+    line-height: 1.15;
+    /* 1 */
+    margin: 0;
+    /* 2 */
+}
+
+button {
+    color: white;
+}
+
+/* icon font: */
+@font-face {
+    font-family: "Material Icons Round";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/icons/ext/material-icons-round.woff2") format("woff2"), url("/icons/ext/material-icons-round.woff") format("woff");
+}
+
+.material-icons-round {
+    font-family: "Material Icons Round";
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "liga";
+}

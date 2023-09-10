@@ -55,9 +55,9 @@ if (browser) {
         });
 }
 
+const provider = new GoogleAuthProvider();
+
 export function signin() {
-    const provider = new GoogleAuthProvider();
-    
     signInWithPopup(auth, provider).then((result) => {
         // The signed-in user info.
         if (result != null) authState.set(result.user);

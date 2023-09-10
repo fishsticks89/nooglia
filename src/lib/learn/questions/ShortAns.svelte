@@ -225,7 +225,7 @@
 		margin: 0px;
 	}
 	.ov {
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		color: var(--light);
 
 		background-color: transparent;

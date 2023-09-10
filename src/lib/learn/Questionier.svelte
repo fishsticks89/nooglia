@@ -118,7 +118,7 @@
 		height: 2rem;
 
 		background-color: var(--emp);
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 
 		border: 0px solid transparent;
 		border-radius: 100vmax;

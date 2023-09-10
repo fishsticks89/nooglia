@@ -1,16 +1,14 @@
 <script lang="ts">
 	export let data: any;
 	import { writable } from 'svelte/store';
-	import { GoogleAuthProvider, getRedirectResult, onAuthStateChanged } from 'firebase/auth';
 	import { doc, setDoc, type DocumentData, type DocumentReference } from 'firebase/firestore';
 	import App from '$lib/App.svelte';
 	import { authState } from '$lib/auth/authState';
-	import { getCloudSet, getUserDoc } from '$lib/data/db';
-	import { auth, sets } from '$lib/firebase';
+	import { getCloudSet } from '$lib/data/db';
+	import { sets } from '$lib/firebase';
 	import { toSetStore, type setStoreOrNull } from '$lib/data/setStore';
 	import { createDebounce } from '$lib/util/debounce';
-	import { browser } from '$app/environment';
-
+	
 	let currentset: setStoreOrNull = writable(null);
 
 	authState.subscribe(async (user) => {

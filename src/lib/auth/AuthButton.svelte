@@ -1,32 +1,33 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
-	import { authState, expectingSignIn, signin } from '$lib/auth/authState';
+	import { fly } from "svelte/transition";
+	import { authState, signin } from "$lib/auth/authState";
 
 	export let oncl: () => void;
-	export let posStyle: string = '';
-	export let text = 'Library';
+	export let posStyle: string = "";
+	export let text = "Library";
 	$: pfp = $authState ? $authState?.photoURL : null;
 	let showpfp = true;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-	class="pos"
-	style={$authState ? '' : `
+
+{#if $authState}<div
+		class="pos"
+		style={$authState
+			? ""
+			: `
 	background-color: white;
-	color: var(--emp);
-	font-family: 'GilroyBold', sans-serif;
-	color: black; width: fit-content;
+	font-family: 'PoppinsSemi', sans-serif;
+	width: fit-content;
 	` + posStyle}
-	on:click={$authState
-		? oncl
-		: () => {
-				signin();
-		  }}
->
-	<div class="clipper">
-		{#if $authState}
+		on:click={$authState
+			? oncl
+			: () => {
+					signin();
+			  }}
+	>
+		<div class="clipper">
 			{#key text}
 				<p class="txt" in:fly={{ duration: 600, y: 200 }}>{text}</p>
 			{/key}
@@ -43,32 +44,26 @@
 					alt=""
 				/>
 			{/if}
-		{:else}
-			<img class="ggl" src="/google_logo.svg" alt="" srcset="" />
-			<p class="signup">Continue with Google</p>
-		{/if}
+		</div>
+		<slot />
 	</div>
-
-	<slot />
-</div>
+{:else}
+	<button class="signup-btn" on:click={signin}> <img class="signup" src="./elem/signup-btn.svg" alt="" /></button>
+{/if}
 
 <style>
+	.signup-btn {
+		display: contents;
+	}
 	.signup {
-		width: fit-content;
-		padding-inline: 1rem;
-		padding-left: 0.7rem;
-		translate: 0px -1%;
+		height: 80%;
 	}
 	.txt {
 		width: 55px;
 		margin: 0px;
 		text-align: center;
-	}
-	.ggl {
-		padding-left: 1rem;
-		width: 1.5rem;
-		height: 1.5rem;
-		outline: 0px;
+
+		color: var(--light);
 	}
 	#pfp {
 		width: 1.5rem;
@@ -98,7 +93,7 @@
 		padding: 0.6rem;
 		padding-inline: 1.4rem;
 		padding: 0px;
-		background-color: var(--accent);
+		background-color: var(--emp);
 		border-radius: var(--round);
 
 		display: flex;
@@ -108,7 +103,7 @@
 
 		position: relative;
 
-		font-family: 'PoppinsSemi', sans-serif;
+		font-family: 'Poppins', sans-serif;
 		font-size: 15px;
 	}
 </style>

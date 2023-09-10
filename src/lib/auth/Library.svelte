@@ -36,7 +36,7 @@
 				});
 			}
 		}}
-		class="open"
+		class="new"
 		in:fade={{ duration: 300 }}
 		out:fade={{ duration: 100 }}>New Set</button
 	>
@@ -51,24 +51,38 @@
 			}}
 		>
 			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
-			<button class="open">Open</button>
 		</button>
 	{/each}
 </div>
 
 <style>
-	.open {
+	.new {
 		width: fit-content;
 		height: fit-content;
 		padding: 1rem;
 		padding-inline: 1.5rem;
+
+		font-family: 'PoppinsSemi', sans-serif;
 
 		color: var(--light);
 		font-weight: bold;
 		border-width: 0px;
 		border-radius: var(--round);
 
-		background-color: var(--glass);
+		background-color: var(--glasser);
+	}
+	.open {
+		width: fit-content;
+		height: fit-content;
+		padding: 1rem;
+		padding-inline: 1.5rem;
+
+		color: var(--background);
+		font-weight: bold;
+		border-width: 0px;
+		border-radius: var(--round);
+
+		background-color: var(--light);
 	}
 	.holder {
 		margin: 0px;
@@ -90,19 +104,17 @@
 		flex-direction: column;
 	}
 	.setholder {
-		color: white;
+		color: var(--light);
 		z-index: 8;
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'MontserratBold', sans-serif;
 		margin: 0px;
 		margin-block: 1rem;
 		padding: 10%;
 		width: 100%;
 
-		border: 1px solid white;
-		border-width: 1px;
-		border-color: var(--background);
+		border: 0px;
 
-		background-color: var(--emp);
+		background-color: var(--background);
 		border-radius: var(--round);
 
 		display: flex;

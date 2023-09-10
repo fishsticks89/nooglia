@@ -21,9 +21,9 @@
 		return `
 		position: ${isSmall ? "absolute" : "fixed"};
 		top: 4rem;
-		left: 50%;
+		right: 0%;
 		opacity: ${100 * (isin ? cubicOut(x) : cubicIn(x))}%;
-		transform: translateX(-50%) perspective(600px) translateZ(-${
+		transform: perspective(600px) translateZ(-${
 			(1 - x) * 80
 		}px) rotateX(-${(1 - x) * 20}deg);
         width: ${isSmall ? "15rem" : "80vw"};
@@ -75,7 +75,7 @@
 						window.location.reload();
 					}}
 				>
-					Signout
+					Sign out
 				</button>
 			</div>
 		{/if}
@@ -87,10 +87,10 @@
 		font-size: 16px;
 		background-color: transparent;
 		border: none;
-		font-family: "Gilroy", sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		font-weight: bold;
 
-		background-color: var(--light);
+		background-color: var(--lighter);
 		color: var(--background);
 		border: 0px solid transparent;
 		border-radius: var(--round);

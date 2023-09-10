@@ -224,7 +224,7 @@
 		padding: 0px;
 
 		text-align: center;
-		font-family: "GilroyBold";
+		font-family: 'PoppinsSemi';
 		font-size: 0.8rem;
 
 		width: fit-content;

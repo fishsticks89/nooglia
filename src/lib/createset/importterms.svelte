@@ -216,7 +216,7 @@
 		justify-content: left;
 	}
 	.cancel {
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		margin: 1rem;
 		padding: 1rem;
 		background-color: var(--emp);

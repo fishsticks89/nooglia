@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { scrollBarWidth } from '$lib/util/scrollbarwidth';
 </script>
 
-<div id="nav">
-	<a href="/" class="title" on:click={(e) => {
-		e.preventDefault();
-		window.location.replace("/")
-	}}>nooglia</a>
+<div id="nav" style:width="calc(100% - 1.5rem - {$scrollBarWidth}px)" style:padding={"0.75rem"}>
+	<a
+		href="/"
+		class="title"
+		on:click={(e) => {
+			e.preventDefault();
+			window.location.replace("/");
+		}}>nooglia</a
+	>
 	<slot />
 </div>
 
@@ -19,36 +24,28 @@
 		font-size: 20px;
 		transform: translateY(-3%);
 
-		font-family: 'Montserrat', sans-serif;
+		font-family: "Montserrat", sans-serif;
 
 		cursor: pointer;
 
-		color: white;
+		color: var(--light);
 		text-decoration: none;
 	}
 	#nav {
-		filter: drop-shadow(0px -1.2rem 0px var(--background));
-
 		margin: 0px;
-		padding-inline: 0.7rem;
-		height: 3.3rem;
-		width: calc(70vw - 1.4rem + 8vh);
+		height: 3.4rem;
 
 		position: fixed;
-		top: 0.8rem;
-		left: 50vw;
-		transform: translateX(-50%);
+		top: 0rem;
+		right: 50%;
+		transform: translateX(50%);
 
-		box-shadow: 0px 0px 0.5px 1px var(--background);
-
-		border: none;
-		background-color: var(--emp);
-		border-radius: var(--round);
 		display: flex;
-
 		align-items: center;
 		justify-content: center;
 		align-content: center;
 		justify-content: space-between;
+
+		background-color: var(--background);
 	}
 </style>

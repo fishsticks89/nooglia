@@ -1,87 +1,166 @@
 <script lang="ts">
-	import { signInWithPopup } from "firebase/auth";
-	import CSRprovider from "$lib/util/CSRprovider.svelte";
-	import { authState, expectingSignIn } from "$lib/auth/authState";
-	import { GoogleAuthProvider } from "firebase/auth";
+	import DisableDarkMode from "./../lib/util/DisableDarkMode.svelte";
+	import { scrollBarWidth } from "$lib/util/scrollbarwidth";
+	import { authState, expectingSignIn, signin } from "$lib/auth/authState";
 	import { auth } from "$lib/firebase";
 	import { browser } from "$app/environment";
-	import type { DocumentSnapshot, DocumentData } from "firebase/firestore";
 	import Nav from "$lib/nav/Nav.svelte";
 	import AuthManager from "$lib/auth/AuthManager.svelte";
-    import DocsList from "$lib/ui/DocsList.svelte";
-
-
-	authState.subscribe((e) => console.log(e));
-
-	let href: null | string = null;
-	let width = 0;
+	import DocsList from "$lib/ui/DocsList.svelte";
 </script>
 
-{#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
-	<h2>
-		<p class="punchline">Flashcards, Quizzes</p>
-		<p class="punchline1">
-			and more <img
-				src="./icons/rocket.png"
-				alt="rocket"
-				style:height={50 + "px"}
+<div class="width" style:width={`calc(100vw - ${$scrollBarWidth}px`}>
+	{#if $authState != null}
+		<DocsList />
+	{/if}
+
+	{#if $authState === null && !expectingSignIn && !auth.currentUser && browser}
+		<DisableDarkMode />
+
+		<div class="top-section">
+			<img class="bg-logo" src="/icons/bg-logo.svg" alt="" />
+			<h2>The Best Quizlet Alternative</h2>
+			<h3>Completely Free</h3>
+		</div>
+		<div class="multichoice-section">
+			<img
+				class="multichoice-img"
+				src="/elem/multichoice.png"
+				alt=""
+				srcset=""
 			/>
-		</p>
-		<button
-			class="startbutt"
-			on:click={() => {
-				signInWithPopup(auth, new GoogleAuthProvider());
-			}}>Start Studying</button
-		>
-	</h2>
-{/if}
-
-<svelte:window bind:innerWidth={width} />
-
-{#if $authState != null}
-	<DocsList />
-{/if}
+			<h4 class="learn">
+				Learn efficiently with multiple choice and write questions
+			</h4>
+		</div>
+		<div class="write-section">
+			<img class="write-img" src="/elem/test.png" alt="" srcset="" />
+			<h4 class="test">
+				Print foldable tests with answers that are different every time
+			</h4>
+		</div>
+		<div class="sign-up-bottom">
+			<button on:click={signin} class="sign-up-button">
+				<img
+					class="sign-up-button-img"
+					src="/icons/sign-up-light.svg"
+					alt=""
+					srcset=""
+				/>
+			</button>
+		</div>
+	{/if}
+</div>
 
 <Nav>
-	{#if $authState != null}
-		<AuthManager />
-	{/if}
+	<AuthManager />
 </Nav>
 
 <style>
-	h2 {
-		position: fixed;
-		font-family: "GilroyBold", sans-serif;
-		font-size: calc(4vw + 2rem);
-		top: 50vh;
-		left: calc(17vw - 1rem);
-		padding: 0px;
-		transform: translateY(-50%);
-		width: 70vw;
-		max-width: calc(70vw + 8vh);
-		text-align: left;
-		margin: 0px;
+	.sign-up-button-img {
+		width: 100%;
 	}
-	.punchline {
-		margin: 0rem;
-	}
-	.punchline1 {
-		margin: 0rem;
-	}
-	.startbutt {
-		background-color: var(--accent);
-		border-radius: var(--round);
-		border: 0px;
-		color: white;
-		margin: 0px;
-		padding: calc(0.6rem + 0.6vw);
-		padding-inline: calc(1.4rem + 1.4vw);
+	.sign-up-button {
+		width: calc(8vw + 120px);
+		background-color: transparent;
 
-		font-size: calc(0.7rem + 0.5vw);
-		font-weight: 500;
-		font-family: "GilroyBold", sans-serif;
-		/* font-weight: bold; */
-		/* letter-spacing: 0.2vw; */
-		text-decoration: none;
+		border: none;
+		outline: none;
+	}
+	.sign-up-bottom {
+		margin-top: 20vmin;
+		padding-bottom: 20vmin;
+
+		width: 100%;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.test {
+		position: absolute;
+		font-family: "Poppins", sans-serif;
+		bottom: 20%;
+		left: 3%;
+		width: 40%;
+
+		font-size: 3.4vw;
+
+		color: var(--lighter);
+	}
+	.write-img {
+		width: 50%;
+	}
+	.write-section {
+		position: relative;
+		margin-top: -13vw;
+		width: 100%;
+
+		display: flex;
+		justify-content: right;
+		align-items: center;
+	}
+	.learn {
+		position: absolute;
+		font-family: "Poppins", sans-serif;
+		bottom: 20%;
+		right: 3%;
+		width: 40%;
+
+		font-size: 3.4vw;
+
+		color: var(--lighter);
+	}
+	.multichoice-img {
+		width: 60%;
+	}
+	.multichoice-section {
+		position: relative;
+		margin-top: -20vw;
+		width: 100%;
+	}
+	h2,
+	h3 {
+		font-family: "Poppins", sans-serif;
+	}
+	h2 {
+		position: absolute;
+		right: 7vw;
+		top: 20vw;
+		font-size: 6.25vw;
+		color: var(--light);
+	}
+	h3 {
+		position: absolute;
+		right: 7vw;
+		top: 25vw;
+		font-size: 7.25vw;
+		color: linear-gradient(90deg, var(--incorrect) 0%, var(--yellow) 100%);
+		background: -webkit-linear-gradient(
+			45deg,
+			var(--incorrect) 0%,
+			var(--yellow) 100%
+		);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+	.bg-logo {
+		width: 70vw;
+		position: relative;
+		left: 5vw;
+	}
+	.top-section {
+		margin-top: 3.4rem;
+		width: 100%;
+
+		background-color: var(--background);
+
+		display: flex;
+		justify-content: right;
+		align-items: center;
+	}
+	.width {
+		overflow-x: hidden;
 	}
 </style>

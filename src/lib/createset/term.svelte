@@ -49,11 +49,11 @@
 			(selected ? tx1 : tx2).focus({ preventScroll: true });
 		}
 	});
+	$: long = term.q.length > 20 || term.a.length > 20;
 </script>
 
 {#if isEditing}
 	<textarea
-		type="text"
 		on:change={() => {
 			onUpdate($terms);
 		}}
@@ -66,7 +66,6 @@
 	/>
 	<div class="vr" />
 	<textarea
-		type="text"
 		on:change={() => {
 			onUpdate($terms);
 		}}
@@ -118,14 +117,14 @@
 
 		height: 1em;
 
-		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+		border-bottom: 2px solid var(--glasser);
 	}
 	textarea::placeholder {
 		color: rgba(255, 255, 255, 0.2);
 	}
 	textarea:focus {
-		margin-bottom: calc(1rem - 2px);
-		border-bottom: 4px solid var(--comp);
+		margin-bottom: calc(1rem - 1.5px);
+		border-bottom: 3px solid var(--light);
 	}
 	textarea:focus-visible {
 		outline: none;
@@ -153,12 +152,10 @@
 		height: 2.5rem;
 		width: 2.5rem;
 
-		background-color: rgba(255, 255, 255, 0.2);
+		color: var(--lighter);
+		background-color: var(--glasser);
 
 		border: 0px solid transparent;
 		border-radius: var(--round);
-	}
-	.delete:hover {
-		background-color: rgba(255, 255, 255, 0.3);
 	}
 </style>

@@ -1,59 +1,62 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "type": "shell",
-        "label": "firebase emulators",
-        "command": "cd fbase && firebase emulators:start",
-        "windows": {
-          "command": "cd fbase; firebase emulators:start"
-        },
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "runOptions": {
-            "runOn": "folderOpen",
-        }
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "firebase emulators",
+      "command": "firebase emulators:start",
+      "windows": {
+        "command": "npx kill-port 7077, 4040; firebase emulators:start"
       },
-      {
-        "type": "shell",
-        "label": "client devserver",
-        "command": "pnpm run dev --host",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "runOptions": {
-            "runOn": "folderOpen",
-        }
+      "options": {
+        "cwd": "${workspaceFolder}/fbase"
       },
-      {
-        "type": "shell",
-        "label": "client testbuild",
-        "command": "pnpm run build",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
       },
-      {
-        "type": "shell",
-        "label": "scraperinit",
-        "command": "cd scraper && pnpm run start",
-        "windows": {
-          "command": "cd scraper; pnpm run start"
-        },
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
+      "runOptions": {
+        "runOn": "folderOpen",
       }
-    ]
-  }
+    },
+    {
+      "type": "shell",
+      "label": "client devserver",
+      "command": "pnpm run dev --host",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen",
+      }
+    },
+    {
+      "type": "shell",
+      "label": "client testbuild",
+      "command": "pnpm run build",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "scraperinit",
+      "command": "cd scraper && pnpm run start",
+      "windows": {
+        "command": "cd scraper; pnpm run start"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

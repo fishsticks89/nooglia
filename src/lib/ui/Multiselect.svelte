@@ -25,7 +25,7 @@
         transition-property: background-color, scale;
         transition-duration: 0.1s;
         scale: 100%;
-        font-family: 'GilroyBold', sans-serif;
+        font-family: 'PoppinsSemi', sans-serif;
 
         border: 0px solid transparent;
         border-radius: var(--round);

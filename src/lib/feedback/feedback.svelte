@@ -5,14 +5,16 @@
 	let txt = '';
 </script>
 
-<div
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<button
 	class="feedback"
 	on:click={() => {
 		feedback = !feedback;
 	}}
 >
-	FEEDBACK
-</div>
+	Feedback!
+</button>
 
 {#if feedback}
 	<div class="bkg">
@@ -115,6 +117,8 @@
 		border: 0px solid white;
 	}
 	.feedback {
+		background-color: var(--glasser);
+
 		appearance: none;
 		/* filter: brightness(150%) saturate(150%); */
 		color: var(--light);
@@ -122,7 +126,7 @@
 		border: 0px;
 		margin: 2vw;
 		font-weight: 600;
-		font-family: 'PoppinsSemi', sans-serif;
+		font-family: 'Poppins', sans-serif;
 		cursor: pointer;
 
 		padding: 0.7rem;

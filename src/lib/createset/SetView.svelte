@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { squish } from '$lib/transitions/squish';
-	import Runner from './../util/Runner.svelte';
+	import Runner from '../util/Runner.svelte';
 	import { flip } from 'svelte/animate';
 	import Term from './term.svelte';
 	import { toTerm, termToString, type term } from '$lib/data/db';
@@ -121,6 +121,7 @@
 			>
 		{/if}
 	</div>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	{#if $state.isEditing}
 		<button
 			class="swap"
@@ -148,6 +149,8 @@
 				importpop = false;
 			}}
 		/>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
 			class="import"
 			style:margin-top={width > 900 ? '-2rem' : '0rem'}
@@ -223,11 +226,11 @@
 		padding-block: 0.5rem;
 		background-color: var(--light);
 		color: black;
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		height: 2.5rem;
 	}
 	h1 {
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 
 		width: 100%;
 		margin: 0px;
@@ -243,7 +246,7 @@
 		justify-content: space-between;
 	}
 	.edit {
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		background-color: var(--light);
 		color: var(--emp);
 		padding: 0.6rem;
@@ -262,15 +265,15 @@
 		/* transform: translateY(-10%); */
 	}
 	.share {
-		color: white;
-		background-color: var(--glass);
+		color: var(--lighter);
+		background-color: var(--emp);
 	}
 	.si {
 		font-size: 1.7rem;
 	}
 	.clearall {
-		color: white;
-		background-color: var(--glass);
+		color: var(--lighter);
+		background-color: var(--emp);
 
 		margin: 0rem;
 		position: absolute;
@@ -288,10 +291,10 @@
 		border: 0px solid white;
 		border-radius: var(--round);
 
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 	}
 	.swap {
-		color: white;
+		color: var(--light);
 		background-color: var(--emp);
 
 		margin: 1rem;
@@ -317,7 +320,7 @@
 		border: 0px;
 		margin: 0px;
 		font-weight: 600;
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		cursor: pointer;
 
 		padding-inline: 0.7rem;

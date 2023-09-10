@@ -23,13 +23,13 @@
 
 <style>
 	input::placeholder {
-		font-family: 'Gilroy', sans-serif;
+		font-family: 'Poppins', sans-serif;
 		color: var(--light);
 		opacity: 100%;
 	}
 	@media only screen and (max-width: 600px) {
 	input::placeholder {
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 	}
 }
 	input {
@@ -48,10 +48,10 @@
 		padding-bottom: 0.2vw;
 
 		font-size: calc(4vw + 1rem);
-		font-family: 'GilroyBold', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 	}
 	input:focus-visible {
 		outline: none;
-		border-bottom: 4px solid var(--comp);
+		border-bottom: 3px solid var(--light);
 	}
 </style>

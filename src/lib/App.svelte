@@ -4,7 +4,7 @@
 	import Feedback from '$lib/feedback/feedback.svelte';
 	import type { setStore } from '$lib/data/setStore';
 	import AuthManager from './auth/AuthManager.svelte';
-	import Create from './createset/Create.svelte';
+	import Create from './createset/SetView.svelte';
 	import Nav from './nav/Nav.svelte';
 	import { browser } from '$app/environment';
 	import printStore from './util/print/printStore';
@@ -27,11 +27,12 @@
 		{/if}
 
 		<Nav>
-			<AuthManager state={store} />
+			<AuthManager />
 		</Nav>
 
 		<Feedback />
 	</div>
+	
 	<div class="printmain" slot="print" style:overflow-y={'visible'}>
 		<p class="title">nooglia</p>
 		<p class="foldhere">fold here |</p>
