@@ -31,6 +31,8 @@
         border: none;
         border-radius: 50%;
 
+        padding: 0px;
+
         margin-inline: 10px;
     }
 
