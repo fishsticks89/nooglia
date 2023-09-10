@@ -11,11 +11,7 @@
 >
 	<a
 		href="/"
-		class="title"
-		on:click={(e) => {
-			e.preventDefault();
-			window.location.replace("/");
-		}}>nooglia</a
+		class="title">nooglia</a
 	>
 	<div class="btns">
 		<DarkButton />

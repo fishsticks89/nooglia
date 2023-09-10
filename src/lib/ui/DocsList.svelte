@@ -155,7 +155,7 @@
         background-color: var(--emp);
     }
     .holder {
-        width: calc(70vw + 8vh);
+        width: calc(100% - 2rem);
         max-width: 50rem;
         height: fit-content;
         margin: 0px;

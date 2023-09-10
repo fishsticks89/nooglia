@@ -34,6 +34,7 @@
 	let mode: mode | null = null;
 	let container: HTMLElement;
 	function fixContainerHeight() {
+		if (container == null) return;
 		const prevHeight = container.style.height;
 		container.style.height = "fit-content";
 		setTimeout(() => {

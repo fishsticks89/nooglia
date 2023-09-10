@@ -118,10 +118,6 @@
 	};
 
 	let selected: number | null = null;
-	$: correct = options.reduce(
-		(acc, cur, i) => (cur.color === -1 ? i : acc),
-		0
-	);
 </script>
 
 <div
