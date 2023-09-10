@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DarkButton from "./../dark/DarkButton.svelte";
 	import AuthManager from "$lib/auth/AuthManager.svelte";
-	import { scrollBarWidth } from "$lib/util/scrollbarwidth";
+	import { scrollBarWidth } from "$lib/util/domStuff/scrollbarwidth";
 </script>
 
 <div
@@ -43,6 +43,7 @@
 		transform: translateY(-3%);
 
 		font-family: "Montserrat", sans-serif;
+		font-weight: bold;
 
 		cursor: pointer;
 

@@ -1,14 +1,13 @@
 <script lang="ts">
+    import type { term } from '$lib/core/doc';
 	import Runner from './../util/Runner.svelte';
 	import type { Writable } from 'svelte/store';
-	import type { term } from '$lib/data/db';
 
 	export let isEditing: boolean;
-	export let terms: Writable<term[]>;
 	export let selected: boolean | null;
-	export let onUpdate = (tms: term[]) => {};
 	export let setSelected = (side: boolean) => {};
 	export let onPress = (ev: KeyboardEvent) => {};
+	export let onChange: (term: term | null) => void = () => {};
 
 	export let term: term;
 
@@ -54,9 +53,7 @@
 
 {#if isEditing}
 	<textarea
-		on:change={() => {
-			onUpdate($terms);
-		}}
+		on:change={() => onChange(term)}
 		rows="1"
 		bind:this={tx1}
 		bind:value={term.q}
@@ -66,9 +63,7 @@
 	/>
 	<div class="vr" />
 	<textarea
-		on:change={() => {
-			onUpdate($terms);
-		}}
+		on:change={() => onChange(term)}
 		rows="1"
 		bind:this={tx2}
 		bind:value={term.a}
@@ -93,10 +88,7 @@
 	<button
 		class="delete"
 		on:click={() => {
-			terms.update((tms) => {
-				return tms.filter((e) => e !== term);
-			});
-			onUpdate($terms);
+			onChange(null);
 		}}
 	>
 		<span class="material-icons-round">delete</span>

@@ -14,7 +14,6 @@
 			e.forEach((f) => {
 				contents.push(f.get('contents'));
 			});
-			console.log(JSON.stringify(contents));
 		}
 	);
 </script>

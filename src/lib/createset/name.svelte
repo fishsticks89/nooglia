@@ -1,20 +1,17 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import type { setStore } from '$lib/data/setStore';
+    import type { docSub } from '$lib/core/doc';
 
 	import { get } from 'svelte/store';
 
-	export let state: setStore;
+	export let state: docSub;
 	let txf: string;
-	txf = get(state).set.name;
+	txf = get(state).name;
 	state.subscribe((e) => {
-		txf = e.set.name;
+		txf = e.name;
 	});
 	function oninput(_: any) {
-		state.update((e) => {
-			e.set.name = txf ? txf : '';
-			return e;
-		});
+		state.set({ name: txf }, false);
 	}
 	$: oninput(txf);
 </script>

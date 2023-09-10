@@ -2,7 +2,7 @@
     import { darkModeDisabled, darkmode } from "./darkMode";
 </script>
 
-<s-head>
+<svelte:head>
     {#if $darkmode && !$darkModeDisabled}
         <style>
             :root {
@@ -36,4 +36,4 @@
             }
         </style>
     {/if}
-</s-head>
+</svelte:head>

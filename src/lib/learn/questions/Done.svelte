@@ -28,6 +28,7 @@
 		margin: 0px;
 		transform: translateY(-7%);
 		margin-left: 0.3vw;
+
 	}
 	.restart {
 		display: flex;
@@ -37,10 +38,12 @@
 
 		font-size: 1rem;
 
-		border-radius: 100vmax;
+		border-radius: var(--round);
 
-		background-color: var(--background);
-		border: 1px solid var(--accent);
+		font-family: "Poppins", sans-serif;
+		color: var(--emp);
+		background-color: var(--light);
+		border: 0px solid transparent;
 
 		height: fit-content;
 		width: fit-content;
@@ -55,13 +58,15 @@
 
 	}
 	.center {
+		font-family: "PoppinsSemi", sans-serif;
+
 		text-align: center;
-		color: white;
+		color: var(--light);
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		font-size: 6vw;
+		font-size: calc(40px + 4vw);
 		margin: 0px;
 		width: 100%;
 	}

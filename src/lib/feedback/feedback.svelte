@@ -66,8 +66,9 @@
 		top: 1rem;
 		left: 1rem;
 
-		outline: 0px solid white;
-		border: 0px solid white;
+		color: var(--light);
+
+		border: 0px solid transparent;
 		border-radius: var(--round);
 
 		text-align: center;
@@ -84,14 +85,16 @@
 		background-color: var(--background);
 	}
 	.submit {
+		font-family: 'PoppinsSemi', sans-serif;
 		position: fixed;
 		bottom: 1rem;
 		right: 1rem;
 
-		background-color: var(--accent);
+		color: var(--background);
+		background-color: var(--light);
 
-		outline: 0px solid white;
-		border: 0px solid white;
+		outline: 0px solid transparent;
+		border: 0px solid transparent;
 		border-radius: var(--round);
 
 		padding: 0.6rem;
@@ -125,7 +128,6 @@
 		background-color: var(--background);
 		border: 0px;
 		margin: 2vw;
-		font-weight: 600;
 		font-family: 'PoppinsSemi', sans-serif;
 		cursor: pointer;
 

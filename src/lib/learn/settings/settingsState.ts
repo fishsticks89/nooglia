@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import getJson from "$lib/util/getJson";
+import getJson from "$lib/util/operations/getJson";
 import { writable, type Writable } from "svelte/store";
 export type valtype = "term" | "definition" | "both";
 export interface settings {

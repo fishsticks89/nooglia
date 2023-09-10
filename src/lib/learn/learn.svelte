@@ -1,8 +1,7 @@
 <script lang="ts">
-	import shuffle from '$lib/util/shuffle';
+	import shuffle from '$lib/util/operations/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
-	import type { setStore } from '$lib/data/setStore';
 	import { get } from 'svelte/store';
 	import settingsState from './settings/settingsState';
 	import { event } from '$lib/mixyp';
@@ -11,8 +10,6 @@
 	$: {
 		if (terms.length > 10 && done) event('Done');
 	}
-
-	export let state: setStore;
 
 	interface phase {
 		mode: 'write' | 'multichoice' | 'flashcard' | 'done';
@@ -39,16 +36,6 @@
 		setQuestion = sq;
 	};
 	let restart: () => void = () => {};
-
-	let doc = get(state).doc?.id;
-	state.subscribe((s) => {
-		if (!(s.doc?.id === doc)) {
-			doc = s.doc?.id;
-			setTimeout(() => {
-				restart();
-			});
-		}
-	});
 
 	var setQuestionToNewterm = () => {};
 

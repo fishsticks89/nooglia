@@ -8,9 +8,12 @@ export function promise<T>(): [Promise<T> & {isResolved: boolean, isRejected: bo
     p.then(() => { });
     const bp = {
         ...p,
+        then: p.then.bind(p),
+        catch: p.catch.bind(p),
         isResolved: false,
         isRejected: false,
     }
+    console.log(bp, p);
     p.then(() => { bp.isResolved = true; });
     p.catch(() => { bp.isRejected = true; });
     return [bp, resolve!, reject!];

@@ -1,9 +1,8 @@
 <script lang="ts">
     import { flyin } from "$lib/transitions/flyin";
-    import CSRprovider from "$lib/util/CSRprovider.svelte";
+    import CSRprovider from "$lib/util/domStuff/CSRprovider.svelte";
     import { fade } from "svelte/transition";
     import { authState } from "$lib/auth/authState";
-    import { createSet } from "$lib/createset/createSet";
     import { setsCollection } from "$lib/firebase";
     import Runner from "$lib/util/Runner.svelte";
     import {
@@ -15,7 +14,7 @@
         type DocumentData,
     } from "firebase/firestore";
     import { get } from "svelte/store";
-    import { createCloudSet } from "$lib/data/db";
+    import { createSet } from "$lib/core/doc";
 
     let href: null | string = null;
     const getStringArr = (
@@ -49,8 +48,8 @@
                 if (newDocs.length === 0) {
                     const uid = $authState?.uid;
                     if (!uid) throw "no user?";
-                    const set = e.docs[0] ?? (await createSet(uid));
-                    href = "/set/" + set.id;
+                    const set = e.docs.at(0)?.id ?? (await createSet());
+                    href = "/set/" + set;
                     console.log(href);
                 }
                 docs = e.docs;
@@ -62,7 +61,7 @@
     <button
         on:click={async () => {
             const uid = $authState?.uid;
-            if (uid) href = "/set/" + (await createSet(uid)).id;
+            if (uid) href = "/set/" + (await createSet());
         }}
         class="newset"
         in:fade={{ duration: 300 }}>New Set</button

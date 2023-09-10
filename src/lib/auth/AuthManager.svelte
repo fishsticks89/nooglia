@@ -3,8 +3,7 @@
 	import AuthButton from "./AuthButton.svelte";
 	import { authState, expectingSignIn } from "$lib/auth/authState";
 	import { auth } from "$lib/firebase";
-	import { cubicIn, cubicInOut, cubicOut } from "svelte/easing";
-	import type { setStore } from "$lib/data/setStore";
+	import { cubicIn, cubicOut } from "svelte/easing";
 	import { browser } from "$app/environment";
 
 	let popped = false;
@@ -21,9 +20,9 @@
 		return `
 		position: ${isSmall ? "absolute" : "fixed"};
 		top: 4rem;
-		right: 0%;
+		right: ${isSmall ? "0%" : "50%"};
 		opacity: ${100 * (isin ? cubicOut(x) : cubicIn(x))}%;
-		transform: perspective(600px) translateZ(-${
+		transform: ${isSmall ? "" : "translateX(50%)"} perspective(600px) translateZ(-${
 			(1 - x) * 80
 		}px) rotateX(-${(1 - x) * 20}deg);
         width: ${isSmall ? "15rem" : "80vw"};
@@ -88,7 +87,6 @@
 		background-color: transparent;
 		border: none;
 		font-family: 'PoppinsSemi', sans-serif;
-		font-weight: bold;
 
 		background-color: var(--lighter);
 		color: var(--background);

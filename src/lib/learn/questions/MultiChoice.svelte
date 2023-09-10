@@ -1,20 +1,17 @@
 <script lang="ts">
 	import Runner from "$lib/util/Runner.svelte";
-	import shuffle from "$lib/util/shuffle";
-	import { flyin, flyin2 } from "$lib/transitions/flyin";
-	import { spring, type Spring } from "svelte/motion";
-	import { listenKeys } from "$lib/util/keylistener";
-	import { checkOverflow } from "$lib/util/checkoverflow";
+	import shuffle from "$lib/util/operations/shuffle";
+	import { flyin2 } from "$lib/transitions/flyin";
+	import { spring } from "svelte/motion";
+	import { listenKeys } from "$lib/util/domStuff/keylistener";
+	import { checkOverflow } from "$lib/util/domStuff/checkoverflow";
 	import { onDestroy } from "svelte";
 	import { writable } from "svelte/store";
-	import { createDebounce } from "$lib/util/debounce";
-	import { dev } from "$app/environment";
-	import { error } from "@sveltejs/kit";
-
+	import { createDebounce } from "$lib/util/time/debounce";
+	
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: { q: string; a: string };
 	export let questions: { q: string; a: string }[];
-	export let wentOut = () => {};
 
 	$: options = shuffle([
 		currentquestion.a,
@@ -54,7 +51,7 @@
 			setTimeout(
 				() => {
 					answer(term.a === currentquestion.a);
-					console.log("ansering");
+					console.log("answering");
 				},
 				term.a === currentquestion.a ? 700 : 1200
 			);
@@ -119,30 +116,33 @@
 		`,
 		};
 	};
+
+	let selected: number | null = null;
+	$: correct = options.reduce(
+		(acc, cur, i) => (cur.color === -1 ? i : acc),
+		0
+	);
 </script>
 
 <div
 	in:flyin2={{ isin: true, additionalTransforms: "", duration: 200 }}
 	out:flyin2={{ isin: false, additionalTransforms: "", duration: 200 }}
-	on:outroend={() => {
-		wentOut();
-		console.log("shit went doiwn");
-	}}
 	class="qholder"
 >
 	<p class="term">{currentquestion.q}</p>
 
 	<div class={$overflow ? "block" : "grid"}>
-		{#each options as term}
+		{#each options as term, index}
 			<button
 				style={($overflow
 					? ansStyle(term.index).overflow
 					: ansStyle(term.index).grid) +
-					`filter: hue-rotate(${term.color > 0 ? "-" : ""}${Math.abs(
+					`filter: saturate(${currentquestion.a == term.a || selected == index ? Math.abs($springit) : "0"}%) hue-rotate(${term.color > 0 ? "-" : ""}${Math.abs(
 						term.color * $springit
 					)}deg);`}
 				on:click={() => {
 					console.log("onclickity");
+					selected = selected ?? index;
 					answerWithTerm(term);
 				}}
 				id={"term-" + term.index}
@@ -170,9 +170,9 @@
 <style>
 	button {
 		position: relative;
-		background-color: var(--accent);
+		background-color: var(--comp);
 		border-radius: var(--round);
-		color: white;
+		color: var(--light);
 		border: none;
 	}
 	button:focus-visible {
@@ -206,7 +206,7 @@
 		justify-items: center;
 	}
 	.term {
-		color: white;
+		color: var(--light);
 		font-size: large;
 		margin: 1rem;
 		margin-top: 2rem;

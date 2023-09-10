@@ -7,9 +7,9 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-	import { hash } from '$lib/util/hashString';
+	import { hash } from '$lib/util/operations/hashString';
 	import { db } from '$lib/firebase';
-	import { resizeinit } from '$lib/util/textareastuff';
+	import { resizeinit } from '$lib/util/domStuff/textareastuff';
 	export let answer: (correct: boolean) => void;
 	export let fixContainerHeight = () => {};
 	let answerLog = (correct: boolean) => {
@@ -153,6 +153,7 @@
 		/>
 		<div class="enter" transition:fade={{ duration: 200 }}>
 			Enter: "{currentquestion.a}" or
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<strong class="skp" on:click={() => answerLog(false)}>skip</strong>
 		</div>
 	{/if}
@@ -260,7 +261,7 @@
 	}
 	textarea:focus-visible {
 		outline: none;
-		border-bottom: 4px solid var(--comp);
+		border-bottom: 4px solid var(--lighter);
 	}
 
 	textarea {

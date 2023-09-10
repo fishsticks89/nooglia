@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { scrollBarWidth } from "$lib/util/scrollbarwidth";
+	import { scrollBarWidth } from "$lib/util/domStuff/scrollbarwidth";
 	import { authState, expectingSignIn, signin } from "$lib/auth/authState";
 	import { auth } from "$lib/firebase";
 	import { browser } from "$app/environment";
@@ -35,7 +35,7 @@
 		<div class="write-section">
 			<img class="write-img" src="/elem/test.png" alt="" srcset="" />
 			<h4 class="test">
-				Print foldable tests with answers that are different every time
+				Print foldable tests with answers and a random order
 			</h4>
 		</div>
 		<div class="sign-up-bottom">
@@ -54,6 +54,9 @@
 <Nav />
 
 <style>
+	h4 {
+		font-family: "Montserrat", sans-serif;
+	}
 	.sign-up-button-img {
 		width: 100%;
 	}
@@ -76,7 +79,6 @@
 	}
 	.test {
 		position: absolute;
-		font-family: "PoppinsSemi", sans-serif;
 		bottom: 20%;
 		left: 3%;
 		width: 40%;
@@ -99,7 +101,6 @@
 	}
 	.learn {
 		position: absolute;
-		font-family: "PoppinsSemi", sans-serif;
 		bottom: 20%;
 		right: 3%;
 		width: 40%;

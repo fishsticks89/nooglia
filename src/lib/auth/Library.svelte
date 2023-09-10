@@ -1,40 +1,36 @@
 <script lang="ts">
-	import { flyin } from '$lib/transitions/flyin';
-	import { setsCollection } from '$lib/firebase';
+	import { flyin } from "$lib/transitions/flyin";
+	import { setsCollection } from "$lib/firebase";
 	import {
 		getDocs,
 		query,
 		QueryDocumentSnapshot,
 		where,
-		type DocumentData
-	} from 'firebase/firestore';
-	import { get } from 'svelte/store';
-	import { authState } from './authState';
-	import { createCloudSet, newset } from '$lib/data/db';
-	import { fade } from 'svelte/transition';
+		type DocumentData,
+	} from "firebase/firestore";
+	import { get } from "svelte/store";
+	import { authState } from "./authState";
+	import { fade } from "svelte/transition";
+    import { createSet } from "$lib/core/doc";
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
-	getDocs(query(setsCollection, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
-		(e) => {
-			docs = e.docs;
-		}
-	);
+	getDocs(
+		query(
+			setsCollection,
+			where("user", "==", get(authState)?.uid),
+			where("contents", "!=", "")
+		)
+	).then((e) => {
+		docs = e.docs;
+	});
 </script>
 
 <div class="holder" id="create">
 	<button
-		on:click={() => {
-			const uid = $authState?.uid;
-			if (uid) {
-				const set = {
-					user: uid,
-					name: '',
-					contents: newset().contents
-				};
-				createCloudSet(set).then((setref) => {
-					window.location.replace('/set/' + setref.id);
-				});
-			}
+		on:click={async () => {
+			const setID = await createSet();
+
+			window.location.replace("/set/" + setID);
 		}}
 		class="new"
 		in:fade={{ duration: 300 }}
@@ -42,15 +38,17 @@
 	>
 	{#each docs as doc}
 		<button
-			in:flyin={{ isin: true, additionalTransforms: '' }}
-			out:flyin={{ isin: false, additionalTransforms: '' }}
+			in:flyin={{ isin: true, additionalTransforms: "" }}
+			out:flyin={{ isin: false, additionalTransforms: "" }}
 			class="setholder"
 			on:focus
 			on:click={() => {
-				window.location.replace('/set/' + doc.id);
+				window.location.replace("/set/" + doc.id);
 			}}
 		>
-			<p style:margin-top="0px">{doc.get('name') != '' ? doc.get('name') : 'Untitled'}</p>
+			<p style:margin-top="0px">
+				{doc.get("name") != "" ? doc.get("name") : "Untitled"}
+			</p>
 		</button>
 	{/each}
 </div>
@@ -62,10 +60,9 @@
 		padding: 1rem;
 		padding-inline: 1.5rem;
 
-		font-family: 'PoppinsSemi', sans-serif;
+		font-family: "PoppinsSemi", sans-serif;
 
 		color: var(--light);
-		font-weight: bold;
 		border-width: 0px;
 		border-radius: var(--round);
 
@@ -78,7 +75,6 @@
 		padding-inline: 1.5rem;
 
 		color: var(--background);
-		font-weight: bold;
 		border-width: 0px;
 		border-radius: var(--round);
 
@@ -106,7 +102,7 @@
 	.setholder {
 		color: var(--light);
 		z-index: 8;
-		font-family: 'MontserratBold', sans-serif;
+		font-family: "MontserratBold", sans-serif;
 		margin: 0px;
 		margin-block: 1rem;
 		padding: 10%;

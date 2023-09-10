@@ -1,26 +1,29 @@
 <script lang="ts">
-	import Term from './term.svelte';
-	import { event } from '$lib/mixyp';
-	import Selector from '$lib/createset/Selector.svelte';
-	import type { term } from '$lib/data/db';
-	import splitters from './splitters';
-	import Textarea from './textarea.svelte';
-	import { collection, doc, setDoc } from 'firebase/firestore';
-	import { hash } from '$lib/util/hashString';
-	import { db } from '$lib/firebase';
-	import { writable, type Writable } from 'svelte/store';
-	import { createDebounce } from '$lib/util/debounce';
+	import Term from "./term.svelte";
+	import { event } from "$lib/mixyp";
+	import Selector from "$lib/createset/Selector.svelte";
+	import splitters from "./splitters";
+	import Textarea from "./textarea.svelte";
+	import { collection, doc, setDoc } from "firebase/firestore";
+	import { hash } from "$lib/util/operations/hashString";
+	import { db } from "$lib/firebase";
+	import { writable, type Writable } from "svelte/store";
+	import { createDebounce } from "$lib/util/time/debounce";
+	import type { term } from "$lib/core/doc";
 	export let addTerms: (terms: term[]) => void;
 
 	export let importpop = false;
 	let textarea = {
-		get: () => 'bob',
-		reset: () => {}
+		get: () => "bob",
+		reset: () => {},
 	};
 
 	let selector: {
 		reset: () => void;
-		getSplitters: () => { termdef: RegExp | string; entries: RegExp | string };
+		getSplitters: () => {
+			termdef: RegExp | string;
+			entries: RegExp | string;
+		};
 		setTermDefSplitter: (index: number) => void;
 		setEntriesSplitter: (index: number) => void;
 	} = {} as any;
@@ -40,34 +43,35 @@
 						if (!e.match(termDefSplitter)) {
 							return {
 								q: e,
-								a: ''
+								a: "",
 							};
 						} else if (termDefSplitter.constructor === RegExp) {
-							const regex = new RegExp(termDefSplitter, 'g');
+							const regex = new RegExp(termDefSplitter, "g");
 							regex.test(e);
 							return {
 								q: e.split(termDefSplitter)[0],
-								a: e.substring(regex.lastIndex)
+								a: e.substring(regex.lastIndex),
 							};
-						} else if (typeof e === 'string') {
-							let q = '';
-							let a = '';
+						} else if (typeof e === "string") {
+							let q = "";
+							let a = "";
 							e.split(termDefSplitter).forEach((item, index) => {
 								if (index === 0) q = item;
-								else if (a == '') a = item;
+								else if (a == "") a = item;
 								else a += termDefSplitter + item;
 							});
 							return { q, a };
 						} else {
-							throw 'wtf';
+							throw "wtf";
 						}
 					})
-					.filter((e) => e.q != '' || e.a != '')
+					.filter((e) => e.q != "" || e.a != "")
+					.map((e) => ({ ...e, id: Math.random().toString() }))
 			);
 	};
 	let selectorChanged = false;
 	const debo = createDebounce(20, 40);
-	let textareacontents = '';
+	let textareacontents = "";
 </script>
 
 {#if importpop}
@@ -77,7 +81,7 @@
 				class="cancel"
 				on:click={() => {
 					importpop = !importpop;
-				}}>CANCEL IMPORT</button
+				}}>Cancel Import</button
 			>
 			<Selector
 				{selector}
@@ -89,22 +93,28 @@
 				}}
 			/>
 			<p class="dialogue">
-				<strong class="bold">Import your data.</strong> Copy and Paste your data here (from Word, Excel,
-				Google Docs, etc.)
+				<strong class="bold">Import your data.</strong> Copy and Paste your
+				data here (from Word, Excel, Google Docs, etc.)
 			</p>
 			<Textarea
-				defaultText={'Word 1	Definition 1\nWord 2	Definition 2\nWord 3	Definition 3'}
+				defaultText={"Word 1	Definition 1\nWord 2	Definition 2\nWord 3	Definition 3"}
 				funcs={textarea}
 				onChange={(contents) => {
-					textareacontents = 'contents';
-					if (contents === '') selectorChanged = false;
+					textareacontents = "contents";
+					if (contents === "") selectorChanged = false;
 					debo(() => {
 						parse(contents);
 					});
 				}}
 				onPaste={(s) => {
-					console.log(s.split(splitters.newline).length, selectorChanged);
-					if (s.split(splitters.newline).length >= 2 && !selectorChanged) {
+					console.log(
+						s.split(splitters.newline).length,
+						selectorChanged
+					);
+					if (
+						s.split(splitters.newline).length >= 2 &&
+						!selectorChanged
+					) {
 						const concats = [splitters.comma, splitters.tab];
 						let mode = null;
 						concats.forEach((split, i) => {
@@ -122,16 +132,25 @@
 						// idk what goes here but it said: check for newline
 					} else if (
 						!selectorChanged &&
-						textarea.get().split(splitters.doublenewline).length >= 4
+						textarea.get().split(splitters.doublenewline).length >=
+							4
 					) {
 						let twoentries = 0;
 						textarea
 							.get()
 							.split(splitters.doublenewline)
 							.forEach((e) => {
-								twoentries += +(e.split(splitters.newline).length >= 2);
+								twoentries += +(
+									e.split(splitters.newline).length >= 2
+								);
 							});
-						if (twoentries >= textarea.get().split(splitters.doublenewline).length * 0.9 - 1) {
+						if (
+							twoentries >=
+							textarea.get().split(splitters.doublenewline)
+								.length *
+								0.9 -
+								1
+						) {
 							selector.setTermDefSplitter(2);
 							selector.setEntriesSplitter(2);
 						}
@@ -139,17 +158,23 @@
 				}}
 			/>
 			<button
-				style:background-color={'var(--accent)'}
 				class="cancel importbutton"
 				on:click={() => {
 					if (textarea.get() && textarea.get().length != 0) {
 						// anal - itics
 						setDoc(
-							doc(collection(db, 'importAttempts'), Math.abs(hash(textarea.get())).toString()),
+							doc(
+								collection(db, "importAttempts"),
+								Math.abs(hash(textarea.get())).toString()
+							),
 							{
 								contents: textarea.get(),
-								entriesSplitters: selector.getSplitters().entries.toString(),
-								termDefSplitter: selector.getSplitters().termdef.toString()
+								entriesSplitters: selector
+									.getSplitters()
+									.entries.toString(),
+								termDefSplitter: selector
+									.getSplitters()
+									.termdef.toString(),
 							}
 						);
 
@@ -158,22 +183,26 @@
 					}
 					reset();
 					importpop = !importpop;
-					event('Import');
-				}}>IMPORT</button
+					event("Import");
+				}}>Import</button
 			>
 		</div>
 		<div class="termsholder">
 			{#if $terms.length > 0}
 				{#each $terms as term}
 					<div class="termholder">
-						<Term isEditing={false} {terms} selected={null} {term} />
+						<Term isEditing={false} selected={null} {term} />
 					</div>
 				{/each}
-			{:else if textareacontents !== ''}
-				<p>Paste in your terms/definitions and your cards will appear here!</p>
+			{:else if textareacontents !== ""}
+				<p>
+					Paste in your terms/definitions and your cards will appear
+					here!
+				</p>
 			{:else}
 				<p>
-					Select what character splits up your term/definitions and your cards will appear here!
+					Select what character splits up your term/definitions and
+					your cards will appear here!
 				</p>
 			{/if}
 		</div>
@@ -216,7 +245,10 @@
 		justify-content: left;
 	}
 	.cancel {
-		font-family: 'PoppinsSemi', sans-serif;
+		background-color: var(--emp);
+		color: var(--light);
+
+		font-family: "PoppinsSemi", sans-serif;
 		margin: 1rem;
 		padding: 1rem;
 		background-color: var(--emp);
@@ -224,6 +256,9 @@
 		border-radius: var(--round);
 	}
 	.importbutton {
+		color: var(--emp);
+		background-color: var(--light);
+
 		vertical-align: bottom;
 		position: sticky;
 		bottom: 0.5rem;
@@ -262,10 +297,11 @@
 		}
 	}
 	.bold {
-		font-family: 'MontserratBold', sans-serif;
+		font-family: "MontserratBold", sans-serif;
+		font-weight: normal;
 	}
 	.dialogue {
-		font-family: 'Montserrat', sans-serif;
+		font-family: "Montserrat", sans-serif;
 		margin: 1rem;
 	}
 	#bkg {

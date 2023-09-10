@@ -2,15 +2,14 @@
 	import Settings from "./learn/settings/Settings.svelte";
 	import Printer from "./util/print/Printer.svelte";
 	import Feedback from "$lib/feedback/feedback.svelte";
-	import type { setStore } from "$lib/data/setStore";
-	import AuthManager from "./auth/AuthManager.svelte";
-	import Create from "./createset/SetView.svelte";
+	import SetView from "./createset/SetView.svelte";
 	import Nav from "./nav/Nav.svelte";
 	import { browser } from "$app/environment";
 	import printStore from "./util/print/printStore";
-	import shuffle from "./util/shuffle";
+	import shuffle from "./util/operations/shuffle";
+    import type { docSub } from "./core/doc";
 
-	export let store: setStore;
+	export let setSub: docSub;
 	let main: HTMLElement;
 	printStore.subscribe((e) => {
 		if (e) {
@@ -23,7 +22,7 @@
 	<Settings />
 	<div bind:this={main}>
 		{#if browser}
-			<Create docStore={store} />
+			<SetView docStore={setSub} />
 		{/if}
 
 		<Nav />
@@ -34,11 +33,7 @@
 	<div class="printmain" slot="print" style:overflow-y={"visible"}>
 		<p class="title">nooglia</p>
 		<p class="foldhere">fold here |</p>
-		{#each shuffle($store.set.contents)
-			.map((e) => {
-				const qa = e.split("\n");
-				return { q: qa[0], a: qa[1] };
-			})
+		{#each shuffle($setSub.terms)
 			.filter((e) => e.q != "" || e.a != "") as term}
 			<div class="outer">
 				<p class="inner">{term.a}</p>
