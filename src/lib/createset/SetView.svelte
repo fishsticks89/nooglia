@@ -53,7 +53,7 @@
 		return $docStore.terms.length - duplicates >= 4;
 	};
 
-	let isEditing = isEditable && !enoughTerms();
+	$: isEditing = isEditable && !enoughTerms(); // subscribed to isEditable, so it updates when auth inits
 </script>
 
 <svelte:window bind:innerWidth={width} />
