@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Settings from './learn/settings/Settings.svelte';
-	import Printer from './util/print/Printer.svelte';
-	import Feedback from '$lib/feedback/feedback.svelte';
-	import type { setStore } from '$lib/data/setStore';
-	import AuthManager from './auth/AuthManager.svelte';
-	import Create from './createset/SetView.svelte';
-	import Nav from './nav/Nav.svelte';
-	import { browser } from '$app/environment';
-	import printStore from './util/print/printStore';
-	import shuffle from './util/shuffle';
+	import Settings from "./learn/settings/Settings.svelte";
+	import Printer from "./util/print/Printer.svelte";
+	import Feedback from "$lib/feedback/feedback.svelte";
+	import type { setStore } from "$lib/data/setStore";
+	import AuthManager from "./auth/AuthManager.svelte";
+	import Create from "./createset/SetView.svelte";
+	import Nav from "./nav/Nav.svelte";
+	import { browser } from "$app/environment";
+	import printStore from "./util/print/printStore";
+	import shuffle from "./util/shuffle";
 
 	export let store: setStore;
 	let main: HTMLElement;
@@ -21,27 +21,25 @@
 
 <Printer>
 	<Settings />
-	<div style="overflow-y: hidden; height: fit-content; min-height: 100vh;" bind:this={main}>
+	<div bind:this={main}>
 		{#if browser}
-			<Create state={store} />
+			<Create docStore={store} />
 		{/if}
 
-		<Nav>
-			<AuthManager />
-		</Nav>
+		<Nav />
 
 		<Feedback />
 	</div>
-	
-	<div class="printmain" slot="print" style:overflow-y={'visible'}>
+
+	<div class="printmain" slot="print" style:overflow-y={"visible"}>
 		<p class="title">nooglia</p>
 		<p class="foldhere">fold here |</p>
 		{#each shuffle($store.set.contents)
 			.map((e) => {
-				const qa = e.split('\n');
+				const qa = e.split("\n");
 				return { q: qa[0], a: qa[1] };
 			})
-			.filter((e) => e.q != '' || e.a != '') as term}
+			.filter((e) => e.q != "" || e.a != "") as term}
 			<div class="outer">
 				<p class="inner">{term.a}</p>
 				<p class="inner right">{term.q}</p>
@@ -58,7 +56,7 @@
 	.title {
 		padding: 0rem;
 		font-size: 30px;
-		font-family: 'Montserrat', sans-serif;
+		font-family: "Montserrat", sans-serif;
 		text-align: right;
 		width: calc(100%);
 		color: var(--background);

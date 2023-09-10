@@ -23,7 +23,7 @@
 
 <style>
 	input::placeholder {
-		font-family: 'Poppins', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		color: var(--light);
 		opacity: 100%;
 	}

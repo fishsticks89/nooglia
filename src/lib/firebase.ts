@@ -21,8 +21,8 @@ const connectToEmulators = dev;
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 if (connectToEmulators) connectFirestoreEmulator(db, 'localhost', 4040);
-export const users = collection(db, "users")
-export const sets = collection(db, "sets")
+export const usersCollection = collection(db, "users")
+export const setsCollection = collection(db, "sets")
 
 export const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);

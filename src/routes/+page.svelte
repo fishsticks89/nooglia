@@ -1,12 +1,11 @@
 <script lang="ts">
-	import DisableDarkMode from "./../lib/util/DisableDarkMode.svelte";
 	import { scrollBarWidth } from "$lib/util/scrollbarwidth";
 	import { authState, expectingSignIn, signin } from "$lib/auth/authState";
 	import { auth } from "$lib/firebase";
 	import { browser } from "$app/environment";
 	import Nav from "$lib/nav/Nav.svelte";
-	import AuthManager from "$lib/auth/AuthManager.svelte";
 	import DocsList from "$lib/ui/DocsList.svelte";
+    import DisableDarkMode from "$lib/dark/DisableDarkMode.svelte";
 </script>
 
 <div class="width" style:width={`calc(100vw - ${$scrollBarWidth}px`}>
@@ -52,9 +51,7 @@
 	{/if}
 </div>
 
-<Nav>
-	<AuthManager />
-</Nav>
+<Nav />
 
 <style>
 	.sign-up-button-img {
@@ -79,7 +76,7 @@
 	}
 	.test {
 		position: absolute;
-		font-family: "Poppins", sans-serif;
+		font-family: "PoppinsSemi", sans-serif;
 		bottom: 20%;
 		left: 3%;
 		width: 40%;
@@ -102,7 +99,7 @@
 	}
 	.learn {
 		position: absolute;
-		font-family: "Poppins", sans-serif;
+		font-family: "PoppinsSemi", sans-serif;
 		bottom: 20%;
 		right: 3%;
 		width: 40%;
@@ -121,7 +118,7 @@
 	}
 	h2,
 	h3 {
-		font-family: "Poppins", sans-serif;
+		font-family: "PoppinsSemi", sans-serif;
 	}
 	h2 {
 		position: absolute;

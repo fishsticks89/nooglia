@@ -126,7 +126,7 @@
 		border: 0px;
 		margin: 2vw;
 		font-weight: 600;
-		font-family: 'Poppins', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		cursor: pointer;
 
 		padding: 0.7rem;

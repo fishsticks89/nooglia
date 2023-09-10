@@ -5,7 +5,7 @@
 	import App from '$lib/App.svelte';
 	import { authState } from '$lib/auth/authState';
 	import { getCloudSet } from '$lib/data/db';
-	import { sets } from '$lib/firebase';
+	import { setsCollection } from '$lib/firebase';
 	import { toSetStore, type setStoreOrNull } from '$lib/data/setStore';
 	import { createDebounce } from '$lib/util/debounce';
 	
@@ -13,11 +13,11 @@
 
 	authState.subscribe(async (user) => {
 		console.log(data);
-		let doci = await getCloudSet(doc(sets, data.id));
+		let doci = await getCloudSet(doc(setsCollection, data.id));
 		console.log(data.id, doci);
 		if (doci)
 			currentset.set({
-				doc: doc(sets, data.id),
+				doc: doc(setsCollection, data.id),
 				set: {
 					user: doci.user,
 					name: doci.name,

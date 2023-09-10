@@ -4,7 +4,7 @@
     import { fade } from "svelte/transition";
     import { authState } from "$lib/auth/authState";
     import { createSet } from "$lib/createset/createSet";
-    import { sets } from "$lib/firebase";
+    import { setsCollection } from "$lib/firebase";
     import Runner from "$lib/util/Runner.svelte";
     import {
         DocumentSnapshot,
@@ -34,7 +34,7 @@
     enter={() => {
         onSnapshot(
             query(
-                sets,
+                setsCollection,
                 where("user", "==", get(authState)?.uid),
                 where("contents", "!=", "")
             ),

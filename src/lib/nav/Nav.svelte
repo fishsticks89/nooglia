@@ -1,8 +1,14 @@
 <script lang="ts">
-	import { scrollBarWidth } from '$lib/util/scrollbarwidth';
+	import DarkButton from "./../dark/DarkButton.svelte";
+	import AuthManager from "$lib/auth/AuthManager.svelte";
+	import { scrollBarWidth } from "$lib/util/scrollbarwidth";
 </script>
 
-<div id="nav" style:width="calc(100% - 1.5rem - {$scrollBarWidth}px)" style:padding={"0.75rem"}>
+<div
+	id="nav"
+	style:width="calc(100% - 1.5rem - {$scrollBarWidth}px)"
+	style:padding={"0.75rem"}
+>
 	<a
 		href="/"
 		class="title"
@@ -11,10 +17,22 @@
 			window.location.replace("/");
 		}}>nooglia</a
 	>
-	<slot />
+	<div class="btns">
+		<DarkButton />
+		<AuthManager />
+	</div>
 </div>
 
 <style>
+	.btns {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+		gap: 0.5rem;
+
+		height: 100%;
+	}
 	.title {
 		margin: 0px;
 		padding: 0rem;

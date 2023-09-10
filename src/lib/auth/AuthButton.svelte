@@ -103,7 +103,7 @@
 
 		position: relative;
 
-		font-family: 'Poppins', sans-serif;
+		font-family: 'PoppinsSemi', sans-serif;
 		font-size: 15px;
 	}
 </style>

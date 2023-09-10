@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { flyin } from '$lib/transitions/flyin';
-	import { sets } from '$lib/firebase';
+	import { setsCollection } from '$lib/firebase';
 	import {
 		getDocs,
 		query,
@@ -14,7 +14,7 @@
 	import { fade } from 'svelte/transition';
 
 	let docs: QueryDocumentSnapshot<DocumentData>[] = [];
-	getDocs(query(sets, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
+	getDocs(query(setsCollection, where('user', '==', get(authState)?.uid), where('contents', '!=', ''))).then(
 		(e) => {
 			docs = e.docs;
 		}

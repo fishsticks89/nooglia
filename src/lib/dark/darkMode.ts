@@ -1,7 +1,7 @@
 import { get, writable } from "svelte/store";
-import { subscribeIgnoreFirst } from "./subscribeIgnoreFirst";
+import { subscribeIgnoreFirst } from "../util/subscribeIgnoreFirst";
 import { browser } from "$app/environment";
-import { store } from "./store";
+import { store } from "../util/store";
 import { onDestroy } from "svelte";
 
 export const darkmode = writable(false);

@@ -1,9 +1,7 @@
 import { type DocumentReference, setDoc, doc, getDoc, DocumentSnapshot, type DocumentData, updateDoc } from "firebase/firestore"
 import { get } from "svelte/store";
 import { authState } from "$lib/auth/authState";
-import { users, sets } from "$lib/firebase"
-import { dev } from "$app/environment";
-import type { setStore } from "./setStore";
+import { usersCollection, setsCollection } from "$lib/firebase";
 
 export type user = {
     email: string;
@@ -38,13 +36,13 @@ export const termToString = (term: term) => {
 }
 
 export const getUserDoc = async (useruid: string): Promise<DocumentSnapshot> => {
-    const userDoc = await getDoc(doc(users, useruid));
+    const userDoc = await getDoc(doc(usersCollection, useruid));
     if (userDoc.exists()) {
         return userDoc
     }
     else {
-        setDoc(doc(users, get(authState)?.uid), newuser());
-        const userDoc = await getDoc(doc(users, useruid));
+        setDoc(doc(usersCollection, get(authState)?.uid), newuser());
+        const userDoc = await getDoc(doc(usersCollection, useruid));
         if (userDoc.exists()) {
             return userDoc
         } else {
@@ -53,7 +51,7 @@ export const getUserDoc = async (useruid: string): Promise<DocumentSnapshot> => 
     }
 }
 export const createCloudSet = async (set: set) => {
-    const nsetdoc = doc(sets);
+    const nsetdoc = doc(setsCollection);
     await setDoc(nsetdoc, set)
     return nsetdoc;
 }

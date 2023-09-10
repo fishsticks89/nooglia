@@ -12,19 +12,19 @@
 	import Importterms from './importterms.svelte';
 	import printStore from '$lib/util/print/printStore';
 
-	export let state: setStore;
+	export let docStore: setStore;
 
 	let terms: Writable<(term & { id: string })[]> = writable([]);
 
 	// writes state to terms
-	state.subscribe((stat) => {
-		if (stat.set.contents.length === 0) {
-			state.update((stat2) => {
+	docStore.subscribe((doc) => {
+		if (doc.set.contents.length === 0) {
+			docStore.update((stat2) => {
 				stat2.set.contents = ['\n'];
 				return stat2;
 			});
 		}
-		const newterms = stat.set.contents.map((e) => {
+		const newterms = doc.set.contents.map((e) => {
 			const term = toTerm(e);
 			return { ...term, id: Math.random().toString() };
 		});
@@ -41,12 +41,12 @@
 	const onUpdate = (tms: term[]) => {
 		const newterms = tms.map((e) => termToString(e));
 		if (
-			$state.set.contents.length != newterms.length ||
-			$state.set.contents.filter((e, i) => {
+			$docStore.set.contents.length != newterms.length ||
+			$docStore.set.contents.filter((e, i) => {
 				return e != newterms[i];
 			}).length !== 0
 		)
-			state.update((stat) => {
+			docStore.update((stat) => {
 				stat.set.contents = newterms;
 				return stat;
 			});
@@ -77,7 +77,7 @@
 	let width: number = 0;
 	let importpop = false;
 
-	$: isEditing = $state.isEditing && $state.isEditable;
+	$: isEditing = $docStore.isEditing && $docStore.isEditable;
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -85,30 +85,30 @@
 <div class="create">
 	<!-- name -->
 	{#if isEditing}
-		<Name {state} />
+		<Name state={docStore} />
 	{:else}
-		<h1>{$state.set.name}</h1>
+		<h1>{$docStore.set.name}</h1>
 	{/if}
 	<div class="setButtons">
-		{#if $state.isEditable}
+		{#if $docStore.isEditable}
 			<button
 				class="edit"
 				on:click={() => {
-					if ($state.set.name === '') alert('Name Your Set!');
+					if ($docStore.set.name === '') alert('Name Your Set!');
 					else if (
-						$state.set.contents.length < 4 ||
-						$state.set.contents
+						$docStore.set.contents.length < 4 ||
+						$docStore.set.contents
 							.join('')
 							.split(/[\n ]+/)
 							.join('').length <= 1
 					)
 						alert('You must have at least 4 unique terms');
 					else
-						state.update((s) => {
+						docStore.update((s) => {
 							s.isEditing = !s.isEditing;
 							return s;
 						});
-				}}>{$state.isEditing ? 'Done' : 'Edit'}</button
+				}}>{$docStore.isEditing ? 'Done' : 'Edit'}</button
 			>
 		{/if}
 		{#if !isEditing}
@@ -122,7 +122,7 @@
 		{/if}
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	{#if $state.isEditing}
+	{#if $docStore.isEditing}
 		<button
 			class="swap"
 			on:click={() => {
@@ -161,7 +161,7 @@
 			+ Import from Word, Google Docs, Excel, etc
 		</div>
 	{:else}
-		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} {state} />
+		<Learn terms={$terms.filter((e) => e && (e.q != '' || e.a != ''))} state={docStore} />
 		<button
 			class="printstudy"
 			out:squish={{ initialheight: '2.5rem' }}
@@ -202,7 +202,7 @@
 		</button>
 	{/if}
 </div>
-{#if $state.isEditing}
+{#if $docStore.isEditing}
 	<Importterms
 		{importpop}
 		addTerms={(tt) => {
