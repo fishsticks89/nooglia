@@ -60,7 +60,7 @@
 		font-weight: normal;
 	}
 	h4 {
-		font-family: "PoppinsSemi", sans-serif;
+		font-family: "PoppinsMed", sans-serif;
 	}
 	.sign-up-button-img {
 		width: 100%;

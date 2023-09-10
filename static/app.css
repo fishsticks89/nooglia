@@ -69,6 +69,11 @@
 }
 
 @font-face {
+    font-family: 'PoppinsMed';
+    src: url('/fonts/Poppins-Medium.ttf');
+}
+
+@font-face {
     font-family: 'PoppinsSemi';
     src: url('/fonts/Poppins-SemiBold.ttf');
 }
