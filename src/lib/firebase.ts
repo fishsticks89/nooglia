@@ -15,7 +15,7 @@ const firebaseConfig = {
   appId: "1:448020777089:web:208bb363cd58124d43e580"
 };
 
-const connectToEmulators = dev;
+const connectToEmulators = dev && false;
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

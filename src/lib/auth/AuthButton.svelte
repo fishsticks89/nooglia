@@ -83,7 +83,7 @@
 	.vr {
 		height: 40%;
 		width: 1.5px;
-		background-color: rgba(255, 255, 255, 0.427);
+		background-color: var(--glass);
 		margin-inline: 0.4rem;
 	}
 	.pos {

@@ -38,7 +38,10 @@
     {
       "type": "shell",
       "label": "client testbuild",
-      "command": "pnpm run build",
+      "command": "pnpm run build && pnpm run preview",
+      "windows": {
+        "command": "pnpm run build; pnpm run preview"
+      },
       "problemMatcher": [],
       "group": {
         "kind": "build",

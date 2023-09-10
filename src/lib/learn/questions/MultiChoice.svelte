@@ -168,7 +168,7 @@
 		position: relative;
 		background-color: var(--comp);
 		border-radius: var(--round);
-		color: var(--light);
+		color: white; /* Todo: temporary */
 		border: none;
 	}
 	button:focus-visible {

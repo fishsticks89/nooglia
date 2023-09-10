@@ -53,7 +53,7 @@
 		return $docStore.terms.length - duplicates >= 4;
 	};
 
-	let isEditing = isEditable || !enoughTerms();
+	let isEditing = isEditable && !enoughTerms();
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -70,7 +70,7 @@
 			<button
 				class="edit"
 				on:click={() => {
-					if (!enoughTerms())
+					if (!enoughTerms() && isEditing)
 						alert("You must have at least 4 unique questions");
 					else isEditing = !isEditing;
 				}}>{isEditing ? "Done" : "Edit"}</button
