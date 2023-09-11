@@ -8,15 +8,34 @@
 	import { onDestroy } from "svelte";
 	import { writable } from "svelte/store";
 	import { createDebounce } from "$lib/util/time/debounce";
+    import { similarity } from "$lib/ai/dot";
+    import type { termMaybeWithEmbed } from "$lib/core/doc";
 	
 	export let answer: (correct: boolean) => void;
-	export let currentquestion: { q: string; a: string };
-	export let questions: { q: string; a: string }[];
+	export let currentquestion: termMaybeWithEmbed;
+	export let questions: termMaybeWithEmbed[];
+
+	$: console.log(
+		"hasEmbed: " + currentquestion.embed
+	)
 
 	$: options = shuffle([
 		currentquestion.a,
 		...shuffle(questions)
 			.filter((e) => e.a != currentquestion.a)
+			.sort((a, b) => {
+				if (!currentquestion.embed) return 0;
+				// prioritise answers with embed
+				if (a.embed && !b.embed) return -1;
+				if (!a.embed && b.embed) return 1;
+				if (!a.embed || !b.embed) return 0;
+				// prioritise answers with higher similarity
+				const a1 = similarity(a.embed, currentquestion.embed);
+				const b1 = similarity(b.embed, currentquestion.embed);
+				if (!a1 || !b1) return 0;
+				
+				return b1 - a1;
+			})
 			.map((e) => e.a)
 			.slice(0, 3),
 	]).map((e, i) => {

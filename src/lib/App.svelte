@@ -22,7 +22,7 @@
 	<Settings />
 	<div bind:this={main}>
 		{#if browser}
-			<SetView docStore={setSub} />
+			<SetView docSub={setSub} />
 		{/if}
 
 		<Nav />

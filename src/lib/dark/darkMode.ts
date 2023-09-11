@@ -8,8 +8,6 @@ export const darkmode = writable(false);
 
 const [darkModeDisabled, setDarkModeDisabled] = store(false);
 
-darkModeDisabled.subscribe(console.log);
-
 export function markDisableDarkMode() {
     if (get(darkModeDisabled)) return;
     setDarkModeDisabled(true);

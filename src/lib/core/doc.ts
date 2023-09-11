@@ -27,6 +27,8 @@ export async function createSet() {
 }
 
 export interface term { readonly q: string, readonly a: string, readonly id: string }
+export type termMaybeWithEmbed = term & { readonly embed?: number[] };
+export type termWithEmbed = term & { readonly embed: number[] };
 
 export interface docState {
     readonly name: string,
@@ -54,8 +56,6 @@ function encodeTerm(term: term): string {
 
 function decodeTerm(term: string): term | null {
 
-    console.log(term);
-
     const hasID = term.split("\n").length > 2 && !Number.isNaN(term.split("\n").at(-1));
     const id = hasID ? term.split("\n").at(-1)! : Math.random().toString();
     if (hasID) term = term.slice(0, term.lastIndexOf("\n"));
@@ -67,8 +67,6 @@ function decodeTerm(term: string): term | null {
     const longest = split.reduce((a, b) => a.length > b.length ? a : b);
     const q = term.slice(0, term.indexOf(longest));
     const a = term.slice(term.indexOf(longest) + longest.length);
-
-    console.log(q, a, id);
 
     return { q, a, id };
 }

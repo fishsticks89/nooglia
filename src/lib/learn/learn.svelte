@@ -2,9 +2,10 @@
 	import shuffle from '$lib/util/operations/shuffle';
 	import Questionier from './Questionier.svelte';
 	import type { mode } from './questiontype';
-	import { get } from 'svelte/store';
 	import settingsState from './settings/settingsState';
 	import { event } from '$lib/mixyp';
+    import { embed } from '$lib/ai/encode';
+    import type { term, termWithEmbed } from '$lib/core/doc';
 
 	let done = false;
 	$: {
@@ -17,7 +18,7 @@
 		correctTimes: number;
 	}
 
-	export let terms: { q: string; a: string }[] = [];
+	export let terms: (term | termWithEmbed)[] = [];
 	let shuffledTerms = shuffle(terms);
 	let stack: {
 		q: string;

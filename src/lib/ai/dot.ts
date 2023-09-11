@@ -1,6 +1,6 @@
 import { log } from "@tensorflow/tfjs-core/dist/log";
 
-function dot(a: number[], b: number[]) {
+export function dot(a: number[], b: number[]) {
     var sum = 0;
     if (a.length != b.length)
         throw "lengths must match"
@@ -11,7 +11,7 @@ function dot(a: number[], b: number[]) {
     return sum;
 }
 
-function similarity(a: number[], b: number[]) {
+export function similarity(a: number[], b: number[]) {
     var magnitudeA = Math.sqrt(dot(a, a));
     var magnitudeB = Math.sqrt(dot(b, b));
     if (magnitudeA && magnitudeB)

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Switch from "$lib/ui/Switch.svelte";
 	import { squish } from "$lib/transitions/squish";
 	import Runner from "../util/Runner.svelte";
 	import { flip } from "svelte/animate";
@@ -8,10 +9,11 @@
 	import Name from "./name.svelte";
 	import Importterms from "./importterms.svelte";
 	import printStore from "$lib/util/print/printStore";
-	import type { docSub } from "$lib/core/doc";
+	import type { docSub, termWithEmbed } from "$lib/core/doc";
 	import { authState } from "$lib/auth/authState";
+	import { embed } from "$lib/ai/encode";
 
-	export let docStore: docSub;
+	export let docSub: docSub;
 
 	let focused = {
 		left: true,
@@ -31,9 +33,9 @@
 				break;
 		}
 		if (0 > focused.item) focused.item = 0;
-		if ($docStore.terms.length - 1 < focused.item)
-			docStore.set({
-				terms: $docStore.terms.concat({
+		if ($docSub.terms.length - 1 < focused.item)
+			docSub.set({
+				terms: $docSub.terms.concat({
 					q: "",
 					a: "",
 					id: Math.random().toString(),
@@ -43,14 +45,17 @@
 	let width: number = 0;
 	let importpop = false;
 
-	$: isEditable = $docStore.uid === $authState?.uid;
+	let aiTerms: null | termWithEmbed[] = null;
+	let usingAI = false;
+
+	$: isEditable = $docSub.uid === $authState?.uid;
 
 	const enoughTerms = () => {
 		const duplicates =
-			$docStore.terms.filter(
-				(e) => $docStore.terms.filter((f) => f.q == e.q).length > 1
+			$docSub.terms.filter(
+				(e) => $docSub.terms.filter((f) => f.q == e.q).length > 1
 			).length / 2;
-		return $docStore.terms.length - duplicates >= 4;
+		return $docSub.terms.length - duplicates >= 4;
 	};
 
 	$: isEditing = isEditable && !enoughTerms(); // subscribed to isEditable, so it updates when auth inits
@@ -61,9 +66,9 @@
 <div class="create">
 	<!-- name -->
 	{#if isEditing}
-		<Name state={docStore} />
+		<Name state={docSub} />
 	{:else}
-		<h1>{$docStore.name}</h1>
+		<h1>{$docSub.name}</h1>
 	{/if}
 	<div class="setButtons">
 		{#if isEditable}
@@ -94,8 +99,8 @@
 		<button
 			class="swap"
 			on:click={() => {
-				docStore.set({
-					terms: $docStore.terms.map((e) => {
+				docSub.set({
+					terms: $docSub.terms.map((e) => {
 						return {
 							q: e.a,
 							a: e.q,
@@ -113,7 +118,7 @@
 				const should = confirm(
 					"Are you sure you want to delete all terms?"
 				);
-				if (should) docStore.set({ terms: [] });
+				if (should) docSub.set({ terms: [] });
 			}}
 		>
 			Clear all&nbsp;<span class="si material-icons-round">delete</span>
@@ -135,12 +140,55 @@
 			+ Import from Word, Google Docs, Excel, etc
 		</div>
 	{:else}
-		{#key $docStore.id}
+		{#key $docSub.id + (aiTerms != null)}
 			<Learn
-				terms={$docStore.terms.filter(
-					(e) => e && (e.q != "" || e.a != "")
-				)}
+				terms={usingAI && aiTerms
+					? aiTerms
+					: $docSub.terms.filter(
+							(e) => e && (e.q != "" || e.a != "")
+					  )}
 			/>
+			{#if $docSub.terms.length > 20}
+				<div class="printstudy aihard">
+					<div class="topAiHard">
+						ai hard mode:
+						{#if usingAI && !aiTerms}
+							loading...
+						{:else}
+							<Switch
+								on={usingAI}
+								onChange={async (e) => {
+									const should = confirm(
+										"This will restart the study session. Are you sure?"
+									);
+									if (!should) return;
+
+									const aiTermsLoading = usingAI && !aiTerms;
+									usingAI = e;
+									if (aiTerms == null && !aiTermsLoading) {
+										const terms = $docSub.terms.filter(
+											(e) => e && (e.q != "" || e.a != "")
+										);
+										const embeds = await embed(
+											terms.map((e) => e.a)
+										);
+										aiTerms = terms.map((e, i) => {
+											return {
+												...e,
+												embed: embeds[i],
+											};
+										});
+									}
+								}}
+							/>
+						{/if}
+					</div>
+					<p class="aihard-desc">
+						Uses ai to find the hardest alternate multichoice
+						answers
+					</p>
+				</div>
+			{/if}
 		{/key}
 		<button
 			class="printstudy"
@@ -152,7 +200,7 @@
 		>
 	{/if}
 
-	{#each isEditing ? $docStore.terms : $docStore.terms.filter((e) => e && (e.q != "" || e.a != "")) as term, i (term.id)}
+	{#each isEditing ? $docSub.terms : $docSub.terms.filter((e) => e && (e.q != "" || e.a != "")) as term, i (term.id)}
 		<div class="termholder" animate:flip={{ duration: 200 }}>
 			<Term
 				{isEditing}
@@ -165,14 +213,14 @@
 				}}
 				onChange={(e) => {
 					if (e == null) {
-						docStore.set({
-							terms: $docStore.terms.filter((f, termIndex) => {
+						docSub.set({
+							terms: $docSub.terms.filter((f, termIndex) => {
 								return termIndex != i;
 							}),
 						});
 					} else {
-						docStore.set({
-							terms: $docStore.terms.map((f) => {
+						docSub.set({
+							terms: $docSub.terms.map((f) => {
 								if (f == term) return e;
 								return f;
 							}),
@@ -187,9 +235,9 @@
 		<button
 			class="add"
 			on:click={() => {
-				docStore.set(
+				docSub.set(
 					{
-						terms: $docStore.terms.concat({
+						terms: $docSub.terms.concat({
 							q: "",
 							a: "",
 							id: Math.random().toString(),
@@ -198,7 +246,7 @@
 					true
 				);
 				focused.left = true;
-				focused.item = $docStore.terms.length - 1;
+				focused.item = $docSub.terms.length - 1;
 			}}
 		>
 			<span class="material-icons-round">add</span>
@@ -209,8 +257,8 @@
 	<Importterms
 		{importpop}
 		addTerms={(tt) => {
-			docStore.set({
-				terms: $docStore.terms.concat(tt),
+			docSub.set({
+				terms: $docSub.terms.concat(tt),
 			});
 		}}
 	/>
@@ -235,6 +283,27 @@
 		background-color: var(--lighter);
 		color: var(--emp);
 		font-family: "PoppinsSemi", sans-serif;
+	}
+	.aihard {
+		background-color: var(--correct);
+		margin-bottom: 0.5rem;
+
+		height: fit-content;
+	}
+	.topAiHard {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.aihard-desc {
+		font-family: "PoppinsSemi", sans-serif;
+		font-size: 0.8rem;
+		margin: 0px;
+		margin-left: 0.5rem;
+
+		width: 100%;
+		text-align: center;
 	}
 	h1 {
 		font-family: "PoppinsSemi", sans-serif;
