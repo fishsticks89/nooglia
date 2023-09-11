@@ -10,7 +10,7 @@ if (prod)
         r.src = n + p._hjSettings.hjid + i + p._hjSettings.hjsv;
         s.appendChild(r);
     })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    
+
 if (!prod)
     setInterval(() => {
         [...document.getElementsByClassName("firebase-emulator-warning")].forEach(element => {
@@ -18,6 +18,15 @@ if (!prod)
             element.remove();
         });
     }, 200);
+
+if (prod) {
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-VC9747164E');
+}
 
 if (prod)
     (function (f, b) {
@@ -29,6 +38,7 @@ if (prod)
                 MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g)
         }
     })(document, window.mixpanel || []);
+
 
 // Enabling the debug mode flag is useful during implementation,
 // but it's recommended you remove it for production
