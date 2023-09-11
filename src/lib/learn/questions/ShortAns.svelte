@@ -226,8 +226,9 @@
 		margin: 0px;
 	}
 	.ov {
-		font-family: 'PoppinsSemi', sans-serif;
-		color: var(--light);
+		font-family: "PoppinsSemi", sans-serif;
+		font-weight: normal;
+		color: var(--lighter);
 
 		background-color: transparent;
 		border-radius: var(--round);
@@ -287,8 +288,10 @@
 		margin: 2rem;
 		margin-top: 2rem;
 		max-width: calc(100% - 4rem);
-		font-family: 'Montserrat', sans-serif;
 		word-wrap: break-word;
+
+		font-family: "PoppinsSemi", sans-serif;
+		font-weight: normal;
 	}
 	.qholder {
 		display: flex;
