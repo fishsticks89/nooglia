@@ -80,7 +80,7 @@
 		input.removeEventListener('keyup', listener);
 	});
 	const incorrectTweened = tweened(0, {
-		duration: 1000
+		duration: 100
 	});
 	function incorrect() {
 		incorrectTweened.update((e) => {
@@ -91,9 +91,12 @@
 			}
 			return e;
 		});
+		setTimeout(() => {
+			incorrectTweened.update(e => 0);
+		}, 600);
 	}
 	const correctTweened = tweened(0, {
-		duration: 600,
+		duration: 400,
 		easing: cubicOut
 	});
 	function onCorrect() {
@@ -138,8 +141,19 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: #00e326;
+    background-color: var(--correct);
     opacity: ${$correctTweened * 100};
+    `}
+	/>
+	<div
+		style={`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: var(--incorrect);
+    opacity: ${$incorrectTweened * 100}%;
     `}
 	/>
 	<h1 class="term">
@@ -152,9 +166,8 @@
 			}}
 		/>
 		<div class="enter" transition:fade={{ duration: 200 }}>
-			Enter: "{currentquestion.a}" or
-			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<strong class="skp" on:click={() => answerLog(false)}>skip</strong>
+			<button class="skp" on:click={() => answerLog(false)}>Continue</button> or
+			Enter: "{currentquestion.a}"
 		</div>
 	{/if}
 	<div class="consumer" style:flex-grow={1} />
@@ -213,11 +226,19 @@
 		animation-timing-function: ease-in-out;
 	}
 	.skp {
-		color: white;
+		color: var(--emp);
+		background-color: var(--lighter);
 		cursor: pointer;
+		font-family: "PoppinsSemi", sans-serif;
+		font-weight: normal;
+		border-radius: var(--round);
+		border: 0px solid transparent;
+		padding: 0.6rem;
+		padding-inline: 1rem;
+		margin-right: 0.5rem;
 	}
 	.enter {
-		color: var(--complight);
+		color: var(--lighter);
 
 		position: relative;
 		left: 2rem;
