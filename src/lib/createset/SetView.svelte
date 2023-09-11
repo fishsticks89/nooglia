@@ -47,6 +47,7 @@
 
 	let aiTerms: null | termWithEmbed[] = null;
 	let usingAI = false;
+	$: aiTermsLoading = usingAI && !aiTerms;
 
 	$: isEditable = $docSub.uid === $authState?.uid;
 
@@ -141,18 +142,20 @@
 		</div>
 	{:else}
 		{#key $docSub.id + (aiTerms != null)}
-			<Learn
-				terms={usingAI && aiTerms
-					? aiTerms
-					: $docSub.terms.filter(
-							(e) => e && (e.q != "" || e.a != "")
-					  )}
-			/>
+			{#if !aiTermsLoading}
+				<Learn
+					terms={usingAI && aiTerms
+						? aiTerms
+						: $docSub.terms.filter(
+								(e) => e && (e.q != "" || e.a != "")
+						  )}
+				/>
+			{/if}
 			{#if $docSub.terms.length > 20}
 				<div class="printstudy aihard">
 					<div class="topAiHard">
 						ai hard mode:
-						{#if usingAI && !aiTerms}
+						{#if aiTermsLoading}
 							loading...
 						{:else}
 							<Switch
