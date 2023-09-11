@@ -220,7 +220,6 @@
 		color: var(--complight);
 
 		position: relative;
-		bottom: calc(10% + 4rem);
 		left: 2rem;
 		width: calc(100% - 4rem);
 		margin: 0px;
