@@ -142,7 +142,8 @@
     top: 0px;
     left: 0px;
     background-color: var(--correct);
-    opacity: ${$correctTweened * 100};
+    opacity: ${$correctTweened * 100}%;
+	border-radius: var(--round);
     `}
 	/>
 	<div
@@ -154,6 +155,7 @@
     left: 0px;
     background-color: var(--incorrect);
     opacity: ${$incorrectTweened * 100}%;
+	border-radius: var(--round);
     `}
 	/>
 	<h1 class="term">
