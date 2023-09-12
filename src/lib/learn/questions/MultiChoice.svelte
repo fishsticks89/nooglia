@@ -8,16 +8,14 @@
 	import { onDestroy } from "svelte";
 	import { writable } from "svelte/store";
 	import { createDebounce } from "$lib/util/time/debounce";
-    import { similarity } from "$lib/ai/dot";
-    import type { termMaybeWithEmbed } from "$lib/core/doc";
-	
+	import { similarity } from "$lib/ai/dot";
+	import type { termMaybeWithEmbed } from "$lib/core/doc";
+
 	export let answer: (correct: boolean) => void;
 	export let currentquestion: termMaybeWithEmbed;
 	export let questions: termMaybeWithEmbed[];
 
-	$: console.log(
-		"hasEmbed: " + currentquestion.embed
-	)
+	$: console.log("hasEmbed: " + currentquestion.embed);
 
 	$: options = shuffle([
 		currentquestion.a,
@@ -33,7 +31,7 @@
 				const a1 = similarity(a.embed, currentquestion.embed);
 				const b1 = similarity(b.embed, currentquestion.embed);
 				if (!a1 || !b1) return 0;
-				
+
 				return b1 - a1;
 			})
 			.map((e) => e.a)
@@ -109,41 +107,14 @@
 	window.addEventListener("resize", resize);
 	onDestroy(() => window.removeEventListener("resize", resize));
 
-	listenKeys(e=> {
-		const key = [1, 2, 3, 4].map(e => e.toString()).indexOf(e.key);
+	listenKeys((e) => {
+		const key = [1, 2, 3, 4].map((e) => e.toString()).indexOf(e.key);
 		if (key != -1) {
 			selected = key;
 			console.log(options, key, options[key]);
 			answerWithTerm(options[key]);
 		}
 	});
-
-	const ansStyle = (i: number) => {
-		const same = `
-        font-family: 'Montserrat', sans-serif;
-        font-size: 100%;
-		`;
-		return {
-			grid:
-				same +
-				`
-					width: 80%;
-					height: 70%;
-					grid-column: ${(i % 2) + 1};
-					grid-row: ${i < 2 ? 1 : 2};
-        `,
-			overflow:
-				same +
-				`
-					word-break: break-word;
-					width: calc(100% - 3rem);
-					padding-inline: 0.5rem;
-					padding-block: 1rem;
-					margin-block: 0.5rem;
-					height: fit-content;
-		`,
-		};
-	};
 
 	let selected: number | null = null;
 </script>
@@ -155,15 +126,17 @@
 >
 	<p class="term">{currentquestion.q}</p>
 
-	<div class={$overflow ? "block" : "grid"}>
+	<div class="answers">
 		{#each options as term, index}
 			<button
-				style={($overflow
-					? ansStyle(term.index).overflow
-					: ansStyle(term.index).grid) +
-					`filter: saturate(${currentquestion.a == term.a || selected == index ? Math.abs($springit) : "0"}%) hue-rotate(${term.color > 0 ? "-" : ""}${Math.abs(
-						term.color * $springit
-					)}deg);`}
+				style={`filter: saturate(${
+					currentquestion.a == term.a || selected == index
+						? Math.abs($springit)
+						: "0"
+				}%) hue-rotate(${term.color > 0 ? "-" : ""}${Math.abs(
+					term.color * $springit
+				)}deg);`}
+				class="answer"
 				on:click={() => {
 					console.log("onclickity");
 					selected = selected ?? index;
@@ -189,36 +162,15 @@
 		border-radius: var(--round);
 		color: white; /* Todo: temporary */
 		border: none;
+
+		width: calc(90% - 0.5rem);
+		padding: 0.5rem;
+		margin-bottom: 1rem;
+
+		padding-block: 1rem;
 	}
 	button:focus-visible {
 		outline: none;
-	}
-	.grid {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-template-rows: 50% 50%;
-
-		width: 100%;
-		height: 50vh;
-		margin-block: 1rem;
-
-		align-items: center;
-		align-content: center;
-		justify-content: center;
-		justify-items: center;
-	}
-	.block {
-		display: flex;
-		flex-direction: column;
-
-		width: 100%;
-		height: fit-content;
-		margin-block: 1rem;
-
-		align-items: center;
-		align-content: center;
-		justify-content: center;
-		justify-items: center;
 	}
 	.term {
 		color: var(--light);
@@ -239,11 +191,17 @@
 		padding: 0px;
 
 		text-align: center;
-		font-family: 'PoppinsSemi';
+		font-family: "PoppinsSemi";
 		font-size: 0.8rem;
 
 		width: fit-content;
 		height: fit-content;
+	}
+	.answers {
+		flex-direction: column;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
 	}
 	.number {
 		top: 0px;
