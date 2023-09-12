@@ -109,6 +109,15 @@
 	window.addEventListener("resize", resize);
 	onDestroy(() => window.removeEventListener("resize", resize));
 
+	listenKeys(e=> {
+		const key = [1, 2, 3, 4].map(e => e.toString()).indexOf(e.key);
+		if (key != -1) {
+			selected = key;
+			console.log(options, key, options[key]);
+			answerWithTerm(options[key]);
+		}
+	});
+
 	const ansStyle = (i: number) => {
 		const same = `
         font-family: 'Montserrat', sans-serif;
@@ -162,15 +171,6 @@
 				}}
 				id={"term-" + term.index}
 			>
-				<Runner
-					enter={() => {
-						const unsub = listenKeys((ev) => {
-							if (Number(ev.key) == term.index + 1)
-								answerWithTerm(term);
-						});
-						unsub();
-					}}
-				/>
 				<div class="number">
 					<p>
 						{term.index + 1}

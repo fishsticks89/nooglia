@@ -9,18 +9,18 @@
 	import { squish } from "$lib/transitions/squish";
 	import showSettings from "$lib/learn/settings/showSettings";
 	import { onDestroy } from "svelte";
-	import { writable } from "svelte/store";
+	import type { term } from "$lib/core/doc";
 	export let progress: number;
 	export let done: boolean;
 	export let restart: () => void;
 	// exposed to questions
 	export let onanswer: (correct: boolean) => void;
-	export let questions: { q: string; a: string }[];
+	export let questions: term[];
 	export let registerSetQuestion: (
 		fun: (qa: { q: string; a: string }, newmode: mode) => void
 	) => void;
 	registerSetQuestion((qa, newmode) => {
-		currentquestion = qa;
+		currentquestion = { ...qa, id: Math.random().toString() };
 		mode = newmode;
 		fixContainerHeight();
 	});
@@ -29,7 +29,7 @@
 		currentquestion = null;
 		setTimeout(() => onanswer(correct));
 	};
-	let currentquestion: { q: string; a: string } | null = null;
+	let currentquestion: term | null = null;
 	// awaits parent interaction (setquestion)
 	let mode: mode | null = null;
 	let container: HTMLElement;

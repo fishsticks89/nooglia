@@ -9,8 +9,8 @@
 
 <script lang="ts">
 	import { browser, dev } from '$app/environment';
-	import type { term } from '$lib/data/db';
-	import Importterms from './../../lib/createset/importterms.svelte';
+    import type { term } from '$lib/core/doc';
+	import Importterms from '$lib/createset/importterms.svelte';
 	let addTerms: (terms: term[]) => {};
 
 	if (!dev && browser) {
