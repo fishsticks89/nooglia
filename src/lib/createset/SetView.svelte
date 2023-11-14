@@ -151,7 +151,7 @@
 						  )}
 				/>
 			{/if}
-			{#if $docSub.terms.length > 20}
+			{#if $docSub.terms.length > 12}
 				<div class="printstudy aihard">
 					<div class="topAiHard">
 						ai hard mode:
